@@ -1,8 +1,8 @@
 # dd-wrt build for d-link dir 853/867/878/882 + 1760/1960/2660/2640 (see GPL_VIO_ALLEGATIONS.MD first please)
 
-<p>here's a <strong>GNUBS'D-out System V</strong> (or "linux" if you take uname seriously) <strong>DD-WRT</strong> image with a <strong>native BASH</strong> shell (with <strong>Linux-PAM</strong>, <strong>DNSCRYPT</strong>, <strong>OPENDPI</strong>, <a href="https://github.com/openwrt/openwrt/commit/424a9ae128bd2045cd4bfd6e3229f2529d150a25">BLOGIC's <strong>Hardware NAT for MT7621 devices[/b[</a>, [b]<font color="red">WPA3 Support[/COLOR]</strong>, <strong>ENTWARE</strong>; don't think the first five are in BS' build). tools were built/based on a <strong>NeXTSTEP</strong> derivative with GLIBC.<br />
-currently kernel <strong>4.14.229</strong> and DD-WRT <strong>v46390<br />
-latest FW [COLOR=blue]SE[/COLOR]</strong> ([[COLOR=blue]special edition[/COLOR]] dedicated to John Crispin, aka blogic):<br />
+<p>here's a <strong>GNUBS'D-out System V</strong> (or "linux" if you take uname seriously) <strong>DD-WRT</strong> image with a <strong>native BASH</strong> shell (with <strong>Linux-PAM</strong>, <strong>DNSCRYPT</strong>, <strong>OPENDPI</strong>, <a href="https://github.com/openwrt/openwrt/commit/424a9ae128bd2045cd4bfd6e3229f2529d150a25">BLOGIC's <strong>Hardware NAT for MT7621 devices</strong></a>, <strong><font color="red">WPA3 Support</font></strong>, <strong>ENTWARE</strong>; don't think the first five are in BS' build). tools were built/based on a <strong>NeXTSTEP</strong> derivative with GLIBC.<br />
+currently kernel <strong>4.14.231</strong> and DD-WRT <strong>v46390<br />
+latest FW <font color="blue">SE</font></strong> ([<font color="blue">special edition</font>] dedicated to John Crispin, aka blogic):<br />
 DIR-882/878/853/867:<br />
 <u><strong><a href="https://www.sendspace.com/file/xre67m">factory-to-ddwrt-SE.bin</a></strong>[/u], <u><strong><a href="https://www.sendspace.com/file/e4nomk">dlink-dir882-a1-webflash.bin</a></strong></u><br />
 DIR-1760/1960/2660/2640 (ignore the file name, it works for all of these routers):<br />
@@ -52,6 +52,6 @@ createUser *desired username for snmp crypto* SHA *desired SHA password* AES *de
 ----<br />
 [LIST]<br />
 <li><u><strong>What's Different in your version of DD-WRT compared to the rest?</strong></u></li><li>[u]<strong>Why should I use this version of DD-WRT as opposed to others (assuming availability)?</strong></u></li>[LIST]<br />
-<li>first and foremost: [b]gLIBC 2.33</b>.</li><li>due to the character limit, i will defer people to the larger post on the D-LINK forums that provides a bit <a href="http://forums.dlink.com/index.php?topic=76161.0">[COLOR=rgb(44, 130, 201)" target="_blank">more information</font></a> about my motivations for making this firmware.</li>[/list]<br />
+<li>first and foremost: [b]gLIBC 2.33</b>.</li><li><br />
 [/list]</p><p>* "IT'S THE GLOBAL ECKANAMY" (Mitt Romney) <cue gesture:><br />
 <a href="https://thumb9.shutterstock.com/display_pic_with_logo/401095/154882448/stock-photo-business-man-looks-exasperated-horizontal-154882448.jpg" target="_blank"><img src="https://thumb9.shutterstock.com/display_pic_with_logo/401095/154882448/stock-photo-business-man-looks-exasperated-horizontal-154882448.jpg" alt="https://thumb9.shutterstock.com/display_pic_with_logo/401095/154882448/stock-photo-business-man-looks-exasperated-horizontal-154882448.jpg" border="0" />[/url]</p>
