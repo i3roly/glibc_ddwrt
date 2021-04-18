@@ -1,4 +1,4 @@
-# dd-wrt build for d-link dir 853/867/878/882 + 1760/1960/2660/2640 (see GPL_VIO_ALLEGATIONS.MD first please)
+# dd-wrt build for d-link dir 867/878/882 + 1760/1960/2660/2640 (see GPL_VIO_ALLEGATIONS.MD first please)
 ----------
 here's a <b>GNUBS'D-out System V</b> (or "linux" if you take uname seriously) <b>DD-WRT <span style="color:blue">SE</span></b> ([<span style="color:blue">special edition</span>] dedicated to John Crispin, aka blogic) image with a <b>native BASH</b> shell (with <b>Linux-PAM</b>, <b>DNSCRYPT</b>, <b>OPENDPI</b>, <a href="https://github.com/openwrt/openwrt/commit/424a9ae128bd2045cd4bfd6e3229f2529d150a25">BLOGIC's <b>Hardware NAT for MT7621 devices</b></a>, <b><span style="color:red">WPA3 Support</span></b>, <b>ENTWARE</b>; don't think the first five are in BS' build). tools were built/based on a <b>NeXTSTEP</b> derivative with GLIBC.
 
@@ -7,7 +7,7 @@ latest FW :
 -------------
 currently kernel <b>4.14.231</b> and DD-WRT <b>v46390</b>
 
-DIR-882/878/853/867:
+DIR-882/878/867:
 <u><b><a href="https://www.sendspace.com/file/xre67m">factory-to-ddwrt-SE.bin</a></b></u>, <u><b><a href="https://www.sendspace.com/file/e4nomk">dlink-dir882-a1-webflash.bin</a></b></u>
 
 DIR-1760/1960/2660/2640
@@ -28,7 +28,7 @@ older (mt_wifi) versions
 
 (4.14.226/46177) **882/878 ONLY!** <a href="https://www.sendspace.com/file/sflda8">factory-to-ddwrt.bin</a>, <a href="https://www.sendspace.com/file/uqdu7s">dlink-dir882-a1-webflash.bin</a>
 
-(4.14.229/46333) 853/867/878/882: <a href="https://www.sendspace.com/file/bv148j">factory-to-ddwrt.bin</a>, <a href="https://www.sendspace.com/file/8fdwtk">dlink-dir882-a1-webflash.bin</a> 1760/1960/2660/2640: <a href="https://www.sendspace.com/file/ew4wb7">factory-to-ddwrt-SE.bin</a>, <a href="https://www.sendspace.com/file/6upt3q">dir-2640-a1-webflash.bin</a>
+(4.14.229/46333) 867/878/882: <a href="https://www.sendspace.com/file/bv148j">factory-to-ddwrt.bin</a>, <a href="https://www.sendspace.com/file/8fdwtk">dlink-dir882-a1-webflash.bin</a> 1760/1960/2660/2640: <a href="https://www.sendspace.com/file/ew4wb7">factory-to-ddwrt-SE.bin</a>, <a href="https://www.sendspace.com/file/6upt3q">dir-2640-a1-webflash.bin</a>
 
 
 i have tested both builds numerous times, they are safe. they will not brick your router. i have been making an 882 firmware for years. the 2640/2660/1760/1960 is a recent addition but it is even safer since it has a backup. either way, they dont touch your u-boot (its designated as a read-only partition for both builds) so, at worst, all that will happen is you may need to use recovery mode if something happens (i haven't had a report of this yet). i am soliciting input on the next 'new' target. i am hopeful there is some excitement among SNB users, and i'm hopeful some even have the routers currently supported so i can get some feedback.
