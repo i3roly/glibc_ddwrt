@@ -1,21 +1,34 @@
 # dd-wrt build for d-link dir 853/867/878/882 + 1760/1960/2660/2640 (see GPL_VIO_ALLEGATIONS.MD first please)
 
-here's a <b>GNUBS'D-out System V</b> (or "linux" if you take uname seriously) <b>DD-WRT</b> image with a <b>native BASH</b> shell (with <b>Linux-PAM</b>, <b>DNSCRYPT</b>, <b>OPENDPI</b>, <a href="https://github.com/openwrt/openwrt/commit/424a9ae128bd2045cd4bfd6e3229f2529d150a25">BLOGIC's <b>Hardware NAT for MT7621 devices</b></a>, <b><span style="color:red">WPA3 Support</span></b>, <b>ENTWARE</b>; don't think the first five are in BS' build). tools were built/based on a <b>NeXTSTEP</b> derivative with GLIBC.
-currently kernel <b>4.14.229</b> and DD-WRT <b>v46390
-latest FW <span style="color:blue">SE</span></b> ([<span style="color:blue">special edition</span>] dedicated to John Crispin, aka blogic):
+here's a <b>GNUBS'D-out System V</b> (or "linux" if you take uname seriously) <b>DD-WRT <span style="color:blue">SE</span></b> ([<span style="color:blue">special edition</span>] dedicated to John Crispin, aka blogic) image with a <b>native BASH</b> shell (with <b>Linux-PAM</b>, <b>DNSCRYPT</b>, <b>OPENDPI</b>, <a href="https://github.com/openwrt/openwrt/commit/424a9ae128bd2045cd4bfd6e3229f2529d150a25">BLOGIC's <b>Hardware NAT for MT7621 devices</b></a>, <b><span style="color:red">WPA3 Support</span></b>, <b>ENTWARE</b>; don't think the first five are in BS' build). tools were built/based on a <b>NeXTSTEP</b> derivative with GLIBC.
+
+
+currently kernel <b>4.14.231</b> and DD-WRT <b>v46390</b>
+
+latest FW :
+
 DIR-882/878/853/867:
 <u><b><a href="https://www.sendspace.com/file/xre67m">factory-to-ddwrt-SE.bin</a></b></u>, <u><b><a href="https://www.sendspace.com/file/e4nomk">dlink-dir882-a1-webflash.bin</a></b></u>
-DIR-1760/1960/2660/2640 (ignore the file name, it works for all of these routers):
+
+DIR-1760/1960/2660/2640
 <b><u><a href="https://www.sendspace.com/file/gp12hv">factory-to-ddwrt-SE.bin</a></u></b>, <u><b><a href="https://www.sendspace.com/file/4wzg1c">dir-2640-a1-webflash.bin</a>
 
+ (ignore the file name, it works for all of these routers)
+ 
 <a href="https://www.sendspace.com/file/doyuy1">LOOTBAG*</a></b></u>, <u><b><a href="https://www.sendspace.com/file/mxksfk">BINUTILS2.35+GCC10.2</a></b></u> (dead links for now; i will happily re-upload if there's any demand)
+
 <b>*</b> lootbag contains: glibc/bash/coreutils locales+tor0.4.4.6+PHP8.0.1+manpages+GNU Midnight Commander4.8.25+GNUMake4.2+sqlite3.30.1+JAVA (via JamVM)+GRoFF1.22.4+minidlna+VIm8.1(2-2123)+tcl8.6.9+Tk8.6.9+libX11-1.6.7*
 
-<b>older (mt_wifi) versions</b> (882/878 ONLY since 1760/1960/2660/2640 were just added yesterday!)
+<b>older (mt_wifi) versions</b> (882/878 ONLY!)
+
 (4.14.219/45770) <a href="https://www.sendspace.com/file/c3mfdx">factory-to-ddwrt.bin</a>, <a href="https://www.sendspace.com/file/h1i7hg">dlink-dir882-a1-webflash.bin</a>
+
 (4.14.222/45888) <a href="https://www.sendspace.com/file/dsxn7c">factory-to-ddwrt.bin</a>, <a href="https://www.sendspace.com/file/o8v4kc">dlink-dir882-a1-webflash.bin</a>
+
 (4.14.226/46177) <a href="https://www.sendspace.com/file/sflda8">factory-to-ddwrt.bin</a>, <a href="https://www.sendspace.com/file/uqdu7s">dlink-dir882-a1-webflash.bin</a>
+
 (4.14.229/46333) 853/867/878/882: <a href="https://www.sendspace.com/file/bv148j">factory-to-ddwrt.bin</a>, <a href="https://www.sendspace.com/file/8fdwtk">dlink-dir882-a1-webflash.bin</a> 1760/1960/2660/2640: <a href="https://www.sendspace.com/file/ew4wb7">factory-to-ddwrt-SE.bin</a>, <a href="https://www.sendspace.com/file/6upt3q">dir-2640-a1-webflash.bin</a>
+
 
 i have tested both builds numerous times, they are safe. they will not brick your router. i have been making an 882 firmware for years. the 2640/2660/1760/1960 is a recent addition but it is even safer since it has a backup. either way, they dont touch your u-boot (its designated as a read-only partition for both builds) so, at worst, all that will happen is you may need to use recovery mode if something happens (i haven't had a report of this yet). i am soliciting input on the next 'new' target. i am hopeful there is some excitement among SNB users, and i'm hopeful some even have the routers currently supported so i can get some feedback.
 
