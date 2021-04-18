@@ -103,12 +103,17 @@ createUser *desired username for snmp crypto* SHA *desired SHA password* AES *de
 </li></ul>
 ----
 <ul>
-<li><u><b>What's Different in your version of DD-WRT compared to the rest?</b></u>
-</li><li><u><b>Why should I use this version of DD-WRT as opposed to others (assuming availability)?</b></u>
+</ul>
+
+
+What distinguishes this DD-WRT build?
+----
+<ul>
+ <li><u><b>Why should I use this version of DD-WRT as opposed to others (assuming availability)?</b></u>
 <ul>
 <li>first and foremost: <b>gLIBC 2.33</b>.
 </li>
-<li> who cares. i am not going to provide long protacted reasons for my motivations and why i continue to do this. 
+<li> who cares. i am not going to give reasons for my motivations and why i continue to do this. i did that for three years. i'm over it now. just be greedy and consume.
  <ul>
   <li> if you don't want to try it, don't. </li>
   <li> if you want the subpar stock firmware that has good wifi performance: keep it. </li>
