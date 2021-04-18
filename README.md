@@ -1,11 +1,11 @@
 # dd-wrt build for d-link dir 853/867/878/882 + 1760/1960/2660/2640 (see GPL_VIO_ALLEGATIONS.MD first please)
-
+----------
 here's a <b>GNUBS'D-out System V</b> (or "linux" if you take uname seriously) <b>DD-WRT <span style="color:blue">SE</span></b> ([<span style="color:blue">special edition</span>] dedicated to John Crispin, aka blogic) image with a <b>native BASH</b> shell (with <b>Linux-PAM</b>, <b>DNSCRYPT</b>, <b>OPENDPI</b>, <a href="https://github.com/openwrt/openwrt/commit/424a9ae128bd2045cd4bfd6e3229f2529d150a25">BLOGIC's <b>Hardware NAT for MT7621 devices</b></a>, <b><span style="color:red">WPA3 Support</span></b>, <b>ENTWARE</b>; don't think the first five are in BS' build). tools were built/based on a <b>NeXTSTEP</b> derivative with GLIBC.
 
 
-currently kernel <b>4.14.231</b> and DD-WRT <b>v46390</b>
-
 latest FW :
+-------------
+currently kernel <b>4.14.231</b> and DD-WRT <b>v46390</b>
 
 DIR-882/878/853/867:
 <u><b><a href="https://www.sendspace.com/file/xre67m">factory-to-ddwrt-SE.bin</a></b></u>, <u><b><a href="https://www.sendspace.com/file/e4nomk">dlink-dir882-a1-webflash.bin</a></b></u>
@@ -19,25 +19,35 @@ DIR-1760/1960/2660/2640
 
 <b>*</b> lootbag contains: glibc/bash/coreutils locales+tor0.4.4.6+PHP8.0.1+manpages+GNU Midnight Commander4.8.25+GNUMake4.2+sqlite3.30.1+JAVA (via JamVM)+GRoFF1.22.4+minidlna+VIm8.1(2-2123)+tcl8.6.9+Tk8.6.9+libX11-1.6.7*
 
-<b>older (mt_wifi) versions</b> (882/878 ONLY!)
+older (mt_wifi) versions
+-------------
 
-(4.14.219/45770) <a href="https://www.sendspace.com/file/c3mfdx">factory-to-ddwrt.bin</a>, <a href="https://www.sendspace.com/file/h1i7hg">dlink-dir882-a1-webflash.bin</a>
+(4.14.219/45770) **882/878 ONLY!** <a href="https://www.sendspace.com/file/c3mfdx">factory-to-ddwrt.bin</a>, <a href="https://www.sendspace.com/file/h1i7hg">dlink-dir882-a1-webflash.bin</a>
 
-(4.14.222/45888) <a href="https://www.sendspace.com/file/dsxn7c">factory-to-ddwrt.bin</a>, <a href="https://www.sendspace.com/file/o8v4kc">dlink-dir882-a1-webflash.bin</a>
+(4.14.222/45888) **882/878 ONLY!** <a href="https://www.sendspace.com/file/dsxn7c">factory-to-ddwrt.bin</a>, <a href="https://www.sendspace.com/file/o8v4kc">dlink-dir882-a1-webflash.bin</a>
 
-(4.14.226/46177) <a href="https://www.sendspace.com/file/sflda8">factory-to-ddwrt.bin</a>, <a href="https://www.sendspace.com/file/uqdu7s">dlink-dir882-a1-webflash.bin</a>
+(4.14.226/46177) **882/878 ONLY!** <a href="https://www.sendspace.com/file/sflda8">factory-to-ddwrt.bin</a>, <a href="https://www.sendspace.com/file/uqdu7s">dlink-dir882-a1-webflash.bin</a>
 
 (4.14.229/46333) 853/867/878/882: <a href="https://www.sendspace.com/file/bv148j">factory-to-ddwrt.bin</a>, <a href="https://www.sendspace.com/file/8fdwtk">dlink-dir882-a1-webflash.bin</a> 1760/1960/2660/2640: <a href="https://www.sendspace.com/file/ew4wb7">factory-to-ddwrt-SE.bin</a>, <a href="https://www.sendspace.com/file/6upt3q">dir-2640-a1-webflash.bin</a>
 
 
 i have tested both builds numerous times, they are safe. they will not brick your router. i have been making an 882 firmware for years. the 2640/2660/1760/1960 is a recent addition but it is even safer since it has a backup. either way, they dont touch your u-boot (its designated as a read-only partition for both builds) so, at worst, all that will happen is you may need to use recovery mode if something happens (i haven't had a report of this yet). i am soliciting input on the next 'new' target. i am hopeful there is some excitement among SNB users, and i'm hopeful some even have the routers currently supported so i can get some feedback.
 
-<u><b><span class="bbcode-size-7">LAUNDRY LIST/INFO</span></b></u>
+LAUNDRY LIST/INFO
+-----------
 <ul>
 <li><b>&#91;27042021 22:28GMT&#93; (46390++) </b>i've added asterisk, freeradius and transmission as included programs for the 1760/1960/2660/2640 builds (bigger flash) & opened these codepaths on all builds, so if they're installed on a USB key via entware, it will honour DD-WRT configuration settings on boot.
-</li><li><b>&#91;15042021 19:31GMT&#93;</b> i've added a poll to solicit your input on what should be the next router added. i wouldn't mind adding another router or two, but i want them to be "popular". it the build below is for two boards deployed for 8 models, which only differed in their flash memory type.
-</li><li><b>&#91;01122019 22:00GMT&#93;</b> just an FYI, iwpriv's TxPower command is a PERCENTAGE. i think the best way to tweak txpower is using the manual command. if people could test it out and report back i think all ralink users would be grateful (and help restore this brand's status to "the best"). here is the format
+</li>
+ <li><b>&#91;15042021 19:31GMT&#93;</b> i've added a poll to solicit your input on what should be the next router added. i wouldn't mind adding another router or two, but i want them to be "popular". it the build below is for two boards deployed for 8 models, which only differed in their flash memory type.
+</li>
+ <li><b>&#91;01122019 22:00GMT&#93;</b> just an FYI, iwpriv's TxPower command is a PERCENTAGE. i think the best way to tweak txpower is using the manual command. if people could test it out and report back i think all ralink users would be grateful (and help restore this brand's status to "the best"). here is the format
+</ul>
 
+USAGE
+--------------
+<ul>
+ <li><b>SETTING TX POWER MANUALLY:</b>
+  
 the manual command is "iwpriv &lt;radio&gt; set TxPwrManualSet=&lt;input&gt;" where i believe input takes five arguments separated by colons (i.e. &lt;arg1&gt;:&lt;arg2&gt;:&lt;arg3&gt;:&lt;arg4&gt;:&lt;arg5&gt;) where each arg is TWO digits (i.e. 14 character string in TOTAL) and takes the following arguments:
 
 <blockquote>
@@ -60,7 +70,9 @@ VHT20 (3) only supports rate setting: 0 ~ 9
 VHT40 (3) only supports rate setting: 0
 -----------------------------------------------------------------------------
 </blockquote>
-</li><li><u><b>entware/using the SES/WPS buttons</b></u>
+</li>
+
+<li><u><b>entware/using the SES/WPS buttons</b></u>
 </li><li>the SES (left) button now disables the 2.4G radio, and the WPS (right) button disables the 5G radio. enjoy this fully-functional killer firmware. so good that people are trying to create false rumours about being unable to flash lol.
 </li><li>i symlinked /usr/local/ to /opt/. so if you mount a usb drive on /opt/, it should have its contents appear in /usr/local. i find this highly desirable. also, enjoy the binutils/gcc suite for this platform. i have tested it and it can compile perl from source. must be pretty, pretty good ;)
 </li><li>to use <u><b>ENTWARE</b></u>, do the following:
@@ -95,7 +107,16 @@ createUser *desired username for snmp crypto* SHA *desired SHA password* AES *de
 </li><li><u><b>Why should I use this version of DD-WRT as opposed to others (assuming availability)?</b></u>
 <ul>
 <li>first and foremost: <b>gLIBC 2.33</b>.
-</li><li>due to the character limit, i will defer people to the larger post on the D-LINK forums that provides a bit <a href="http://forums.dlink.com/index.php?topic=76161.0"><span style="color:black">more information</span></a> about my motivations for making this firmware.
+</li>
+<li> who cares. i am not going to provide long protacted reasons for my motivations and why i continue to do this. 
+ <ul>
+  <li> if you don't want to try it, don't. </li>
+  <li> if you want the subpar stock firmware that has good wifi performance: keep it. </li>
+  <li> if you want terrible openwrt or DD-WRT with that stinky faeces they call the mt76 driver: use it.
+   <ul><li>no one is forcing you to try this build, but there must be a reason the DD-WRT maintainer is exerting so much energy trying to bury this build. 
+    <ul><li>maybe he has shares in mediatek too.</li></ul>
+   </ul>
+ </ul>
 </li></ul>
 </li></ul>
 
