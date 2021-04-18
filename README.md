@@ -5,8 +5,9 @@ firstly, i want to address the spurious allegation that my build of DD-WRT is so
 * http://web.archive.org/web/20201111193744/https://forum.dd-wrt.com/phpBB2/viewtopic.php?p=1095476
 * https://webcache.googleusercontent.com/search?q=cache:y13CRTPv-IEJ:https*//forum.dd-wrt.com/phpBB2/viewtopic.php%3Fp%3D1095476&client=firefox-b-d&hl=en&gl=ca&gbv=1&sei=iil8YM2ZAsjb-gT2vpewBQ
 * using unmodified GNU programs (coreutils, bash, bison, sed, gawk, findutils, etc) with GLIBC in the dd-wrt source tree does not violate GPL. simply add the folders  to src/router, edit the make rules (rules/all.mk rules/generic.mk rules/configs.mk) to include their own build file (rules/<file>.mk) and you can build DD-WRT too. 
-*
+* the wireless driver is available at https://github.com/hanwckf/rt-n56u/tree/master/trunk/proprietary/rt_wifi/rtpci/5.0.4.0
 
+in short, there is NO GPL VIOLATION,  NOR SHOULD ANY USER OF THIS FIRMWARE EXPECT SUPPORT FROM DD-WRT MAINTAINERS. I THOUGHT THIS WAS CLEAR, BUT I AM BEING EXPLICIT    
 <p>here's a <strong>GNUBS'D-out System V</strong> (or "linux" if you take uname seriously) <strong>DD-WRT</strong> image with a <strong>native BASH</strong> shell (with <strong>Linux-PAM</strong>, <strong>DNSCRYPT</strong>, <strong>OPENDPI</strong>, <a href="https://github.com/openwrt/openwrt/commit/424a9ae128bd2045cd4bfd6e3229f2529d150a25">BLOGIC's <strong>Hardware NAT for MT7621 devices[/b[</a>, [b]<font color="red">WPA3 Support[/COLOR]</strong>, <strong>ENTWARE</strong>; don't think the first five are in BS' build). tools were built/based on a <strong>NeXTSTEP</strong> derivative with GLIBC.<br />
 currently kernel <strong>4.14.229</strong> and DD-WRT <strong>v46390<br />
 latest FW [COLOR=blue]SE[/COLOR]</strong> ([[COLOR=blue]special edition[/COLOR]] dedicated to John Crispin, aka blogic):<br />
