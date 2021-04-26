@@ -1,4 +1,6 @@
-# dd-wrt build for d-link dir 867/878/882 + 1760/1960/2660/2640 (see GPL_VIO_ALLEGATIONS.MD first please)
+# dd-wrt build for d-link dir 867/878/882 + 1760/1960/2660/2640 + 3060/3040
+
+(see GPL_VIO_ALLEGATIONS.MD first please)
 ----------
 here's a <b>GNUBS'D-out System V</b> (or "linux" if you take uname seriously) <b>DD-WRT <span style="color:blue">SE</span></b> ([<span style="color:blue">special edition</span>] dedicated to John Crispin, aka blogic) image with a <b>native BASH</b> shell (with <b>Linux-PAM</b>, <b>DNSCRYPT</b>, <b>OPENDPI</b>, <a href="https://github.com/openwrt/openwrt/commit/424a9ae128bd2045cd4bfd6e3229f2529d150a25">BLOGIC's <b>Hardware NAT for MT7621 devices</b></a>, <b><span style="color:red">WPA3 Support</span></b>, <b>ENTWARE</b>; don't think the first five are in BS' build). tools were built/based on a <b>NeXTSTEP</b> derivative with GLIBC.
 
