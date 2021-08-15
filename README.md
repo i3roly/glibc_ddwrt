@@ -21,18 +21,6 @@ DIR-1760/1960/2660/2640
 
 <b>*</b> lootbag contains: glibc/bash/coreutils locales+tor0.4.4.6+PHP8.0.1+manpages+GNU Midnight Commander4.8.25+GNUMake4.2+sqlite3.30.1+JAVA (via JamVM)+GRoFF1.22.4+minidlna+VIm8.1(2-2123)+tcl8.6.9+Tk8.6.9+libX11-1.6.7*
 
-older (mt_wifi) versions
--------------
-
-(4.14.219/45770) **882/878 ONLY!** <a href="https://www.sendspace.com/file/c3mfdx">factory-to-ddwrt.bin</a>, <a href="https://www.sendspace.com/file/h1i7hg">dlink-dir882-a1-webflash.bin</a>
-
-(4.14.222/45888) **882/878 ONLY!** <a href="https://www.sendspace.com/file/dsxn7c">factory-to-ddwrt.bin</a>, <a href="https://www.sendspace.com/file/o8v4kc">dlink-dir882-a1-webflash.bin</a>
-
-(4.14.226/46177) **882/878 ONLY!** <a href="https://www.sendspace.com/file/sflda8">factory-to-ddwrt.bin</a>, <a href="https://www.sendspace.com/file/uqdu7s">dlink-dir882-a1-webflash.bin</a>
-
-(4.14.229/46333) 867/878/882: <a href="https://www.sendspace.com/file/bv148j">factory-to-ddwrt.bin</a>, <a href="https://www.sendspace.com/file/8fdwtk">dlink-dir882-a1-webflash.bin</a> 1760/1960/2660/2640: <a href="https://www.sendspace.com/file/ew4wb7">factory-to-ddwrt-SE.bin</a>, <a href="https://www.sendspace.com/file/6upt3q">dir-2640-a1-webflash.bin</a>
-
-
 i have tested both builds numerous times, they are safe. they will not brick your router. i have been making an 882 firmware for years. the 2640/2660/1760/1960 is a recent addition but it is even safer since it has a backup. either way, they dont touch your u-boot (its designated as a read-only partition for both builds) so, at worst, all that will happen is you may need to use recovery mode if something happens (i haven't had a report of this yet). i am soliciting input on the next 'new' target. i am hopeful there is some excitement among SNB users, and i'm hopeful some even have the routers currently supported so i can get some feedback.
 
 LAUNDRY LIST/INFO
