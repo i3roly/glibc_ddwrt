@@ -4,33 +4,41 @@
 ----------
 here's a <b>GNUBS'D-out System V</b> (or "linux" if you take uname seriously) <b>DD-WRT <span style="color:blue">SE</span></b> ([<span style="color:blue">special edition</span>] dedicated to John Crispin, aka blogic) image with a <b>native BASH</b> shell (with <b>Linux-PAM</b>, <b>DNSCRYPT</b>, <b>OPENDPI</b>, <a href="https://github.com/openwrt/openwrt/commit/424a9ae128bd2045cd4bfd6e3229f2529d150a25">BLOGIC's <b>Hardware NAT for MT7621 devices</b></a>, <b><span style="color:red">WPA3 Support</span></b>, <b>ENTWARE</b>; don't think the first five are in BS' build). tools were built/based on a <b>NeXTSTEP</b> derivative with GLIBC.
 
+this readme is updated periodically. thus the DD-WRT and kernel versions may be far newer than what is given below. this document serves as a guide for using the firmware.
 
 latest FW :
 -------------
-currently kernel <b>4.14.231</b> and DD-WRT <b>v46450</b>
+currently kernel <b>4.14.255</b> and DD-WRT <b>v47675</b>
 
-DIR-882/878/867:
-<u><b><a href="https://www.sendspace.com/file/xre67m">factory-to-ddwrt-SE.bin</a></b></u>, <u><b><a href="https://www.sendspace.com/file/e4nomk">dlink-dir882-a1-webflash.bin</a></b></u>
+DIR-882/878/867: use the dir-882 firmware
 
-DIR-1760/1960/2660/2640
-<b><u><a href="https://www.sendspace.com/file/gp12hv">factory-to-ddwrt-SE.bin</a></u></b>, <u><b><a href="https://www.sendspace.com/file/4wzg1c">dir-2640-a1-webflash.bin</a>
+DIR-1760/1960/2660/2640: use the dir-2640 firmware
 
- (ignore the file name, it works for all of these routers)
- 
-<a href="https://www.sendspace.com/file/doyuy1">LOOTBAG*</a></b></u>, <u><b><a href="https://www.sendspace.com/file/mxksfk">BINUTILS2.35+GCC10.2</a></b></u> (dead links for now; i will happily re-upload if there's any demand)
+DIR-3040/3060: use the dir-3040 firmware
 
-<b>*</b> lootbag contains: glibc/bash/coreutils locales+tor0.4.4.6+PHP8.0.1+manpages+GNU Midnight Commander4.8.25+GNUMake4.2+sqlite3.30.1+JAVA (via JamVM)+GRoFF1.22.4+minidlna+VIm8.1(2-2123)+tcl8.6.9+Tk8.6.9+libX11-1.6.7*
+<b>*</b> lootbag contains: 
+<ul>
+<li> manpages  </li>
+<li>GNU Midnight Commander</li>
+<li> tor </li>
+<li> make  </li>
+<li> sqlite </li>
+<li> java (JamVM) </li>
+<li> GroFF (for manpages) </li>
+<li> VIm8.1(2-2123) </li>
+<li> minidlna  </li>
+<li> tcl/tk 8.6.9 </li>
+<li> libX11-1.6.7*</li>
+<li> and a bunch of other shit </li>
+</ul>
 
-i have tested both builds numerous times, they are safe. they will not brick your router. i have been making an 882 firmware for years. the 2640/2660/1760/1960 is a recent addition but it is even safer since it has a backup. either way, they dont touch your u-boot (its designated as a read-only partition for both builds) so, at worst, all that will happen is you may need to use recovery mode if something happens (i haven't had a report of this yet). i am soliciting input on the next 'new' target. i am hopeful there is some excitement among SNB users, and i'm hopeful some even have the routers currently supported so i can get some feedback.
+i have tested both builds numerous times, they are safe. they will not brick your router. i have been making an 882 firmware for years. the 2640/2660/1760/1960/3040/3060 are recent additions but it are even safer since they have a backup. 
+either way, they dont touch your u-boot (its designated as a read-only partition for both builds) so, at worst, all that will happen is you may need to use recovery mode if something happens (i haven't had a report of this yet). 
 
 LAUNDRY LIST/INFO
 -----------
 <ul>
-<li><b>&#91;27042021 22:28GMT&#93; (46390++) </b>i've added asterisk, freeradius and transmission as included programs for the 1760/1960/2660/2640 builds (bigger flash) & opened these codepaths on all builds, so if they're installed on a USB key via entware, it will honour DD-WRT configuration settings on boot.
-</li>
- <li><b>&#91;15042021 19:31GMT&#93;</b> i've added a poll to solicit your input on what should be the next router added. i wouldn't mind adding another router or two, but i want them to be "popular". it the build below is for two boards deployed for 8 models, which only differed in their flash memory type.
-</li>
- <li><b>&#91;01122019 22:00GMT&#93;</b> just an FYI, iwpriv's TxPower command is a PERCENTAGE. i think the best way to tweak txpower is using the manual command. if people could test it out and report back i think all ralink users would be grateful (and help restore this brand's status to "the best"). here is the format
+<li><b>(BUILDS PREVIOUS TO (AND INCLUDING) 47525 SHOULD UPGRADE DUE TO A BUG IN THE HTTPD AUTHENTICATION THAT WOULD ALLOW AN ATTACKER TO ACCESS WEBGUI WITH ANY USERNAME OTHER THAN 'root')</b></li>
 </ul>
 
 USAGE
