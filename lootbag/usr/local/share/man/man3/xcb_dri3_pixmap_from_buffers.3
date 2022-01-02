@@ -1,0 +1,59 @@
+.TH xcb_dri3_pixmap_from_buffers 3  "libxcb 1.13.1" "X Version 11" "XCB Requests"
+.ad l
+.SH NAME
+xcb_dri3_pixmap_from_buffers \- 
+.SH SYNOPSIS
+.hy 0
+.B #include <xcb/dri3.h>
+.SS Request function
+.HP
+xcb_void_cookie_t \fBxcb_dri3_pixmap_from_buffers\fP(xcb_connection_t\ *\fIconn\fP, xcb_pixmap_t\ \fIpixmap\fP, xcb_window_t\ \fIwindow\fP, uint8_t\ \fInum_buffers\fP, uint16_t\ \fIwidth\fP, uint16_t\ \fIheight\fP, uint32_t\ \fIstride0\fP, uint32_t\ \fIoffset0\fP, uint32_t\ \fIstride1\fP, uint32_t\ \fIoffset1\fP, uint32_t\ \fIstride2\fP, uint32_t\ \fIoffset2\fP, uint32_t\ \fIstride3\fP, uint32_t\ \fIoffset3\fP, uint8_t\ \fIdepth\fP, uint8_t\ \fIbpp\fP, uint64_t\ \fImodifier\fP, const int32_t\ *\fIbuffers\fP);
+.br
+.hy 1
+.SH REQUEST ARGUMENTS
+.IP \fIconn\fP 1i
+The XCB connection to X11.
+.IP \fIpixmap\fP 1i
+TODO: NOT YET DOCUMENTED.
+.IP \fIwindow\fP 1i
+TODO: NOT YET DOCUMENTED.
+.IP \fInum_buffers\fP 1i
+TODO: NOT YET DOCUMENTED.
+.IP \fIwidth\fP 1i
+TODO: NOT YET DOCUMENTED.
+.IP \fIheight\fP 1i
+TODO: NOT YET DOCUMENTED.
+.IP \fIstride0\fP 1i
+TODO: NOT YET DOCUMENTED.
+.IP \fIoffset0\fP 1i
+TODO: NOT YET DOCUMENTED.
+.IP \fIstride1\fP 1i
+TODO: NOT YET DOCUMENTED.
+.IP \fIoffset1\fP 1i
+TODO: NOT YET DOCUMENTED.
+.IP \fIstride2\fP 1i
+TODO: NOT YET DOCUMENTED.
+.IP \fIoffset2\fP 1i
+TODO: NOT YET DOCUMENTED.
+.IP \fIstride3\fP 1i
+TODO: NOT YET DOCUMENTED.
+.IP \fIoffset3\fP 1i
+TODO: NOT YET DOCUMENTED.
+.IP \fIdepth\fP 1i
+TODO: NOT YET DOCUMENTED.
+.IP \fIbpp\fP 1i
+TODO: NOT YET DOCUMENTED.
+.IP \fImodifier\fP 1i
+TODO: NOT YET DOCUMENTED.
+.IP \fIbuffers\fP 1i
+TODO: NOT YET DOCUMENTED.
+.SH DESCRIPTION
+.SH RETURN VALUE
+Returns an \fIxcb_void_cookie_t\fP. Errors (if any) have to be handled in the event loop.
+
+If you want to handle errors directly with \fIxcb_request_check\fP instead, use \fIxcb_dri3_pixmap_from_buffers_checked\fP. See \fBxcb-requests(3)\fP for details.
+.SH ERRORS
+This request does never generate any errors.
+.SH SEE ALSO
+.SH AUTHOR
+Generated from dri3.xml. Contact xcb@lists.freedesktop.org for corrections and improvements.

@@ -1,0 +1,453 @@
+
+   The Three-D Athena Toolkit (Xaw3d)
+   ----------------------------------
+
+   This is a new release of the Xaw3d toolkit, an update from 1.5E.
+
+   X.Org has now picked up the mantle of Xaw3d maintenance, previously
+   carried by Xaw3d creator Kaleb Keithley, and then by D. J. Hawkey Jr.
+
+   While not as insistant as Kaleb was, we do suggest you include this
+   file, as is, with any product that includes Xaw3d, in whole or in
+   part, in any form. This file is the authoritative documentation for
+   Xaw3d.
+
+   If you're new to the Athena toolkit, please understand that it is
+   highly configurable, and some resources will interact (or not) with
+   undesirable results. Some of these are bugs, but many are just the
+   nature of the beast.
+
+     _________________________________________________________________
+
+   Usage:
+   ------
+
+   This release of Xaw3d is based on X.Org's X11R6.3 Athena toolkit, with
+   bits and pieces thrown in from other sources. It is intended to be a
+   general-purpose replacement for the Athena (Xaw) toolkit.
+
+   In general, you should be able to link almost any Athena-based
+   application to this Xaw3d Athena toolkit, for a three-dimensional
+   appearance on most of the widgets. On systems with shared libraries,
+   you might be able replace your shared libXaw.* with libXaw3d.* to
+   obtain the appearance without even relinking, but the odds of this
+   working is slim, and not recommended.
+
+   Applications written for Xaw3d might have to test the library for a
+   particular feature (see the "Xaw3d build options" section below). To
+   accomodate this, a private header is installed which reflects the
+   library's capabilities. Xaw3dP.h contains four definitions that may be
+   used for this purpose. For example:
+
+       #define XAW_INTERNATIONALIZATION
+       #define XAW_MULTIPLANE_PIXMAPS
+       #define XAW_GRAY_BLKWHT_STIPPLES
+       #undef XAW_ARROW_SCROLLBARS
+
+   Xaw3dP.h need not be included by the application source, as the public
+   headers that reference any 3D features include this header. The
+   default configuration is set up to match the capabilities of X.Org's
+   Xaw toolkit.
+
+   The use of most shadow resources should be intuitive enough, and may
+   be set or read conventionally (e.g., resource files, editres,
+   programatically, etc.). The userData resource may be used to "hang"
+   application-specific data on a widget, but this is accessable to
+   programs only. Other resources and less-than-obvious features are
+   documented throughout this file.
+
+   The default resource values present a not-as-pretty-as-it-could-be
+   appearance, due to stippled shadows (as opposed to allocated colors)
+   in order to conserve colormap space, and by allowing non-rectangular
+   pushbuttons, which are not shadowed. To specify otherwise, set these
+   resources:
+
+       *beNiceToColormap:  False
+       *shapeStyle:        Rectangle
+
+   You might also want to remove the borders from some widgets:
+
+       *Text.borderWidth:           0
+       *SimpleMenu.borderWidth:     0
+       *Paned.internalBorderWidth:  0
+
+   To revert to reverse-video highlighting in menus:
+
+       *SmeBSB.shadowWidth:  0
+
+   Note that shadows "grow outward" in the SimpleMenu and Text widgets,
+   increasing these widgets' sizes, "grow inward" in the Viewport and
+   Scrollbar widgets, decreasing the size of the clip widget and thumb,
+   respectively, and "grow inward" in the Label (and superclasses of) and
+   SmeBSB widgets, encroaching on their label parts. Fat shadows will
+   probably mean some futzing with size or margin resources for a proper
+   appearance.
+     _________________________________________________________________
+
+   Xaw3d build requirements:
+   -------------------------
+
+   Many header files have changed since Release 1.5. This means that any
+   installed Xaw3d headers must be removed before building this
+   distribution, to see that these source files include these header
+   files. Renaming the directory that the existing headers live in is
+   sufficient.
+
+   Xaw3d build options:
+   --------------------
+
+   Like Xaw, the default Xaw3d does not accomodate multi-plane pixmaps.
+   If you want color pixmaps, and have the XPM library installed, pass
+   the --enable-multiplane-bitmaps flag to configure.  You may then specify
+   either XPM or XBM files for any Xaw3d bitmap resource, whether by
+   resource files, with editres, programmatically, etc.. And yes, the
+   transparency of XPM files is honored.
+
+   Note that this enables the use of structures and functions in the XPM
+   library; the XPM library include file (xpm.h) must be available when
+   building Xaw3d, and the XPM library must then be availble when running
+   applications that use Xaw3d. This makes Xaw3d dependant on the XPM
+   library, so think twice about it.
+
+   The default stippled shadows used when the beNiceToColormap resource
+   is True work well enough, except for widgets that have black or white
+   backgrounds.  This can be changed by passing the --enable-gray-stipples
+   flag to configure when building.
+
+   This makes Xaw3d allocate a gray colorcell, and use it in stippled
+   shadows when 1) widgets have black or white backgrounds and 2) the
+   beNiceToColormap resource is True and 3) the display allows it. This
+   option was disabled in previous Xaw3d releases.
+
+   The default Xaw3d does not use arrow scrollbars.  If you want
+   arrow-style scrollbars, pass the --enable-arrow-scrollbars flag to
+   configure when building.
+
+   Note that the Scrollbar widget's translations and actions will change
+   accordingly.
+
+     _________________________________________________________________
+
+   New in 1.5A:
+   ------------
+
+   The SimpleMenu widget now supports scrolling through entries too
+   numerous to fit on the screen, with a new resource supporting a scroll
+   jump value. The record variable is simple_menu.jump_val, resourced as
+   XtNjumpScroll, and classed as XtCJumpScroll. Adapted from an early
+   neXtaw toolkit.
+
+   Added 3D support to the SimpleMenu, Text, and Viewport widgets.
+
+   Four minor changes in ThreeD.c and SmeThreeD.c to have the widgets use
+   the app's colormap, rather than the screen's default, for those apps
+   that create their own.
+
+   Added the deletion of laygram.h to the Imakefile.
+
+   Created Xaw3dP.c, for functions shared by other modules that have no
+   other appropriate home.
+
+   A new directory containing sample resource files for a few apps. See
+   the README.AD file in that directory.
+
+   New in 1.5B:
+   ------------
+
+   Made Imakefile a bit more friendly to build options. Makefile now
+   defines the build options in Xaw3dP.h during the build.
+
+   Added to the key translation tables in Panner.c and TextTr.c, and some
+   rules to Imakefile, to make this distribution X11R5 compliant. Tested
+   on exactly one X11R5 system; your mileage may vary.
+
+   Made internationalization support conditional, for systems lacking or
+   broken. Tested on exactly two systems, one with and one without; your
+   mileage may vary.
+
+   New in 1.5C:
+   ------------
+
+   Enabled multi-plane pixmap support with a new Xt resource type
+   converter. The "Xaw3d build options" section has more information.
+
+   Added private Pixmap resources to the Label and SmeBSB widgets for
+   stippled copies of the public Pixmap resources (record variables
+   label.stippled, label.right_stippled, sme_bsb.left_stippled, and
+   sme_bsb.right_stippled, respectively). Insensitive pixmaps are now
+   rendered properly.
+
+   New in 1.5D:
+   ------------
+
+   Added two resources to the SimpleMenu widget for setting margins. The
+   SmeBSB widgets have a tighter relationship with their parent and
+   siblings; menus and their entries now respond properly to changes in
+   themselves or their parent. See the section "The SimpleMenu widget and
+   margins" below for a detailed explanation.
+
+   New in 1.5E:
+   ------------
+
+   Enabled a new resource in the ThreeD widget to specify one of five
+   shadow types. The record variable is threeD.relief (the record part is
+   transparent), resourced as XtNRelief and classed as XtCRelief. It
+   accepts as values XtReliefNone, XtReliefRaised, XtReliefSunken,
+   XtReliefRidge, and XtReliefGroove. Note that the Text, SimpleMenu,
+   Scrollbar, and Viewport widgets ignore this resource, and display only
+   raised or sunken shadows. Built on the unfinished work of an early
+   neXtaw toolkit.
+
+   Added support for sub-menus in the SimpleMenu widget. Inspired by the
+   xfig application, adapted from XFree86's X11R6.6 "Xaw7" toolkit, and
+   made better than both. See the section "The SimpleMenu widget and
+   sub-menus" below for usage.
+
+   Added a resource to the SmeBSB widget to specify an underlined
+   character in the label. The record variable is sme_bsb.underline,
+   resourced as XtNunderline, and classed as XtCUnderline. It accepts an
+   integer as an index to the character; a value less than zero or
+   greater than or equal to the label length inhibits underlining.
+   Adapted from a recent distribution of the xfig application.
+
+   Made the SmeThreeD widget sensitive to the GRAY_BLKWHT_STIPPLES build
+   option (see the "Xaw3d build options" section for what this is and
+   does).
+
+   Added support for "tooltips". Inspired by the xfig application and
+   adapted from XFree86's X11R6.6 "Xaw7" toolkit. See the section "The
+   Tip widget" below for usage.
+
+   Fixed some geometry and positioning bugs in the Label widget. It's
+   internalHeight and internalWidth resources are now used to enforce a
+   minimum size when it's resize resource is True. The Label (and
+   superclasses of) widget now resizes properly to changes in label parts
+   and internal margins (subject to any constraints placed on the
+   widgets, of course).
+
+   Swapped the top and bottom colors in the stippled pixmap shadows.
+
+   Fixed a shadow drawing bug in the Command widget, when the shape is
+   changed.
+
+   Fixed the shadow state bug in the SmeBSB widget.
+
+   Dropped support for Linux shared a.out libraries.
+     _________________________________________________________________
+
+   Bugs and deficiencies:
+   ----------------------
+
+   You may not be be able to replace shared libXaw.* libraries with
+   libXaw3d.* libraries on systems with SVR3-style shared libraries.
+
+   The lexer in the Layout widget doesn't work well when a program that
+   uses the Layout widget is linked with GNU's malloc(). This is a
+   problem on older releases of Linux, where the libc malloc() is is GNU
+   malloc(). It's also a problem on older releases of FreeBSD if
+   "ExtraLibraries -lgnumalloc" is specified in imake's FreeBSD.cf
+   configuration file (this may be a problem on other BSDs too, but I
+   don't know this as fact). The solution under FreeBSD is to delete the
+   "ExtraLibraries" line(s) in the vendor.cf configuration file, or edit
+   the Makefile to not link with "-lgnumalloc". I don't have a solution
+   for older Linux distributions, nor do I have the time (or inclination)
+   to figure one out. If you discover a fix, you're more than welcome to
+   send it in.
+
+   The samples in Layout.h are wrong and don't work. Example programs
+   written by Keith Packard that use the Layout widget are available at
+   ftp://ftp.x.org/R5contrib/.
+
+   If an application subclasses Athena's Simple or Sme classes, or
+   subclasses thereof, there is a high probability that Xaw3d isn't
+   source compatible. Sorry, I have no plans (or ideas) on how to fix
+   this.
+
+   Xaw3d pixel allocation may not behave well when beNiceToColormap is
+   False and the colormap (default or application) is full.
+
+   Non-rectangular Command widgets are not rendered with shadows.
+
+   All geometry management routines should fully account for shadow
+   widths, but some don't, and it can show.
+
+   A few bugs and ambiguities in the Athena toolkit from which this
+   distribution is derived have been resolved. While trying to be true to
+   Athena documentation, these changes may make Xaw3d behave oddly for
+   some applications. Nothing that can't be fixed by tweaking the
+   appropriate resources, I'll wager.
+
+   A comment that appears in the xterm source:
+   -------------------------------------------
+
+       *
+       * ...There be serious and nasty dragons here.
+       *
+
+   xterm is, well, xterm. The auto-scroll with arrow-style scrollbars
+   won't work in xterm because it relies on timeouts. xterm, perhaps for
+   speed, circumvents XtAppNextEvent() by using XNextEvent() to get its X
+   events, with the unfortunate side effect of completely ignoring "other
+   sources", like timeouts. At this time there is no patch to fix the
+   X11R6 xterm, but there is a patch for the X11R5 xterm at
+   ftp://ftp.x.org/contrib/widgets/Xaw3d/R5/; it shouldn't be too hard to
+   integrate it into the X11R6 sources.
+     _________________________________________________________________
+
+   The SimpleMenu widget and margins:
+   ----------------------------------
+
+   Two resources have been added to the SimpleMenu widget for margin
+   management. The record variables are simple_menu.left_whitespace and
+   simple_menu.right_whitespace, resourced as XtNleftWhitespace and
+   XtNrightWhitespace, and classed as - yup - XtCLeftWhitespace and
+   XtCRightWhitespace. They can be also be referenced together by the
+   class XtCHorizontalWhitespace.
+
+   To illustrate, the leftMargin resource can be different values in each
+   SmeBSB widget, and SimpleMenu will oblige. If a pixmap wider than the
+   margin is specified in any SmeBSB widget, the result is less than
+   desirable (refer to ORA X, Vol 5 Sec 6, SmeBSB.*Bitmap and
+   SmeBSB.*Margin). Set the leftWhitespace resource in the parent
+   SimpleMenu widget, and SimpleMenu will set all children SmeBSB
+   leftMargins to that value. Specify a pixmap of any width for any
+   SmeBSB child, and SimpleMenu will separate the elements (menu edge,
+   pixmap, and text) of all SmeBSB children with that minimum distance as
+   it vertically aligns their text elements.
+
+   The SimpleMenu widget now resizes not only to the above, but also to
+   changes in these SmeBSB traits: Labels and fonts, pixmaps, and
+   margins.
+
+   Implementation notes: The SimpleMenu *Whitespace resources override
+   and replace the values of SmeBSB *Margin resources. To nullify this
+   behavior, a *Whitespace resource must first be set to zero, and the
+   corresponding *Margin resources then set appropriately. The *Margin
+   resources remain unchanged in and of themselves; they behave just as
+   always when the *Whitespace resources are not used.
+
+   The SimpleMenu widget and sub-menus:
+   ------------------------------------
+
+   Resources have been added to the SimpleMenu and SmeBSB widgets to
+   support sub-menus. The record variables are simple_menu.sub_menu and
+   simple_menu.state (neither are public), and sme_bsb.menu_name, which
+   is resourced as XtNmenuName, and classed as XtCMenuName. It's the
+   latter resource that is used by an application, and by default it is
+   NULL; menus behave as they always have. When this resource is set to a
+   menu name, the parent SimpleMenu widget will use the SmeBSB widget as
+   the entry point to a child SimpleMenu widget, managing it's visibility
+   and location. No constraints are placed on focus or the pointer.
+   Consider this code fragment:
+
+       /* create a menu button */
+       opsbutton = XtCreateManagedWidget("ops", menuButtonWidgetClass,
+                                         parent, NULL, 0);
+
+       /* create a menu for the button */
+       opsmenu = XtCreatePopupShell("opsMenu", simpleMenuWidgetClass,
+                                    opsbutton, NULL, 0);
+       XtSetArg(args[0], XtNmenuName, "fileMenu");
+       XtSetArg(args[1], XtNrightBitmap, rightArrow);
+       filebutton = XtCreateManagedWidget("file", smeBSBObjectClass,
+                                          opsmenu, args, 2);
+       XtSetArg(args[0], XtNmenuName, "pageMenu");
+       XtSetArg(args[1], XtNrightBitmap, rightArrow);
+       pagebutton = XtCreateManagedWidget("page", smeBSBObjectClass,
+                                          opsmenu, args, 2);
+       quitbutton = XtCreateManagedWidget("quit", smeBSBObjectClass,
+                                          opsmenu, NULL, 0);
+
+       /* create a sub-menu for the first menu item */
+       filemenu = XtCreatePopupShell("fileMenu", simpleMenuWidgetClass,
+                                     opsmenu, NULL, 0);
+       openbutton = XtCreateManagedWidget("open", smeBSBObjectClass,
+                                          filemenu, NULL, 0);
+       printbutton = XtCreateManagedWidget("print", smeBSBObjectClass,
+                                           filemenu, NULL, 0);
+
+       /* create a sub-menu for the second menu item */
+       pagemenu = XtCreatePopupShell("pageMenu", simpleMenuWidgetClass,
+                                     opsmenu, NULL, 0);
+       prevbutton = XtCreateManagedWidget("prev", smeBSBObjectClass,
+                                          pagemenu, NULL, 0);
+       nextbutton = XtCreateManagedWidget("next", smeBSBObjectClass,
+                                          pagemenu, NULL, 0);
+
+   The SimpleMenu widget named "opsMenu" will inherit the SimpleMenu
+   widgets named "fileMenu" and "pageMenu" as children sub-menus. It will
+   position the first sub-menu next to the SmeBSB widget named "file",
+   and the second next to the SmeBSB widget named "page". A sub-menu will
+   be mapped (or unmapped) when the pointer enters (or leaves) the
+   superior SmeBSB widget. Note that a sub-menu's parent must be the
+   superior SimpleMenu widget, not the superior SmeBSB widget. The other
+   resources of SmeBSB widgets are unaffected by the menuName resource.
+
+   The Tip widget:
+   ---------------
+
+   This Tip widget is not compatable with XFree86's "Xaw7" Tip widget. I
+   couldn't grok how it links the specified widgets to a Tip widget, nor
+   how their labels are set. Perhaps it's all done with an "Xaw7"
+   DisplayList, I don't know. So, this XawTipEnable() function requires a
+   second parameter, to set the label:
+
+       /* create a menu button */
+       opsbutton = XtCreateManagedWidget("ops", menuButtonWidgetClass,
+                                         parent, NULL, 0);
+
+       /* add a tooltip */
+       XawTipEnable(opsbutton, "Application functions");
+
+       ...
+
+       /* for some reason, disable the tooltip */
+       XawTipDisable(opsbutton);
+
+   The XawTipEnable() function creates a Tip widget (one per screen, as
+   required), and links the specified widget and label to the correct Tip
+   widget. Nothing else is required of the application; Tip widgets
+   manage themselves. The XawTipDisable() function removes the timeout
+   and event handler, and unmaps the Tip window if necessary, but does
+   not destroy the widget or its linked list.
+
+   Note that the labels of Tip widgets are set individually, but the
+   font, colors, margins, etc., can only be set globally, for all Tip
+   widget instances. For example, a resource file might contain:
+
+       *Tip.font:         7x13bold
+       *Tip.background:   yellow
+       *Tip.foreground:   blue
+       *Tip.borderColor:  blue
+
+   Note also that the *Margin resources of XFree86's "Xaw7" Tip widget
+   are not in this Tip widget; they have been reduced to internalHeight
+   and internalWidth resources, like those of the Label widget.
+     _________________________________________________________________
+
+   Authors and contributors, in alphabetical order:
+   ------------------------------------------------
+
+   Uri Blumenthal <uri@watson.ibm.com>
+   Dimitrios P. Bouras <dbouras@hol.gr>
+   David Flanagan <david@ora.com>
+   D. J. Hawkey Jr. <hawkeyd@visi.com>, current maintainer
+   Achille Hui <eillihca@drizzle.stanford.edu>
+   Kaleb S. Keithley <kaleb@keithley.org>, developed and maintained Xaw3d
+   Alfredo Kojima
+   Gustaf Neumann <neumann@mohegan.wi-inf.uni-essen.de>
+   Keith Packard <keithp@ncd.com>
+   Mark Rawling <mwr@mel.dit.csiro.au>
+   Heiko Schroeder <heiko@pool.informatik.rwth-aachen.de>
+   Mike Schulze <mike@cs.curtin.edu.au>
+   Brian V. Smith <bvsmith@lbl.gov>
+   Malcolm Strickland <chuck-strickland@orl.mmc.com>
+   Frank Terhaar-Yonkers <fty@bizarre.trpnc.epa.gov>
+   Tim Theisen <tim@cs.wisc.edu>
+   Mitch Trachtenberg <mitch@mta.com>
+   Jerry Whelan <guru@stasi.bradley.edu>
+   Robert Withrow <witr@rwwa.com>
+   Jamie Zawinski <jwz@netscape.com>
+
+   And, of course, all the people at X.Org and XFree86.
+

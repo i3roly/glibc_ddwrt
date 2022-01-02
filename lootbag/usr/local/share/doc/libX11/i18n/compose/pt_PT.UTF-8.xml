@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+ "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd">
+<section id="pt_PT.UTF-8">
+<title>Xlib Compose Keys for pt_PT.UTF-8</title>
+<para>Applications using Xlib input handling should recognize
+ these compose key sequences in locales using the
+ pt_PT.UTF-8 compose table.</para>
+
+<para>This compose table includes the non-conflicting entries from: /usr/local/share/X11/locale/en_US.UTF-8/Compose.  Those entries are not shown here - see those charts for the included key sequences.</para>
+<table><title>Compose Key Sequences for pt_PT.UTF-8</title>
+<tgroup cols='2'>
+ <colspec colname='seq' /><colspec colname='action' />
+ <thead><row>
+  <entry>Key Sequence</entry><entry>Action</entry>
+ </row></thead>
+ <tbody>
+<row><entry><keycombo action='seq'><keysym>dead_acute</keysym><keysym>C</keysym></keycombo></entry><entry>"Ç" Ccedilla # LATIN CAPITAL LETTER C WITH CEDILLA</entry></row>
+<row><entry><keycombo action='seq'><keysym>dead_acute</keysym><keysym>c</keysym></keycombo></entry><entry>"ç" ccedilla # LATIN SMALL LETTER C WITH CEDILLA</entry></row>
+</tbody>
+</tgroup>
+</table>
+</section>

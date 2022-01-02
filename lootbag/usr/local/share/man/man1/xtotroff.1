@@ -1,0 +1,149 @@
+.TH XTOTROFF 1 "18 November 2018" "groff 1.22.4"
+.SH NAME
+xtotroff \- convert X font metrics into GNU troff font metrics
+.
+.
+.\" ====================================================================
+.\" Legal Terms
+.\" ====================================================================
+.\"
+.\" Copyright (C) 2004-2018 Free Software Foundation, Inc.
+.\"
+.\" Permission is granted to make and distribute verbatim copies of this
+.\" manual provided the copyright notice and this permission notice are
+.\" preserved on all copies.
+.\"
+.\" Permission is granted to copy and distribute modified versions of
+.\" this manual under the conditions for verbatim copying, provided that
+.\" the entire resulting derived work is distributed under the terms of
+.\" a permission notice identical to this one.
+.\"
+.\" Permission is granted to copy and distribute translations of this
+.\" manual into another language, under the above conditions for
+.\" modified versions, except that this permission notice may be
+.\" included in translations approved by the Free Software Foundation
+.\" instead of in the original English.
+.
+.
+.\" ====================================================================
+.SH SYNOPSIS
+.\" ====================================================================
+.
+.SY xtotroff
+.OP \-r resolution
+.OP \-s point-size
+.I font-map
+.YS
+.
+.SY xtotroff
+.B \-\-help
+.YS
+.
+.SY xtotroff
+.B \-v
+.SY xtotroff
+.B \-\-version
+.YS
+.
+.
+.\" ====================================================================
+.SH DESCRIPTION
+.\" ====================================================================
+.
+.I xtotroff
+takes a
+.IR font-map ,
+which maps
+.IR groff (1)
+fonts to X11 fonts,
+creates GNU
+.IR troff (1)
+metric files for all fonts listed.
+.
+Each line in
+.I font-map
+consists of a
+.I groff
+font name and an X font name as a X Logical Font Description (XLFD)
+pattern,
+separated by whitespace.
+.
+Example:
+.
+.
+.PP
+.RS
+.EX
+TB \-adobe\-times\-bold\-r\-normal\-\-*\-*\-*\-*\-p\-*\-iso8859\-1
+.EE
+.RE
+.
+.
+.PP
+The wildcards in the patterns are filled with the arguments to the
+.B \-r
+and
+.B \-s
+switches.
+.
+If a font name is still ambiguous,
+.I xtotroff
+aborts.
+.
+.
+.\" ====================================================================
+.SH OPTIONS
+.\" ====================================================================
+.
+Whitespace is permitted between a command-line option and its argument.
+.
+.
+.TP
+.B \-\-help
+Display a usage message and exit.
+.
+.
+.TP
+.BI \-r resolution
+Set the resolution for all font patterns in
+.IR font-map .
+.
+The value is used for both the horizontal and vertical resolution.
+.
+If not specified, a resolution of 75dpi is assumed.
+.
+.
+.TP
+.BI \-s point-size
+Set the point size for all font patterns in
+.IR font-map .
+.
+If not specified, a size of 10pt is assumed.
+.
+.
+.TP
+.B \-v
+.TQ
+.B \-\-version
+Display version information and exit.
+.
+.
+.\" ====================================================================
+.SH BUGS
+.\" ====================================================================
+The only supported font encodings are \(lqiso8859\-1\(rq and
+\(lqadobe\-fontspecific\(rq.
+.
+.
+.\" ====================================================================
+.SH "SEE ALSO"
+.\" ====================================================================
+.IR groff (1),
+.IR gxditview (1),
+.IR troff (1)
+.
+.
+.\" Local Variables:
+.\" mode: nroff
+.\" End:
+.\" vim: set filetype=groff:
