@@ -19,7 +19,7 @@ DIR-3040/3060: use the dir-3040 firmware
 <b>*</b> lootbag contains: 
 <ul>
 <li> manpages  </li>
-<li>GNU Midnight Commander</li>
+ <li>GNU Midnight Commander</li>
 <li> tor </li>
 <li> make  </li>
 <li> sqlite </li>
@@ -27,6 +27,7 @@ DIR-3040/3060: use the dir-3040 firmware
 <li> GroFF (for manpages) </li>
 <li> VIm8.1(2-2123) </li>
 <li> minidlna  </li>
+<li> SOFTETHER  </li>
 <li> tcl/tk 8.6.9 </li>
 <li> libX11-1.6.7*</li>
 <li> and a bunch of other shit </li>
@@ -84,7 +85,6 @@ you now have opkg, and can install packages willy-nilly (tested myself! ENJOY! T
 <ul>
 <li> each radio now uses one configuration file (i.e. CONFIG_MULTI_PROFILE=n produces AC3467 at 5GHz)
 </li><li>VAPs can have distinct wireless channels from the main ssid. To set them, use wl{0,1}_channel=ssid1chan;vap1chan;vap2chan;vap3chan;...;vapNchan where the ordering of the N VAPs' channels (not sure if the limit N is 4, 8 or 16 different channels for VAPS on a single radio) should correspond to the order they are listed in the DD-WRT interface (or nvram settings). I think it's possible to have more VAPs than distinct channels for the respective radio. This feature should really let the mt7615 shine (deal with the reboots. don't create VAPs willy nilly and expect it in 10 seconds k, sometimes it takes 25-30seconds more)
-</li><li>users can instantiate the "wl{0,1}_dbdc={0,1}" nvram variable to enable DBDC mode for whichever radio. AC3467 is currently only possible without DBDC mode from my cursory assessment. still a work in progress.
 </li><li><b>PRO TIP #1:</b> switching from BS' to my build, or vice-versa, CAN (but SHOULD not &#91;from my experience flashing back and forth for debugging purposes&#93;) corrupt your nvram because we use different NVRAM drivers. BACK UP your settings and restore them after first-boot.
 </li></ul>
 </li><li><u><b> additional information about SNMPD </b></u>
