@@ -141,7 +141,7 @@ OPTIONS
         Don't load key bindings from any file, use default hardcoded keys.
 
 -P file, --printwd=file
-        Print the last working directory to the specified file. This option is not meant to be used directly. Instead, it's used from a special shell script that automatically changes the current directory of the shell to the last directory Midnight Commander was in. Source the file /usr/local/libexec/mc/mc.sh (bash and zsh users) or /usr/local/libexec/mc.csh (tcsh users) respectively to define mc as an alias to the appropriate shell script.
+        Print the last working directory to the specified file. This option is not meant to be used directly. Instead, it's used from a special shell script that automatically changes the current directory of the shell to the last directory Midnight Commander was in. Source the file /usr/libexec/mc/mc.sh (bash and zsh users) or /usr/libexec/mc.csh (tcsh users) respectively to define mc as an alias to the appropriate shell script.
 
 -s, --slow
         Turn on the slow terminal mode, in this mode the program will not draw expensive line drawing characters and will toggle verbose mode off.
@@ -225,7 +225,7 @@ The Shell Command LineShell Command Line section list the keys which are used
 Input Line KeysInput Line Keys are used for editing input lines. This means both the command line and the input lines in the query dialogs.[Keys_redefine]
 Redefine hotkey bindings
 
-Hotkey bindings may be read from external file (keymap-file). Initially, Midnight Commander creates key bindings using keymap defined in the source code. Then, two files /usr/local/share/mc/mc.keymap and /usr/local/etc/mc/mc.keymap are loaded always, sequentially reassigned key bindings defined earlier. User-defined keymap-file is searched on the following algorithm (to the first one found):
+Hotkey bindings may be read from external file (keymap-file). Initially, Midnight Commander creates key bindings using keymap defined in the source code. Then, two files /usr/share/mc/mc.keymap and /usr/etc/mc/mc.keymap are loaded always, sequentially reassigned key bindings defined earlier. User-defined keymap-file is searched on the following algorithm (to the first one found):
 
         1) command line option -K <keymap> or --keymap=<keymap>
         2) Environment variable MC_KEYMAP
@@ -235,8 +235,8 @@ Hotkey bindings may be read from external file (keymap-file). Initially, Midnigh
 Command line option, environment variable and parameter in config file may contain the absolute path to the keymap-file (with the extension .keymap or without it). Search of keymap-file will occur in (to the first one found):
 
         1) ~/.config/mc
-        2) /usr/local/etc/mc/
-        3) /usr/local/share/mc/[Miscellaneous Keys]
+        2) /usr/etc/mc/
+        3) /usr/share/mc/[Miscellaneous Keys]
 Miscellaneous Keys
 
 Here are some keys which don't fall into any of the other categories:
@@ -796,7 +796,7 @@ Background Jobs
 This lets you control the state of any background Midnight Commander process (only copy and move files operations can be done in the background). You can stop, restart and kill a background job from here.[Edit Menu File]
 Edit Menu File
 
-The user menu is a menu of useful actions that can be customized by the user. When you access the user menu, the file .mc.menu from the current directory is used if it exists, but only if it is owned by user or root and is not world-writable. If no such file found, ~/.config/mc/menu is tried in the same way, and otherwise mc uses the default system-wide menu /usr/local/share/mc/mc.menu.
+The user menu is a menu of useful actions that can be customized by the user. When you access the user menu, the file .mc.menu from the current directory is used if it exists, but only if it is owned by user or root and is not world-writable. If no such file found, ~/.config/mc/menu is tried in the same way, and otherwise mc uses the default system-wide menu /usr/share/mc/mc.menu.
 
 The format of the menu file is very simple. Lines that start with anything but space or tab are considered entries for the menu (in order to be able to use it like a hot key, the first character should be a letter). All the lines that start with a space or a tab are the commands that will be executed when the entry is selected.
 
@@ -1037,7 +1037,7 @@ Panel options
 
 File highlight
 
-You can specify whether permissions and file types should be highlighted with distinctive ColorsColors. If the permission highlighting is enabled, the parts of the perm and mode display fieldsListing Format... which apply to the user running Midnight Commander are highlighted with the color defined by the selected keyword. If the file type highlighting is enabled, file names are colored according to rules described in /usr/local/etc/mc/filehighlight.ini file. See Filenames HighlightFilenames Highlight for more info.
+You can specify whether permissions and file types should be highlighted with distinctive ColorsColors. If the permission highlighting is enabled, the parts of the perm and mode display fieldsListing Format... which apply to the user running Midnight Commander are highlighted with the color defined by the selected keyword. If the file type highlighting is enabled, file names are colored according to rules described in /usr/etc/mc/filehighlight.ini file. See Filenames HighlightFilenames Highlight for more info.
 
 Quick search
 
@@ -1088,14 +1088,14 @@ You can define an FTP proxy host for doing FTP. Note that most modern firewalls 
 
 If Always use ftp proxy is not set, you can use the exclamation sign to enable proxy for certain hosts. See FTP File SystemFTP File System for examples.
 
-If this option is set, the program will do two things: consult the /usr/local/lib/mc/mc.no_proxy file for lines containing host names that are local (if the host name starts with a dot, it is assumed to be a domain) and to assume that any hostnames without dots in their names are directly accessible. All other hosts will be accessed through the specified FTP proxy.
+If this option is set, the program will do two things: consult the /usr/lib/mc/mc.no_proxy file for lines containing host names that are local (if the host name starts with a dot, it is assumed to be a domain) and to assume that any hostnames without dots in their names are directly accessible. All other hosts will be accessed through the specified FTP proxy.
 
 You can enable using ~/.netrc file, which keeps login names and passwords for ftp servers. See netrc (5) for the description of the .netrc format.
 
 Use passive mode enables using FTP passive mode, when the connection for data transfer is initiated by the client, not by the server. This option is recommended and enabled by default. If this option is turned off, the data connection is initiated by the server. This may not work with some firewalls.[Save Setup]
 Save Setup
 
-At startup, Midnight Commander tries to load initialization information from the ~/.config/mc/ini file. If this file doesn't exist, the system-wide file /usr/local/etc/mc/mc.ini is used. If this file doesn't exist, the system-wide file /usr/local/share/mc/mc.ini is used. If this file doesn't exist, MC uses the default settings.
+At startup, Midnight Commander tries to load initialization information from the ~/.config/mc/ini file. If this file doesn't exist, the system-wide file /usr/etc/mc/mc.ini is used. If this file doesn't exist, the system-wide file /usr/share/mc/mc.ini is used. If this file doesn't exist, MC uses the default settings.
 
 The Save Setup command creates the ~/.config/mc/ini file by saving the current settings of the Left, RightLeft and Right Menus and OptionsOptions Menu menus.
 
@@ -1483,7 +1483,7 @@ To define a macro, press C-R and then type out the key strokes you want to be 
 
 To change charset of displayed text may use Alt-e (M-e). Recoding is made from selected codepage into system codepage. To cancel the recoding you may select "<No translation>" in charset selection dialog.
 
-F19 will format the currently highlighted block (plain text or C or C++ code or another). This is controlled by the file /usr/local/share/mc/edit.indent.rc which is copied to ~/.local/share/mc/mcedit/edit.indent.rc in your home directory the first time you use it.
+F19 will format the currently highlighted block (plain text or C or C++ code or another). This is controlled by the file /usr/share/mc/edit.indent.rc which is copied to ~/.local/share/mc/mcedit/edit.indent.rc in your home directory the first time you use it.
 
 The editor also displays non-us characters (160+). When editing binary files, you should set display bits to 7 bits in the options menu to keep the spacing clean.[Internal File Editor / options]
 Options of editor in ini-file
@@ -1737,14 +1737,14 @@ A skin-file is searched on the following algorithm (to the first one found):
         1) command line option -S <skin> or --skin=<skin>
         2) Environment variable MC_SKIN
         3) Parameter skin in section [Midnight-Commander] in config file.
-        4) File /usr/local/etc/mc/skins/default.ini
-        5) File /usr/local/share/mc/skins/default.ini
+        4) File /usr/etc/mc/skins/default.ini
+        5) File /usr/share/mc/skins/default.ini
 
 Command line option, environment variable and parameter in config file may contain the absolute path to the skin-file (with the extension .ini or without it). Search of skin-file will occur in (to the first one found):
 
         1) ~/.local/share/mc/skins/
-        2) /usr/local/etc/mc/skins/
-        3) /usr/local/share/mc/skins/
+        2) /usr/etc/mc/skins/
+        3) /usr/share/mc/skins/
 
 For getting extended info, refer to:
 
@@ -1948,7 +1948,7 @@ Filenames Highlight
 
 Section [filehighlight] in current skin-file contains key names as highlight groups and values as color pairs. Color pairs is documented in SkinsSkins section.
 
-Rules of filenames highlight are placed in /usr/local/share/mc/filehighlight.ini file (~/.config/mc/filehighlight.ini). Name of section in this file must be equal to parameters names in [filehighlight] section (in current skin-file).
+Rules of filenames highlight are placed in /usr/share/mc/filehighlight.ini file (~/.config/mc/filehighlight.ini). Name of section in this file must be equal to parameters names in [filehighlight] section (in current skin-file).
 
 Keys in these groups are:
 
@@ -2105,13 +2105,13 @@ The complete key symbol represents the escape sequences used to invoke the com
 [FILES]
 FILES
 
-Full paths below may vary between installations. They are also affected by the MC_DATADIR environment variable. If it's set, its value is used instead of /usr/local/share/mc in the paths below.
+Full paths below may vary between installations. They are also affected by the MC_DATADIR environment variable. If it's set, its value is used instead of /usr/share/mc in the paths below.
 
-/usr/local/share/mc/help/mc.hlp
+/usr/share/mc/help/mc.hlp
 
         The help file for the program.
 
-/usr/local/share/mc/mc.ext
+/usr/share/mc/mc.ext
 
         The default system-wide extensions file.
 
@@ -2119,12 +2119,12 @@ Full paths below may vary between installations. They are also affected by the 
 
         User's own extension, view configuration and edit configuration file. They override the contents of the system wide files if present.
 
-/usr/local/etc/mc/mc.ini
-/usr/local/share/mc/mc.ini
+/usr/etc/mc/mc.ini
+/usr/share/mc/mc.ini
 
-        System-wide setup files for Midnight Commander, used only if the user doesn't have his own ~/.config/mc/ini file. If /usr/local/etc/mc/mc.ini exists, /usr/local/share/mc/mc.ini isn't used.
+        System-wide setup files for Midnight Commander, used only if the user doesn't have his own ~/.config/mc/ini file. If /usr/etc/mc/mc.ini exists, /usr/share/mc/mc.ini isn't used.
 
-/usr/local/share/mc/mc.lib
+/usr/share/mc/mc.lib
 
         Global settings for Midnight Commander. Settings in this file affect all users, whether they have ~/.config/mc/ini or not. Currently, only terminal settingsTerminal databases are loaded from mc.lib.
 
@@ -2132,11 +2132,11 @@ Full paths below may vary between installations. They are also affected by the 
 
         User's own setup. If this file is present then the setup is loaded from here instead of the system-wide startup file.
 
-/usr/local/share/mc/hints/mc.hint
+/usr/share/mc/hints/mc.hint
 
         This file contains the hints displayed by the program.
 
-/usr/local/share/mc/mc.menu
+/usr/share/mc/mc.menu
 
         This file contains the default system-wide applications menu.
 

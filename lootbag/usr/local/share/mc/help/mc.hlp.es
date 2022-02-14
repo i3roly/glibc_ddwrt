@@ -139,7 +139,7 @@ OPCIONES
         No cargar asociaciones de teclas desde ningún archivo, utilizar las teclas nativas del sistema.
 
 -P arch, --printwd=arch
-        Al salir del programa, Midnight Commander registrará el último directorio de trabajo en el archivo indicado. Esta opción no debe ser usada directamente, sino desde un guión de shell adecuado, para dejar como directorio activo el directorio que estaba en uso dentro de Midnight Commander. Consúltese en los archivos /usr/local/libexec/mc/mc.sh (usuarios de bash y zsh) y /usr/local/libexec/mc/mc.csh (usuarios de tcsh) la manera de definir mc como un alias para el correspondiente guión de shell.
+        Al salir del programa, Midnight Commander registrará el último directorio de trabajo en el archivo indicado. Esta opción no debe ser usada directamente, sino desde un guión de shell adecuado, para dejar como directorio activo el directorio que estaba en uso dentro de Midnight Commander. Consúltese en los archivos /usr/libexec/mc/mc.sh (usuarios de bash y zsh) y /usr/libexec/mc/mc.csh (usuarios de tcsh) la manera de definir mc como un alias para el correspondiente guión de shell.
 
 -s, --slow
         Activa el modo para terminales lentos. En este modo el programa no dibuja bordes con líneas de caracteres y desactiva el modo detallado. Si no se rellena la sección [Lines] el marco pseudo-gráfico estará formado por espacios; en caso contrario el marco se contruye con caracteres de texto según los parámetros siguientes:
@@ -259,7 +259,7 @@ La sección Línea de Órdenes del SistemaShell Command Line lista las teclas
 Teclas de línea de EntradaInput Line Keys Son usadas para editar líneas de entrada. Esto implica la línea de órdenes y las líneas de entrada en las ventanas de preguntas.[Keys_redefine]
 Redefinición de teclas
 
-La función de ciertas teclas se puede alterar a partir de un mapa de teclado almacenado en un archivo externo. Inicialmente el programa asigna esas funciones según el mapa definido en el código fuente. Posteriormente se cargan siempre los archivos /usr/local/share/mc/mc.keymap y /usr/local/etc/mc/mc.keymap, reasignando en el orden marcado las definiciones anteriores. Se cargan después posibles mapas de teclado creados por el usuario atendiendo por orden de prioridad a:
+La función de ciertas teclas se puede alterar a partir de un mapa de teclado almacenado en un archivo externo. Inicialmente el programa asigna esas funciones según el mapa definido en el código fuente. Posteriormente se cargan siempre los archivos /usr/share/mc/mc.keymap y /usr/etc/mc/mc.keymap, reasignando en el orden marcado las definiciones anteriores. Se cargan después posibles mapas de teclado creados por el usuario atendiendo por orden de prioridad a:
 
         1) Opción de ejecución en línea de órdenes -K <mapa> o --keymap=<mapa>
         2) Variable de entorno MC_KEYMAP
@@ -269,8 +269,8 @@ La función de ciertas teclas se puede alterar a partir de un mapa de teclado al
 La opción de línea de órdenes, la variable de entorno y el parámetro en el archivo de configuración pueden proporcionar la ruta absoluta al archivo de mapa de teclado (con o sin la extensión .keymap). En caso contrario se procede a realizar una búsqueda por directorios hasta encontrarlo en:
 
         1) ~/.config/mc
-        2) /usr/local/etc/mc/
-        3) /usr/local/share/mc/[Miscellaneous Keys]
+        2) /usr/etc/mc/
+        3) /usr/share/mc/[Miscellaneous Keys]
 Otras Teclas
 
 Se incluyen aquí las teclas que no encajan en ninguna categoría concreta:
@@ -776,7 +776,7 @@ Muestra una lista de sitios y directorios guardados y abre en el panel el lugar 
 Esto hace más rápido el posicionamiento en los directorios usados frecuentemente. Deberíamos considerar también el uso de la variable CDPATH tal y como se describe en comando cd internoThe cd internal command.[Edit Extension File]
 Editar el Archivo de Extensiones
 
-Abre el archivo ~/.config/mc/mc.ext en nuestro editor. El administrador puede optar por editar, en su lugar, el archivo de extensiones del sistema /usr/local/share/mc/mc.ext. El formato del archivo es como sigue:
+Abre el archivo ~/.config/mc/mc.ext en nuestro editor. El administrador puede optar por editar, en su lugar, el archivo de extensiones del sistema /usr/share/mc/mc.ext. El formato del archivo es como sigue:
 
 Todas las líneas que empiecen con # o estén vacías serán ignoradas.
 
@@ -802,7 +802,7 @@ Trabajos en Segundo Plano
 Nos permite controlar el estado de cualquier proceso de Midnight Commander en segundo plano (solo las operaciones de copiar y mover archivos pueden realizarse en segundo plano). Podemos parar, reiniciar y eliminar procesos en segundo plano desde aquí.[Edit Menu File]
 Edición del Archivo de Menú
 
-El menú de usuario es un menú de acciones útiles que puede ser personalizado por el usuario. Cuando accedemos al menú de usuario se utiliza, si existe, el archivo .mc.menu del directorio actual, pero solo si es propiedad del usuario o del superusuario y no es modificable por todos. Si no se encuentra allí el archivo, se intenta de la misma manera con ~/.config/mc/menu, y si no, mc utiliza el menú por defecto para todo el sistema /usr/local/share/mc/mc.menu.
+El menú de usuario es un menú de acciones útiles que puede ser personalizado por el usuario. Cuando accedemos al menú de usuario se utiliza, si existe, el archivo .mc.menu del directorio actual, pero solo si es propiedad del usuario o del superusuario y no es modificable por todos. Si no se encuentra allí el archivo, se intenta de la misma manera con ~/.config/mc/menu, y si no, mc utiliza el menú por defecto para todo el sistema /usr/share/mc/mc.menu.
 
 El formato del menú de archivo es muy simple. Todas las líneas, salvo las que empiezan con espacio o tabulación, son consideradas entradas para el menú (para posibilitar su uso como atajo de teclado, el primer carácter sí deberá ser una letra). Las líneas que comienzan con una tabulación o espacio son los comandos que serán ejecutados cuando la entrada es seleccionada.
 
@@ -979,7 +979,7 @@ La ventana de presentación nos da la posibilidad de cambiar la presentación ge
 
 El resto del área de pantalla se utiliza para los dos paneles de directorio. Podemos elegir si disponemos los paneles vertical u horizontalmente. La división puede ser simétrica o bien podemos indicar una división asimétrica.
 
-Por defecto, todos los contenidos de los paneles se muestran en el mismo color, pero se puede indicar que permisos y tipos de archivos se resalten empleando coloresColors diferentes. Si se activa el resaltado de permisos, las partes de los campos de permisos del Modo de ListadoListing Format... aplicables al usuario actual de Midnight Commander serán resaltados usando el color indicado por medio de la palabra clave selected. Si se activa el resaltado de tipos de archivos, los nombres aparecerán coloreados según las reglas almacenadas en el archivo /usr/local/share/mc/filehighlight.ini. Para más información, véase la sección sobre Resaltado de nombresFilenames Highlight.
+Por defecto, todos los contenidos de los paneles se muestran en el mismo color, pero se puede indicar que permisos y tipos de archivos se resalten empleando coloresColors diferentes. Si se activa el resaltado de permisos, las partes de los campos de permisos del Modo de ListadoListing Format... aplicables al usuario actual de Midnight Commander serán resaltados usando el color indicado por medio de la palabra clave selected. Si se activa el resaltado de tipos de archivos, los nombres aparecerán coloreados según las reglas almacenadas en el archivo /usr/share/mc/filehighlight.ini. Para más información, véase la sección sobre Resaltado de nombresFilenames Highlight.
 
 Si se está ejecutando en X Window dentro de un emulador de terminal, Midnight Commander toma control del titulo de la ventana mostrando allí el nombre del directorio actual. El título se actualiza cuando sea preciso. Podemos desactivar la opción de Titular las ventanas Xterm si el emulador de terminal empleado falla y no se muestran o actualizan correctamente estos textos.[Panel options]
 Paneles
@@ -1016,7 +1016,7 @@ Paneles
 
 Resaltar
 
-Permite que los permisos y tipos de archivos queden resaltados con coloresColors distintivos. Si se habilita el resaltado de permisos, los campos del listadoListing Format... perm y mode aplicables al usuario que ejecuta MC se mostrarán destacados en el color indicado con la clave selected. Si se habilita el resaltado de tipo de archivo, los nombres de archivo se mostrarán coloreados según las reglas contenidas en el archivo de configuración /usr/local/etc/mc/filehighlight.ini. Véase Resaltado de nombresFilenames Highlight.
+Permite que los permisos y tipos de archivos queden resaltados con coloresColors distintivos. Si se habilita el resaltado de permisos, los campos del listadoListing Format... perm y mode aplicables al usuario que ejecuta MC se mostrarán destacados en el color indicado con la clave selected. Si se habilita el resaltado de tipo de archivo, los nombres de archivo se mostrarán coloreados según las reglas contenidas en el archivo de configuración /usr/etc/mc/filehighlight.ini. Véase Resaltado de nombresFilenames Highlight.
 
 Búsqueda rápida
 
@@ -1065,7 +1065,7 @@ Se puede configurar un sistema proxy para FTP, aunque los cortafuegos modernos s
 
 Si la opción Usar siempre proxy no está activa, aún se puede emplear el proxy en casos concretos. Véanse los ejemplos en la sección Sistema de Archivos FTP (FTPfs)FTP File System.
 
-Si la opción Usar siempre proxy está puesta, el programa asume que cualquier nombre de máquina sin puntos es accesible directamente y también consulta el archivo /usr/local/share/mc.no_proxy en busca de nombres de máquinas locales (o dominios completos si el nombre empieza con un punto). En todos los demás casos se usará siempre el proxy de FTP indicado arriba.
+Si la opción Usar siempre proxy está puesta, el programa asume que cualquier nombre de máquina sin puntos es accesible directamente y también consulta el archivo /usr/share/mc.no_proxy en busca de nombres de máquinas locales (o dominios completos si el nombre empieza con un punto). En todos los demás casos se usará siempre el proxy de FTP indicado arriba.
 
 Se puede usar el archivo ~/.netrc, que contiene información de usuarios y contraseñas para determinados servidores FTP. Para conocer el formato de los archivos .netrc véase la página de manual sobre netrc (5).
 
@@ -1074,7 +1074,7 @@ Se puede usar el archivo ~/.netrc, que contiene información de usuarios y con
 [Save Setup]
 Guardar Configuración
 
-Al arrancar Midnight Commander se carga la información de inicio del archivo ~/.config/mc/ini. Si este no existe, se cargará la información del archivo de configuración genérico del sistema, /usr/local/share/mc/mc.ini. Si el archivo de configuración genérico del sistema no existe, MC utiliza la configuración por defecto.
+Al arrancar Midnight Commander se carga la información de inicio del archivo ~/.config/mc/ini. Si este no existe, se cargará la información del archivo de configuración genérico del sistema, /usr/share/mc/mc.ini. Si el archivo de configuración genérico del sistema no existe, MC utiliza la configuración por defecto.
 
 El comando Guardar Configuración crea el archivo ~/.config/mc/ini guardando la configuración actual de los menús Izquierdo, DerechoLeft and Right Menus y OpcionesOptions Menu.
 
@@ -1423,7 +1423,7 @@ El editor es muy fácil de usar y no requiere aprendizaje alguno. Para conocer l
 
 Para definir una macro, pulsar Ctrl-r y entonces teclearemos las secuencias de teclas que deseamos sean ejecutadas. Pulsaremos Ctrl-r de nuevo al finalizar. Podemos asignar la macro a la tecla que queramos pulsando sobre ella. La macro será ejecutada cuando pulsemos Ctrl-a seguido de la tecla asignada. También será ejecutada si pulsamos Meta (Alt), Ctrl, o Escape y la tecla asignada, siempre y cuando la tecla no sea usada por ninguna otra función. Una vez definida, los comandos de macro irán al archivo ~/.local/share/mc/mcedit/mcedit.macros en nuestro directorio de inicio. Podemos eliminar una macro borrando la línea adecuada en este archivo.
 
-F19 formateará el bloque seleccionado (sea texto, código C o C++ u otro). Esto está controlado por el archivo /usr/local/share/mc/edit.indent.rc que se copia la primera vez que se usa en ~/.local/share/mc/mcedit/edit.indent.rc en el directorio personal.
+F19 formateará el bloque seleccionado (sea texto, código C o C++ u otro). Esto está controlado por el archivo /usr/share/mc/edit.indent.rc que se copia la primera vez que se usa en ~/.local/share/mc/mcedit/edit.indent.rc en el directorio personal.
 
 El editor también visualiza caracteres no estadounidenses (160+). Al editar archivos binarios, debemos configurar los bits de pantalla a 7 bits en el menú de opciones para mantener el espaciado saneado.[Completion]
 Terminación
@@ -1652,14 +1652,14 @@ El archivo se busca, en orden, de varias maneras:
         1) La opción -S <skin> o --skin=<skin> al ejecutar mc.
         2) La variable de entorno MC_SKIN.
         3) El parámetro skin en la sección [Midnight-Commander] del archivo de configuración.
-        4) El archivo /usr/local/etc/mc/skins/default.ini.
-        5) El archivo /usr/local/share/mc/skins/default.ini.
+        4) El archivo /usr/etc/mc/skins/default.ini.
+        5) El archivo /usr/share/mc/skins/default.ini.
 
 En línea de órdenes, en la variable de entorno o el parámetro de la configuración pueden contener la ruta absoluta al archivo de skin con o sin su extensión .ini. De no indicar la ruta se realiza la búsqueda, en orden, en:
 
         1) ~/.local/share/mc/skins/.
-        2) /usr/local/etc/mc/skins/.
-        3) /usr/local/share/mc/skins/.
+        2) /usr/etc/mc/skins/.
+        3) /usr/share/mc/skins/.
 
 Para más información consultar:
 
@@ -1849,7 +1849,7 @@ Resaltado de nombres
 
 La sección [filehighlight] de un archivo de skin contiene como claves los nombres que identificarán cada grupo de resaltado y como valor el par de colores que le corresponda. El formato de estas parejas se explica en la sección SkinsSkins.
 
-Las reglas de resaltado de nombres en el archivo se encuentran en /usr/local/share/mc/filehighlight.ini. Los nombres de sección en este archivo tienen que ser iguales a los nombres empleados en la sección [filehighlight] del archivo de skin en uso. PP. Los nombres de los parámetros en estos grupos podrán ser:
+Las reglas de resaltado de nombres en el archivo se encuentran en /usr/share/mc/filehighlight.ini. Los nombres de sección en este archivo tienen que ser iguales a los nombres empleados en la sección [filehighlight] del archivo de skin en uso. PP. Los nombres de los parámetros en estos grupos podrán ser:
 
 type    tipo de archivo. Si existe se ignoran otras opciones.
 
@@ -1948,7 +1948,7 @@ autodetect_codeset=russian
 [Parameters for external editor or viewer]
 Parámetros para editor o visor externo
 
-Midnight Commander permite especificar opciones para editores y visores externos. Midnight Commander busca la sección [External editor or viewer parameters] en el archivo de inicialización del sistema /usr/local/share/mc/mc.lib o en el del usuario ~/.config/mc/ini. El nombre de la opción debe coincidir con el nombre (ruta completa) del editor o visor externo. Su valor puede contener las siguientes variables:
+Midnight Commander permite especificar opciones para editores y visores externos. Midnight Commander busca la sección [External editor or viewer parameters] en el archivo de inicialización del sistema /usr/share/mc/mc.lib o en el del usuario ~/.config/mc/ini. El nombre de la opción debe coincidir con el nombre (ruta completa) del editor o visor externo. Su valor puede contener las siguientes variables:
 
 %filename
         El nombre del archivo a editar/ver.
@@ -1967,7 +1967,7 @@ La línea de comienzo solo se pasa al editor o visor externo cuando se llama des
 Si el editor o visor externo se lanza mediante las teclas F3/F4, MC confía en que el programa (al menos «joe», pero puede que otros también) se comporte abriendo por defecto el archivo donde se abrió la última vez. MC no evita que el editor o visor externo pueda guardar y restaurar posiciones en los archivos abiertos.[Terminal databases]
 Ajustes del Terminal
 
-Midnight Commander permite hacer ajustes a la base de datos de terminales del sistema sin necesidad de privilegios de superusuario. El programa busca definiciones de teclas en el archivo de inicialización del sistema /usr/local/share/mc/mc.lib o en el del usuario ~/.config/mc/ini, en la sección "terminal:nuestro-terminal" y si no en "terminal:general". Cada línea comienza con el identificador de la tecla, seguido de un signo de igual y la definición de la tecla. Para representar el carácter de escape se utiliza \e y ^x para el carácter control-x.
+Midnight Commander permite hacer ajustes a la base de datos de terminales del sistema sin necesidad de privilegios de superusuario. El programa busca definiciones de teclas en el archivo de inicialización del sistema /usr/share/mc/mc.lib o en el del usuario ~/.config/mc/ini, en la sección "terminal:nuestro-terminal" y si no en "terminal:general". Cada línea comienza con el identificador de la tecla, seguido de un signo de igual y la definición de la tecla. Para representar el carácter de escape se utiliza \e y ^x para el carácter control-x.
 
 Los identificadores de tecla son:
 
@@ -2000,13 +2000,13 @@ El identificador complete representa la secuencia usada para invocar el mecani
 [FILES]
 ARCHIVOS AUXILIARES
 
-Los directorios indicados a continuación pueden variar de una instalación a otra. También se pueden modificar con la variable de entorno MC_DATADIR, que de estar definida se emplearía en vez de /usr/local/share/mc.
+Los directorios indicados a continuación pueden variar de una instalación a otra. También se pueden modificar con la variable de entorno MC_DATADIR, que de estar definida se emplearía en vez de /usr/share/mc.
 
-/usr/local/share/mc.hlp
+/usr/share/mc.hlp
 
         Archivo de ayuda.
 
-/usr/local/share/mc/mc.ext
+/usr/share/mc/mc.ext
 
         Archivo de extensiones por defecto del sistema.
 
@@ -2014,11 +2014,11 @@ Los directorios indicados a continuación pueden variar de una instalación a ot
 
         Archivo de usuario de extensiones y configuración de visor y editor. Si está presente prevalece sobre el contenido de los archivos del sistema.
 
-/usr/local/share/mc/mc.ini
+/usr/share/mc/mc.ini
 
         Archivo de configuración del sistema para Midnight Commander, solo si el usuario no dispone de su propio ~/.config/mc/ini.
 
-/usr/local/share/mc/mc.lib
+/usr/share/mc/mc.lib
 
         Opciones globales de Midnight Commander. Se aplican siempre a todos los usuarios, tengan ~/.config/mc/ini o no. Actualmente solo se emplea para los ajustes de terminalTerminal databases.
 
@@ -2026,11 +2026,11 @@ Los directorios indicados a continuación pueden variar de una instalación a ot
 
         Configuración personal del usuario. Si este archivo está presente entonces se cargará la configuración desde aquí en lugar de desde el archivo de configuración del sistema.
 
-/usr/local/share/mc/hints/mc.hint
+/usr/share/mc/hints/mc.hint
 
         Este archivo contiene los mensajes cortos de ayuda mostrados por el programa.
 
-/usr/local/share/mc/mc.menu
+/usr/share/mc/mc.menu
 
         Este archivo contiene el menú de aplicaciones por defecto para el sistema.
 

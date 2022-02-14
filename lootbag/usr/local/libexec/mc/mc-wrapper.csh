@@ -6,7 +6,7 @@ else
 	setenv MC_PWD_FILE /tmp/mc-$MC_USER/mc.pwd.$$
 endif
 
-/usr/local/bin/mc -P "$MC_PWD_FILE" $*
+/usr/bin/mc -P "$MC_PWD_FILE" $*
 
 if (-r "$MC_PWD_FILE") then
 	setenv MC_PWD "`cat '$MC_PWD_FILE'`"

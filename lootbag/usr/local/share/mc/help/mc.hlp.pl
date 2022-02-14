@@ -100,14 +100,14 @@ użytkownicy basha i zsh:
 mc ()
 {
         MC=$HOME/tmp/mc$$-"$RANDOM"
-        /usr/local/bin/mc -P "$@" > "$MC"
+        /usr/bin/mc -P "$@" > "$MC"
         cd "`cat $MC`"
         rm "$MC"
         unset MC;
 }
 
 użytkownicy tcsh:
-alias mc 'setenv MC `/usr/local/bin/mc -P !*`; cd $MC; unsetenv MC'
+alias mc 'setenv MC `/usr/bin/mc -P !*`; cd $MC; unsetenv MC'
         Wiem, że ta funkcja mogłaby być krótsza dla basha i zsh, ale małe cudzysłowy nie zaakceptowały by zawieszenia programu kombinacją C-z.
 
 -s      Włącza tryb powolnego terminala, w którym program nie będzie rysował zbyt obciążających znaków graficznych oraz wyłączy opcję weryfikacji.
@@ -689,7 +689,7 @@ Pozwalają ci one kontrolować status jakichkolwiek procesów wykonywanych w tle
 [Edit Menu File]
 Edycja menu użytkownika (Edit Menu File)
 
-Menu użytkownika jest bardzo użytecznym menu, które może być tworzone w sposób dowolny, przez użytkownika. Kiedy tylko próbujesz coś zrobić przy użyciu tego menu, ładowany jest plik .mc.menu z aktualnego katalogu, ale tylko wtedy kiedy jest on w posiadaniu użytkownika lub roota i mamy do niego prawa zapisu. Jeśli takiego nie ma próbuje się z plikiem ~/.config/mc/menu z tymi samymi założeniami, jeśli jego też nie ma - używa się standardowego pliku systemowego, który znajduje się w /usr/local/share/mc/mc.menu.
+Menu użytkownika jest bardzo użytecznym menu, które może być tworzone w sposób dowolny, przez użytkownika. Kiedy tylko próbujesz coś zrobić przy użyciu tego menu, ładowany jest plik .mc.menu z aktualnego katalogu, ale tylko wtedy kiedy jest on w posiadaniu użytkownika lub roota i mamy do niego prawa zapisu. Jeśli takiego nie ma próbuje się z plikiem ~/.config/mc/menu z tymi samymi założeniami, jeśli jego też nie ma - używa się standardowego pliku systemowego, który znajduje się w /usr/share/mc/mc.menu.
 
 Format pliku z menu użytkownika jest bardzo prosty. Linie zaczynające się od czegokolwiek innego niż spacja lub tabulacja, są traktowane jako wtyczki do menu (aby móc używać ich potem jako gorących klawiszy, dobrze jest aby pierwszy znak był literą). Wszystkie linie zaczynające od spacji lub tabulacji, są komendami, które mają być wykonane jeśli wtyczka zostanie wybrana.
 
@@ -905,7 +905,7 @@ System plików FTP trzyma listę katalogów z odwiedzanego przez nas serwera w b
 Ponadto możesz zdefiniować serwer proxy dla transferów ftp i skonfigurować Midnight Commandera tak, aby zawsze go używał. Zobacz sekcję System plików FTP (FTP File System) po więcej szczegółów.[Save Setup]
 Zapisz ustawienia (Save Setup)
 
-Na starcie Midnight Commander będzie próbował odczytać opcje startowe z pliku ~/.config/mc/ini. Jeśli on nie istnieje, odczyta on konfiguracje z ogólnodostępnego pliku /usr/local/share/mc/mc.ini. Jeśli on też nie istnieje MC użyje swoich domyślnych ustawień.
+Na starcie Midnight Commander będzie próbował odczytać opcje startowe z pliku ~/.config/mc/ini. Jeśli on nie istnieje, odczyta on konfiguracje z ogólnodostępnego pliku /usr/share/mc/mc.ini. Jeśli on też nie istnieje MC użyje swoich domyślnych ustawień.
 
 Komenda Save Setup tworzy plik ~/.config/mc/ini zachowując aktualne ustawienia lewego, prawego menu, jak również menu opcji.
 
@@ -1229,7 +1229,7 @@ Przykłady:
 
 Aby połączyć się z serwerem znajdującym się za firewallem, będziesz musiał użyc przedrostka ftp://! aby wymusić na Midnight Commanderze używanie serwera proxy do transferu danch. Serwer proxy definiuje się w oknie dialogowym wirtualnego systemu plików.
 
-Inną możliwością jest ustawienie opcji Always use ftp proxy w oknie konfiguracyjnym wirtualnego systemu plików. Skonfiguruje to program tak, aby zawsze używał serwera proxy. Jeśli ta zmienna jest ustawiona, program będzie robił dwie rzeczy: konsultował plik /usr/local/share/mc.no_proxy w celu znalezienia linii zawierających nazwy serwerów, które są lokalne (jeśli nazwa hosta zaczyna się od kropki, uznaje się, że jest to domena) i sprawdza czy jakieś hosty bez kropek w nazwie są widoczne bezpośrednio.
+Inną możliwością jest ustawienie opcji Always use ftp proxy w oknie konfiguracyjnym wirtualnego systemu plików. Skonfiguruje to program tak, aby zawsze używał serwera proxy. Jeśli ta zmienna jest ustawiona, program będzie robił dwie rzeczy: konsultował plik /usr/share/mc.no_proxy w celu znalezienia linii zawierających nazwy serwerów, które są lokalne (jeśli nazwa hosta zaczyna się od kropki, uznaje się, że jest to domena) i sprawdza czy jakieś hosty bez kropek w nazwie są widoczne bezpośrednio.
 
 Jeśli używasz systemu ftpfs będąc za routerem filtrującym, który nie pozwala ci na używanie standardowej metody otwierania plików, możesz chcieć wymusić na programie używanie trybu passive-open. Aby tego używać ustaw opcję ftpfs_use_passive_connections w pliku inicjującym.
 
@@ -1533,11 +1533,11 @@ PLIKI
 
 Program będzie pobierał wszystkie swoje informacje ze zmiennej MC_DATADIR, jeśli jest ona nie ustawiona to znowu przetwarzany jest katalog /usr.
 
-/usr/local/share/mc.hlp
+/usr/share/mc.hlp
 
         Plik pomocy dla programu.
 
-/usr/local/share/mc/mc.ext
+/usr/share/mc/mc.ext
 
         Standardowy plik rozszerzeń plików.
 
@@ -1545,11 +1545,11 @@ Program będzie pobierał wszystkie swoje informacje ze zmiennej MC_DATADIR, j
 
         Własny plik użytkownika, konfiguruje podgląd i edycje plików. Ma wyższy priorytet niż plik systemowy.
 
-/usr/local/share/mc/mc.ini
+/usr/share/mc/mc.ini
 
         Standardowy plik setupu do Midnight Commandera, używany tylko wówczas, kiedy użytkownik nie ma swojego własnego pliku ~/.config/mc/ini.
 
-/usr/local/share/mc/mc.lib
+/usr/share/mc/mc.lib
 
         Globalne ustawienia Midnight Commandera. Ustawienia w tym pliku są uwzględniane przez wszystkie sesje Midnight Commandera, użyteczne do definiowania ogólnosystemowych ustawień terminali.
 
@@ -1557,11 +1557,11 @@ Program będzie pobierał wszystkie swoje informacje ze zmiennej MC_DATADIR, j
 
         Własny setup użytkownika. Jeśli ten plik jest dostępny, jest ładowany zamiast pliku globalnego.
 
-/usr/local/share/mc/hints/mc.hint
+/usr/share/mc/hints/mc.hint
 
         Plik zawierający podpowiedzi (hints) wyświetlane przez program.
 
-/usr/local/share/mc/mc.menu
+/usr/share/mc/mc.menu
 
         Ten plik zawiera informacje o ogólnosystemowych aplikacjach w menu.
 

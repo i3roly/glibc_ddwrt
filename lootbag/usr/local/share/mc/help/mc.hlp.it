@@ -100,7 +100,7 @@ OPZIONI
         Salva il dialogo ftpfs con il server in file.
 
 "-P file"
-        Quest'opzione indica al Midnight Commander di stampare l'ultima directory di lavoro sul file specificato. Questa funzione non è fatta per un uso diretto, ma dovrebbe essere utilizzata da una speciale funzione shell che imposti automaticamente l'ultima directory corrente della shell come l'ultima directory in cui stava il Midnight Commander. Prelevate i file /usr/local/libexec/mc/mc.sh (utenti bash e zsh) o rispettivamente /usr/local/libexec/mc/mc.csh (utenti tcsh) per definire mc come un alias allo script di shell appropriato.
+        Quest'opzione indica al Midnight Commander di stampare l'ultima directory di lavoro sul file specificato. Questa funzione non è fatta per un uso diretto, ma dovrebbe essere utilizzata da una speciale funzione shell che imposti automaticamente l'ultima directory corrente della shell come l'ultima directory in cui stava il Midnight Commander. Prelevate i file /usr/libexec/mc/mc.sh (utenti bash e zsh) o rispettivamente /usr/libexec/mc/mc.csh (utenti tcsh) per definire mc come un alias allo script di shell appropriato.
 
 "-s"    Abilita il modo terminale lento, in questa modalità il programma non disegna le linee e disabilita la modalità prolissa.
 
@@ -669,7 +669,7 @@ Processi in background
 Questo comando permette di controllare lo stato di ogni processo in background del Midnight Commander (in background possono essere eseguite solo operazioni di copia e rinomina). Da qui si può bloccare, far ripartire e uccidere un lavoro in background.[Edit Menu File]
 Modifica file menu
 
-Il menu utente è un menu di comandi utili che possono essere personalizzati dall'utente. Quando si accede al menu utente, viene utilizzato, se esiste, il file .mc.menu dalla directory corrente, ma solo se è di proprietà dell'utente o di root e se non è scrivibile a tutti. Se tale file non viene trovato, mc alla stessa maniera prova con ~/.config/mc/menu altrimenti usa il menu di sistema /usr/local/share/mc/mc.menu.
+Il menu utente è un menu di comandi utili che possono essere personalizzati dall'utente. Quando si accede al menu utente, viene utilizzato, se esiste, il file .mc.menu dalla directory corrente, ma solo se è di proprietà dell'utente o di root e se non è scrivibile a tutti. Se tale file non viene trovato, mc alla stessa maniera prova con ~/.config/mc/menu altrimenti usa il menu di sistema /usr/share/mc/mc.menu.
 
 Il formato del file menu è molto semplice. Le righe che cominciano con qualsiasi cosa che non sia uno spazio o una tabulazione sono considerate voci per il menu (per fare in modo di usarle anche come scelta rapida, il primo carattere deve essere una lettera). Tutte le righe che cominciano con uno spazio o un tab sono i comandi che verranno eseguiti quando la voce viene selezionata.
 
@@ -887,14 +887,14 @@ E' possibile definire un host proxy per fare trasferimenti ftp. Notare che molti
 
 Se usa sempre ftp proxy non è impostata, è possibile usare il punto escamativo per abilitare il proxy per certi host. Vedere la sezione file system FTPFTP File System per gli esempi.
 
-Se quest'opzione è impostata, il programma farà due cose: consulterà il file /usr/local/lib/mc/mc.no_proxy per le righe contenenti nomi host locali (se il nome host comincia con un punto, è considerato un dominio) e assumendo che ogni nome host senza punti nel nome sia direttamente accessibile. Tutti gli altri host verranno contattati attraverso il proxy host specificato.
+Se quest'opzione è impostata, il programma farà due cose: consulterà il file /usr/lib/mc/mc.no_proxy per le righe contenenti nomi host locali (se il nome host comincia con un punto, è considerato un dominio) e assumendo che ogni nome host senza punti nel nome sia direttamente accessibile. Tutti gli altri host verranno contattati attraverso il proxy host specificato.
 
 E' possibile abilitare l'uso del file ~/.netrc che mantiene i nomi di accesso e le password per i server ftp. Vedere netrc (5) per una descrizione del formato .netrc.
 
 Usa modalità passiva abilita l'uso della modalità FTP passiva quando la connessione per il trasferimento file è iniziata dal client, non dal server. Quest'opzione è raccomandata e preimpostata. Se quest'opzione è spenta, la connessione dati viene iniziata dal server. Questo potrebbe non funzionare con alcuni firewall.[Save Setup]
 Salva configurazione
 
-Alla partenza il Midnight Commander prova a caricare le informazioni di inizializzazione dal file ~/.config/mc/ini. Se questo file non esiste, caricherà le informazioni dal file di configurazione di sistema posizionato in /usr/local/share/mc/mc.ini. Se il file di configurazione di sistema non esiste, MC userà le impostazioni predefinite.
+Alla partenza il Midnight Commander prova a caricare le informazioni di inizializzazione dal file ~/.config/mc/ini. Se questo file non esiste, caricherà le informazioni dal file di configurazione di sistema posizionato in /usr/share/mc/mc.ini. Se il file di configurazione di sistema non esiste, MC userà le impostazioni predefinite.
 
 Il comando salva configurazione crea il file ~/.config/mc/ini salvando le impostazioni correnti dei menu sinistra, destraLeft and Right Menus e opzioniOptions Menu.
 
@@ -1149,7 +1149,7 @@ L'editor è molto semplice da usare e non richiede apprendimento. Per vedere cos
 
 Per definire una macro, premere Ctrl-R poi premere i tasti che si voglia essere eseguiti. Premere nuovamente Ctrl-R quando si ha finito. E' possibile assegnare una macro a qualsiasi tasto si preme. La macro viene eseguita quando si preme Ctrl-A  e poi il tasto assegnato. La macro viene eseguita anche se si preme il tasto Meta, Ctrl, o Esc e il tasto assegnato, basta che il tasto non sia già assegnato a qualche altra funzione. Una volta definiti, i macro comandi finiscono nel file ~/.local/share/mc/mcedit/mcedit.macros nella propria directory home. E' possibile cancellare una macro cancellando la riga appropriata nel suddetto file.
 
-F19 formatterà il blocco evidenziato correntemente (testo, codice C o C++ o altro). Questo comportamento viene controllato dal file /usr/local/share/mc/edit.indent.rc che viene copiato nel ~/.local/share/mc/mcedit/edit.indent.rc nella propria directory home la prima volta che lo si usa.
+F19 formatterà il blocco evidenziato correntemente (testo, codice C o C++ o altro). Questo comportamento viene controllato dal file /usr/share/mc/edit.indent.rc che viene copiato nel ~/.local/share/mc/mcedit/edit.indent.rc nella propria directory home la prima volta che lo si usa.
 
 L'editor visualizza snche caratteri non-americani (160+). Quando si modifica file binari, si dovrebbe impostare mostra bit a 7 bit nel menu opzioni, per mantenere la spaziatura pulita.[Completion]
 Completamento
@@ -1417,13 +1417,13 @@ Il tasto di completamento rappresenta le sequenze di escape usate per invocare
 [FILES]
 FILE
 
-Il programma recupera tutte le informazioni relative al proprio funzionamento dalla variabile ambiente MC_DATADIR, e se la variabile non è impostata, passerà alla directory /usr/local/share/mc .
+Il programma recupera tutte le informazioni relative al proprio funzionamento dalla variabile ambiente MC_DATADIR, e se la variabile non è impostata, passerà alla directory /usr/share/mc .
 
-/usr/local/share/mc/help/mc.hlp
+/usr/share/mc/help/mc.hlp
 
         Il file di aiuto per il programma.
 
-/usr/local/share/mc/mc.ext
+/usr/share/mc/mc.ext
 
         Il file delle estensioni di sistema predefinito.
 
@@ -1431,11 +1431,11 @@ Il programma recupera tutte le informazioni relative al proprio funzionamento da
 
         Le estensioni dell'utente, la configurazione del visualizzatore e dell'editor di file. Se presenti, questi file si sovrappongono ai file di sistema.
 
-/usr/local/share/mc/mc.ini
+/usr/share/mc/mc.ini
 
         La configurazione di sistema predefinita per il Midnight Commander, usata solo se l'utente non possiede il proprio file ~/.config/mc/ini.
 
-/usr/local/share/mc/mc.lib
+/usr/share/mc/mc.lib
 
         Le impostazioni globali per il Midnight Commander. La modifica di questo file influisce su tutti gli utenti, che abbiano o no il file ~/.config/mc/ini . Attualmente vengono caricate solo le impostazioni del terminaleTerminal databases da mc.lib.
 
@@ -1443,11 +1443,11 @@ Il programma recupera tutte le informazioni relative al proprio funzionamento da
 
         La configurazione dell'utente. Se questo file è presente, la configurazione viene caricata da qui invece che dal file di sistema.
 
-/usr/local/share/mc/hints/mc.hint
+/usr/share/mc/hints/mc.hint
 
         Questo file contiene i suggerimenti (dritte) mostrate dal programma.
 
-/usr/local/share/mc/mc.menu
+/usr/share/mc/mc.menu
 
         Questo file contiene il menu di sistema per le applicazioni.
 
