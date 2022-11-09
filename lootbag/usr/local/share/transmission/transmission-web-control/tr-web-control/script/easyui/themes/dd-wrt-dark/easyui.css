@@ -400,9 +400,6 @@ a:hover {
 .window .window-body {
   border-color: #000;
 }
-.window .window-body {
-  height: 500px !important;   
-}
 .window {
   background-color: #222;
 }
@@ -3088,12 +3085,12 @@ input[type="checkbox"] {
   accent-color: #30519c;
 }
 #torrent_upload_form {
-	margin: 0 .362em 1em 0;
-	height: 1.6rem;
-	cursor: pointer;
+  margin: 0 .362em 1em 0;
+  height: 1.6rem;
+  cursor: pointer;
 }
 ::file-selector-button {
-	height: 1.9rem;
+  height: 1.9rem;
   padding: 0 1rem .05em;
 }
 button, button[disabled]:hover,
@@ -3106,6 +3103,7 @@ button, button[disabled]:hover,
 .button:hover, ::file-selector-button:hover {
   background: #6384cf;
   border: 1px solid #6384cf;
+  cursor: pointer;
 }
 #dialog-torrent-add-tip-title[style], .tip {
   border: 1px solid #925d19 !important;
@@ -3120,7 +3118,7 @@ button, button[disabled]:hover,
   color: #fff !important;
 }
 #btn-UserLabel-remove .tr-icon-delete::before {
-	color: #f00 !important;
+  color: #f00 !important;
 }
 fieldset {
   background-color: #222;
@@ -3132,25 +3130,25 @@ legend {
   color: #6384cf;
 }
 input {
-	padding: 4px;
-	font-size: 12px;
-	line-height: 1.42857;
-	border-radius: 4px;
+  padding: 4px;
+  font-size: 12px;
+  line-height: 1.42857;
+  border-radius: 4px;
 }
 hr {
   border-bottom: 1px dotted #555;
 }
 .torrent-progress {
-	height: 18px !important;
+  height: 18px !important;
   background: #777;
-	border: 1px solid #454545 !important;
+  border: 1px solid #454545 !important;
   border-radius: 4px !important;
 }
 .torrent-progress-download {
-	background-color: #30519c !important;
+  background-color: #30519c !important;
 }
 .torrent-progress-seed {
-	background-color: #228b22 !important;
+  background-color: #228b22 !important;
 }
 .panel {
   overflow: hidden;
@@ -3554,9 +3552,6 @@ a:hover {
 .window .window-body {
   border-color: #000;
 }
-.window .window-body {
-  height: 500px !important;   
-}
 .window {
   background-color: #222;
 }
@@ -3854,9 +3849,9 @@ a:hover {
   border-radius: 4px;
 }
 .l-btn:hover {
-  background: #777;
+  background: #166f2a;
   color: #fff;
-  border: 1px solid #555;
+  border: 1px solid #166f2a;
   filter: none;
 }
 .l-btn-plain {
@@ -6238,16 +6233,26 @@ input, select, textarea {
   color: #e0e0e0;
   border-radius: 4px 0 0 4px;
 }
+textarea {
+  resize: vertical;
+}
+.dialog td.title {
+  vertical-align: middle !important;
+}
+textarea#newname {
+  min-height: 20px !important;
+  height: 20px !important;
+}
 input[type="checkbox"] {
   accent-color: #30519c;
 }
 #torrent_upload_form {
-	margin: 0 .362em 1em 0;
-	height: 1.6rem;
-	cursor: pointer;
+  margin: 0 .362em 1em 0;
+  height: 1.6rem;
+  cursor: pointer;
 }
 ::file-selector-button {
-	height: 1.9rem;
+  height: 1.9rem;
   padding: 0 1rem .05em;
 }
 button, button[disabled]:hover,
@@ -6274,7 +6279,7 @@ button, button[disabled]:hover,
   color: #fff !important;
 }
 #btn-UserLabel-remove .tr-icon-delete::before {
-	color: #f00 !important;
+  color: #f00 !important;
 }
 fieldset {
   background-color: #222;
@@ -6286,23 +6291,50 @@ legend {
   color: #6384cf;
 }
 input {
-	padding: 4px;
-	font-size: 12px;
-	line-height: 1.42857;
-	border-radius: 4px;
+  padding: 4px;
+  font-size: 12px;
+  line-height: 1.42857;
+  border-radius: 4px;
 }
 hr {
   border-bottom: 1px dotted #555;
 }
 .torrent-progress {
-	height: 18px !important;
+  height: 18px !important;
   background: #777;
-	border: 1px solid #454545 !important;
+  border: 1px solid #454545 !important;
   border-radius: 4px !important;
 }
 .torrent-progress-download {
-	background-color: #30519c !important;
+  background-color: #30519c !important;
 }
 .torrent-progress-seed {
-	background-color: #228b22 !important;
+  background-color: #228b22 !important;
+}
+#dialog-torrent-add {
+  height: 368px !important;
+}
+#torrent_upload_form {
+  margin-bottom: 18px;
+}
+#dialog-system-config {
+  height: 600px !important;
+}
+#dialog-torrent-changeDownloadDir {
+  height: 180px !important;
+}
+.webui-popover {
+  background-color: #1a1a1a !important;
+}
+.webui-popover-title {
+  background-color: #222 !important;
+  border-bottom: 1px solid #333 !important;
+  border-radius: 4px 4px 0 0 !important;
+  color: #fff !important;
+}
+.webui-popover.top > .webui-arrow::after, .webui-popover.top-right > .webui-arrow::after, .webui-popover.top-left > .webui-arrow::after {
+  border-top-color: #1a1a1a !important;
+}
+.webui-popover.top > .webui-arrow, .webui-popover.top-right > .webui-arrow, .webui-popover.top-left > .webui-arrow {
+  border-top-color: #222 !important;
 }
