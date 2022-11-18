@@ -36,10 +36,34 @@ DIR-3040/3060: use the dir-3040 firmware
 i have tested both builds numerous times, they are safe. they will not brick your router. i have been making an 882 firmware for years. the 2640/2660/1760/1960/3040/3060 are recent additions but it are even safer since they have a backup. 
 either way, they dont touch your u-boot (its designated as a read-only partition for both builds) so, at worst, all that will happen is you may need to use recovery mode if something happens (i haven't had a report of this yet). 
 
+
+HOW TO FLASH TO/FROM STOCK FIRMWARE
+-----------
+<ul>
+<li> download the "factory-to-ddwrt-SE.bin" for your respective model (see above)
+<li> turn your router off. 
+<li> hold the reset button and turn your router on.
+<li> let go of the reset button once you see the power light flashing.
+<li> plug in an ethernet cable and assign your device the following properties:
+<ul>
+<li> static IP: 192.168.0.101
+<li> netmask: 255.255.255.0
+<li> router IP: 192.168.0.1
+</ul>
+<li> wait a few seconds after you apply these settings.
+<li> go to http://192.168.0.1
+<li> load the appropriate factory-to-ddwrt-SE.bin file and wait.
+<li> all of these steps apply to restore the stock firmware from dd-wrt.
+<li> we have provided the decrypted versions of supported devices' firmware in the stock_fw to make it easy for people to go back and forth.
+<li> enjoy
+</ul>
+
+many thanks to @0xricksanchez for his proof of concept that allows people to use the decrypted firmware to go back and forth (otherwise it's a nuisance).
+
 LAUNDRY LIST/INFO
 -----------
 <ul>
-<li><b>(BUILDS PREVIOUS TO (AND INCLUDING) 47525 SHOULD UPGRADE DUE TO A BUG IN THE HTTPD AUTHENTICATION THAT WOULD ALLOW AN ATTACKER TO ACCESS WEBGUI WITH ANY USERNAME OTHER THAN 'root')</b></li>
+<li><b>AT THIS TIME THE DRIVER DOES NOT SUPPORT WPA2 ENTERPRISE AUTHENTICATION IN <u>STATION/REPEATER</u>. AP-mode with WPA2-EAP SHOULD NOT BE A PROBLEM.</b></li>
 </ul>
 
 USAGE
