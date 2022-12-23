@@ -8,7 +8,7 @@ this readme is updated periodically. thus the DD-WRT and kernel versions may be 
 
 latest FW :
 -------------
-currently kernel <b>4.14.255</b> and DD-WRT <b>v47675</b>
+currently kernel <b>4.14.302</b> and DD-WRT <b>v51063</b>
 
 DIR-882/878/867: use the dir-882 firmware
 
@@ -63,7 +63,7 @@ many thanks to @0xricksanchez for his proof of concept that allows people to use
 LAUNDRY LIST/INFO
 -----------
 <ul>
-<li><b>AT THIS TIME THE DRIVER DOES NOT SUPPORT WPA2 ENTERPRISE AUTHENTICATION IN <u>STATION/REPEATER</u>. AP-mode with WPA2-EAP SHOULD NOT BE A PROBLEM.</b></li>
+<li><b>WPA2-MSCHAPv2 in REPEATER MODE should be WORKING as of 51011 .</b></li>
 </ul>
 
 USAGE
