@@ -1,4 +1,4 @@
-# dd-wrt build for d-link dir 867/878/882 + 1760/1960/2660/2640 + 3060/3040
+# dd-wrt build for d-link dir 867/878/882/1935 + 1760/1960/2660/2640 + 3060/3040
 
 (see GPL_VIO_ALLEGATIONS.MD first please)
 ----------
@@ -10,7 +10,7 @@ latest FW :
 -------------
 currently kernel <b>4.14.302</b> and DD-WRT <b>v51063</b>
 
-DIR-882/878/867: use the dir-882 firmware
+DIR-882/878/867/1935: use the dir-882 firmware
 
 DIR-1760/1960/2660/2640: use the dir-2640 firmware
 
