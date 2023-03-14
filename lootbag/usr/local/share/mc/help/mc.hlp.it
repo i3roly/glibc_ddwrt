@@ -55,7 +55,6 @@ Indice degli argomenti:
     File system TarTar File System
     Trasferimento di file su FIlesystem di SHell (FISH)FIle transfer over SHell filesystem
     Recupero file cancellatiUndelete File System
-    File system SMBSMB File System
     EXTernal File SystemEXTernal File System
   ColoriColors
   Impostazioni specialiSpecial Settings
@@ -100,7 +99,7 @@ OPZIONI
         Salva il dialogo ftpfs con il server in file.
 
 "-P file"
-        Quest'opzione indica al Midnight Commander di stampare l'ultima directory di lavoro sul file specificato. Questa funzione non è fatta per un uso diretto, ma dovrebbe essere utilizzata da una speciale funzione shell che imposti automaticamente l'ultima directory corrente della shell come l'ultima directory in cui stava il Midnight Commander. Prelevate i file /usr/libexec/mc/mc.sh (utenti bash e zsh) o rispettivamente /usr/libexec/mc/mc.csh (utenti tcsh) per definire mc come un alias allo script di shell appropriato.
+        Quest'opzione indica al Midnight Commander di stampare l'ultima directory di lavoro sul file specificato. Questa funzione non è fatta per un uso diretto, ma dovrebbe essere utilizzata da una speciale funzione shell che imposti automaticamente l'ultima directory corrente della shell come l'ultima directory in cui stava il Midnight Commander. Prelevate i file /usr/local/libexec/mc/mc.sh (utenti bash e zsh) o rispettivamente /usr/local/libexec/mc/mc.csh (utenti tcsh) per definire mc come un alias allo script di shell appropriato.
 
 "-s"    Abilita il modo terminale lento, in questa modalità il programma non disegna le linee e disabilita la modalità prolissa.
 
@@ -643,33 +642,13 @@ Il comando Directory favorite mostra le etichette delle directory nell'elenco de
 Questo rende più veloce il cd verso directory usate spesso. Considera l'uso della variabile CDPATH come descritto in comando cd internoThe cd internal command.[Edit Extension File]
 Modifica file estensioni
 
-Questo comando invocherà l'editor sul file ~/.config/mc/mc.ext. Il fomato di questo file è il seguente (il formato è cambiato dalla versione 3.0):
-
-Tutte le righe che iniziano per # vengono ignorate.
-
-Le righe che cominciano dalla prima colonna devono avere il seguente formato:
-
-parolachiave/descrizione, i.e. qualsiasi cosa dopo parolachiave/ fino al fine riga è descrizione
-
-parolachiave può essere:
-
-shell   (allora descrizione è qualsiasi estensione (no caratteri jolly), cioè corrisponde a tutti i file *descrizione. Esempio: .tar corrisponde a *.tar)
-
-regex   (descrizione è un'espressione regolare)
-
-type    (file corrisponde se `file %f` corrisponde all'espressione regolare descrizione (nome del file: a partire da `file %f` viene rimosso))
-
-default (corrisponde a qualsiasi file indipendentemente dalla descrizione)
-
-Le altre linee devono cominciare con uno spazio o una tabulazione e devono essere nel formato: parolachiave=comando (senza spazi intorno a =), dove parolachiave deve essere: Open (se l'utente preme Invio o fa doppio clic), View (F3), Edit (F4). command è qualsiasi comando shell di una riga, con la semplice sostituzione macroMacro Substitution.
-
-Gli obiettivi sono valutati dalla cima al fondo, perciò l'ordine è importante. Se alcune azioni mancano, la ricerca continua come se la regola non corrispondesse, cioè se un file corrisponde alla prima e alla seconda voce e manca la voce View in cima, allora premendo F3 verrà usata l'azione View della seconda voce. Normalmente  dovrebbero corrispondere tutte le azioni.[Background jobs]
+Questo comando invocherà l'editor sul file ~/.config/mc/mc.ext.ini. If this file does not exist and you are not root, it will be copied from /usr/local/etc/mc/mc.ext.ini. If you are root, you can choose the file to edit: user's ~/.config/mc/mc.ext.ini or system-wide /usr/local/etc/mc/mc.ext.ini. The format of this file is described in detail in it.[Background jobs]
 Processi in background
 
 Questo comando permette di controllare lo stato di ogni processo in background del Midnight Commander (in background possono essere eseguite solo operazioni di copia e rinomina). Da qui si può bloccare, far ripartire e uccidere un lavoro in background.[Edit Menu File]
 Modifica file menu
 
-Il menu utente è un menu di comandi utili che possono essere personalizzati dall'utente. Quando si accede al menu utente, viene utilizzato, se esiste, il file .mc.menu dalla directory corrente, ma solo se è di proprietà dell'utente o di root e se non è scrivibile a tutti. Se tale file non viene trovato, mc alla stessa maniera prova con ~/.config/mc/menu altrimenti usa il menu di sistema /usr/share/mc/mc.menu.
+Il menu utente è un menu di comandi utili che possono essere personalizzati dall'utente. Quando si accede al menu utente, viene utilizzato, se esiste, il file .mc.menu dalla directory corrente, ma solo se è di proprietà dell'utente o di root e se non è scrivibile a tutti. Se tale file non viene trovato, mc alla stessa maniera prova con ~/.config/mc/menu altrimenti usa il menu di sistema /usr/local/share/mc/mc.menu.
 
 Il formato del file menu è molto semplice. Le righe che cominciano con qualsiasi cosa che non sia uno spazio o una tabulazione sono considerate voci per il menu (per fare in modo di usarle anche come scelta rapida, il primo carattere deve essere una lettera). Tutte le righe che cominciano con uno spazio o un tab sono i comandi che verranno eseguiti quando la voce viene selezionata.
 
@@ -887,14 +866,14 @@ E' possibile definire un host proxy per fare trasferimenti ftp. Notare che molti
 
 Se usa sempre ftp proxy non è impostata, è possibile usare il punto escamativo per abilitare il proxy per certi host. Vedere la sezione file system FTPFTP File System per gli esempi.
 
-Se quest'opzione è impostata, il programma farà due cose: consulterà il file /usr/lib/mc/mc.no_proxy per le righe contenenti nomi host locali (se il nome host comincia con un punto, è considerato un dominio) e assumendo che ogni nome host senza punti nel nome sia direttamente accessibile. Tutti gli altri host verranno contattati attraverso il proxy host specificato.
+Se quest'opzione è impostata, il programma farà due cose: consulterà il file /usr/local/etc/mc/mc.no_proxy per le righe contenenti nomi host locali (se il nome host comincia con un punto, è considerato un dominio) e assumendo che ogni nome host senza punti nel nome sia direttamente accessibile. Tutti gli altri host verranno contattati attraverso il proxy host specificato.
 
 E' possibile abilitare l'uso del file ~/.netrc che mantiene i nomi di accesso e le password per i server ftp. Vedere netrc (5) per una descrizione del formato .netrc.
 
 Usa modalità passiva abilita l'uso della modalità FTP passiva quando la connessione per il trasferimento file è iniziata dal client, non dal server. Quest'opzione è raccomandata e preimpostata. Se quest'opzione è spenta, la connessione dati viene iniziata dal server. Questo potrebbe non funzionare con alcuni firewall.[Save Setup]
 Salva configurazione
 
-Alla partenza il Midnight Commander prova a caricare le informazioni di inizializzazione dal file ~/.config/mc/ini. Se questo file non esiste, caricherà le informazioni dal file di configurazione di sistema posizionato in /usr/share/mc/mc.ini. Se il file di configurazione di sistema non esiste, MC userà le impostazioni predefinite.
+Alla partenza il Midnight Commander prova a caricare le informazioni di inizializzazione dal file ~/.config/mc/ini. Se questo file non esiste, caricherà le informazioni dal file di configurazione di sistema posizionato in /usr/local/share/mc/mc.ini. Se il file di configurazione di sistema non esiste, MC userà le impostazioni predefinite.
 
 Il comando salva configurazione crea il file ~/.config/mc/ini salvando le impostazioni correnti dei menu sinistra, destraLeft and Right Menus e opzioniOptions Menu.
 
@@ -1110,7 +1089,7 @@ Ecco un'elenco di azioni associate ad ogni tasto che il Midnight Commander gesti
 
 C-r. Inizia una ricerca normale in ordine inverso, se non c'era già un'espressione di ricerca, altrimenti trova la prossima occorrenza.
 
-F8 Cambia tra modalità Normale/Filtrata: questo mostrerà il file come si trova su disco o se è stato specificato un filtro nel file mc.ext, come esce dal filtro. La modalità corrente è sempre quella diversa da quella mostrata dall'etichetta del tasto, dato che il bottone rappresenta la modalità nella quale si entra premendolo.
+F8 Cambia tra modalità Normale/Filtrata: questo mostrerà il file come si trova su disco o se è stato specificato un filtro nel file mc.ext.ini, come esce dal filtro. La modalità corrente è sempre quella diversa da quella mostrata dall'etichetta del tasto, dato che il bottone rappresenta la modalità nella quale si entra premendolo.
 
 F9 Cambia tra modalità non formattata e formattata: quando la modalità è formattata, il visualizzatore interpreterà alcune sequenze di stringa per rappresentare il grassetto e il sottolineato con colori diversi. Anche per questa funzione, l'etichetta sul tasto rappresenta la modalità non corrente.
 
@@ -1149,7 +1128,7 @@ L'editor è molto semplice da usare e non richiede apprendimento. Per vedere cos
 
 Per definire una macro, premere Ctrl-R poi premere i tasti che si voglia essere eseguiti. Premere nuovamente Ctrl-R quando si ha finito. E' possibile assegnare una macro a qualsiasi tasto si preme. La macro viene eseguita quando si preme Ctrl-A  e poi il tasto assegnato. La macro viene eseguita anche se si preme il tasto Meta, Ctrl, o Esc e il tasto assegnato, basta che il tasto non sia già assegnato a qualche altra funzione. Una volta definiti, i macro comandi finiscono nel file ~/.local/share/mc/mcedit/mcedit.macros nella propria directory home. E' possibile cancellare una macro cancellando la riga appropriata nel suddetto file.
 
-F19 formatterà il blocco evidenziato correntemente (testo, codice C o C++ o altro). Questo comportamento viene controllato dal file /usr/share/mc/edit.indent.rc che viene copiato nel ~/.local/share/mc/mcedit/edit.indent.rc nella propria directory home la prima volta che lo si usa.
+F19 formatterà il blocco evidenziato correntemente (testo, codice C o C++ o altro). Questo comportamento viene controllato dal file /usr/local/share/mc/edit.indent.rc che viene copiato nel ~/.local/share/mc/mcedit/edit.indent.rc nella propria directory home la prima volta che lo si usa.
 
 L'editor visualizza snche caratteri non-americani (160+). Quando si modifica file binari, si dovrebbe impostare mostra bit a 7 bit nel menu opzioni, per mantenere la spaziatura pulita.[Completion]
 Completamento
@@ -1163,7 +1142,7 @@ File system virtuale
 
 Il Midnight Commander è provvisto di uno strato di codice per accedere al file system; questo strato di codice è conosciuto anche con il nome di commutazione di file system virtuale. La commutazione del file system virtuale permette al Midnight Commander di manipolare file all'interno di un file system non di tipo Unix.
 
-Attualmente il Midnight Commander viene confezionato con alcuni File System Virtuali (VFS): il file system locale, usato per accedere al normale file system Unix; l'ftpfs, usato per manipolare file su sistemi remoti con il protocollo FTP; il tarfs, usato per manipolare file tar e file tar compressi; l'undelfs, usato per recuperare file cancellati su file system di tipo ext2 (il file system predefinito per sistemi Unix), fish (per manipolare file su connessioni shell come rsh e ssh) e per ultimo l'mcfs (file system del Midnight Commander), un file system basato sulla rete. Se il codice è stato compilato con il supporto smbfs, è possibile manipolare file su file system remoti con il protocollo SMB (CIFS).
+Attualmente il Midnight Commander viene confezionato con alcuni File System Virtuali (VFS): il file system locale, usato per accedere al normale file system Unix; l'ftpfs, usato per manipolare file su sistemi remoti con il protocollo FTP; il tarfs, usato per manipolare file tar e file tar compressi; l'undelfs, usato per recuperare file cancellati su file system di tipo ext2 (il file system predefinito per sistemi Unix), fish (per manipolare file su connessioni shell come rsh e ssh) e per ultimo l'mcfs (file system del Midnight Commander), un file system basato sulla rete.
 
 Il codice di commutazione di file system interpreta tutti i nomi di percorso utilizzati e li dirige al file system corretto; il formato utilizzato per ognuno di questi file system viene descritto più avanti nella sezioni apposite.[FTP File System]
 File system FTP
@@ -1191,7 +1170,7 @@ Il file system tar fornisce un accesso in sola lettura ai file tar e tar compres
 
 /nomefile.tar/utar://[dir-dentro-tar]
 
-Il file mc.ext già fornisce un collegamento per il file tar; ciò significa che normalmente basta selezionare un file tar e premere invio per entrare nel file tar, vedere la sezione modifica file estensioniEdit Extension File per i dettagli su come questo viene fatto.
+Il file mc.ext.ini già fornisce un collegamento per il file tar; ciò significa che normalmente basta selezionare un file tar e premere invio per entrare nel file tar, vedere la sezione modifica file estensioniEdit Extension File per i dettagli su come questo viene fatto.
 
 Esempi:
 
@@ -1226,21 +1205,7 @@ Per esempio, per recuperare file cancellati sulla seconda partizione del primo d
 
     undel://sda2
 
-Il recupero può metterci un po' di tempo per caricare le informazioni necessarie per poter cominciare a navigare attraverso i file.[SMB File System]
-File system SMB
-
-Il file system smb permette di gestire file su macchine remote con protocollo SMB (o CIFS). Queste includono Windows for Workgroups, Windows 9x/ME, Windows NT/2000/XP, OS/2 e Samba. Per usarlo, si può provare il comando dal pannello "Connessione SMB..." (accessibile dalla barra dei menu) o si può direttamente cambiare directory corrente usando il comando cd verso un percorso simile a questo:
-
-smb://[utente@]macchina[/servizio][/dir-remota]
-
-L'elemento utente, servizio e dir-remota sono opzionali. Il nome utente, dominio e la password  possono essere specificati nella finestra di dialogo di ingresso.
-
-Esempi:
-
-    smb://macchina/Condivisione
-    smb://altra_macchina
-    smb://guest@macchina/Public/Irlex
-[EXTernal File System]
+Il recupero può metterci un po' di tempo per caricare le informazioni necessarie per poter cominciare a navigare attraverso i file.[EXTernal File System]
 EXTernal File System
 
 extfs allows to integrate numerous features and file types into GNU Midnight Commander in an easy way, by writing scripts.
@@ -1384,7 +1349,7 @@ Queste sono le variabili che possono essere impostate nel file ~/.config/mc/ini:
         Il tasto fine ha un comportamento simile: va giù alla riga centrale se era sopra di essa, altrimenti va alla riga di fondo a meno che non ci sia già; in tal caso sposterà la selezione all'ultimo file del pannello.
 
 use_file_to_guess_type
-        Se questa variabile è abilitata (valore predefinito) userà il comando file per trovare delle corrispondenze sui tipi di file elencati nel file mc.extEdit Extension File.
+        Se questa variabile è abilitata (valore predefinito) userà il comando file per trovare delle corrispondenze sui tipi di file elencati nel file mc.ext.iniEdit Extension File.
 
 xtree_mode
         Se questa variabile è impostata (il valore predefinito è no) quando si naviga il file system su un pannello ad albero, automaticamente ricaricherà l'altro pannello con il contenuto della directory selezionata.[Terminal databases]
@@ -1417,25 +1382,25 @@ Il tasto di completamento rappresenta le sequenze di escape usate per invocare
 [FILES]
 FILE
 
-Il programma recupera tutte le informazioni relative al proprio funzionamento dalla variabile ambiente MC_DATADIR, e se la variabile non è impostata, passerà alla directory /usr/share/mc .
+Il programma recupera tutte le informazioni relative al proprio funzionamento dalla variabile ambiente MC_DATADIR, e se la variabile non è impostata, passerà alla directory /usr/local/share/mc .
 
-/usr/share/mc/help/mc.hlp
+/usr/local/share/mc/help/mc.hlp
 
         Il file di aiuto per il programma.
 
-/usr/share/mc/mc.ext
+/usr/local/share/mc/mc.ext.ini
 
         Il file delle estensioni di sistema predefinito.
 
-~/.config/mc/mc.ext
+~/.config/mc/mc.ext.ini
 
         Le estensioni dell'utente, la configurazione del visualizzatore e dell'editor di file. Se presenti, questi file si sovrappongono ai file di sistema.
 
-/usr/share/mc/mc.ini
+/usr/local/share/mc/mc.ini
 
         La configurazione di sistema predefinita per il Midnight Commander, usata solo se l'utente non possiede il proprio file ~/.config/mc/ini.
 
-/usr/share/mc/mc.lib
+/usr/local/share/mc/mc.lib
 
         Le impostazioni globali per il Midnight Commander. La modifica di questo file influisce su tutti gli utenti, che abbiano o no il file ~/.config/mc/ini . Attualmente vengono caricate solo le impostazioni del terminaleTerminal databases da mc.lib.
 
@@ -1443,11 +1408,11 @@ Il programma recupera tutte le informazioni relative al proprio funzionamento da
 
         La configurazione dell'utente. Se questo file è presente, la configurazione viene caricata da qui invece che dal file di sistema.
 
-/usr/share/mc/hints/mc.hint
+/usr/local/share/mc/hints/mc.hint
 
         Questo file contiene i suggerimenti (dritte) mostrate dal programma.
 
-/usr/share/mc/mc.menu
+/usr/local/share/mc/mc.menu
 
         Questo file contiene il menu di sistema per le applicazioni.
 
@@ -1472,7 +1437,7 @@ VEDERE ANCHE
 ed(1), gpm(1), terminfo(1), view(1), sh(1), bash(1), tcsh(1), zsh(1).
 
 La pagina Web del Midnight Commander:
-	http://www.midnight-commander.org/
+	https://www.midnight-commander.org/
 [AUTHORS]
 AUTORI
 
@@ -1483,7 +1448,7 @@ BACHI
 
 Vedere il file TODO nella distribuzione per informazioni su quello che rimane ancora da fare.
 
-Se si vuole fare un rapporto di un problema nel programma, si prega di spedire un messaggio di posta a questo indirizzo: mc-devel@gnome.org.
+Se si vuole fare un rapporto di un problema nel programma, si prega di spedire un messaggio di posta a questo indirizzo: mc-devel@lists.midnight-commander.org.
 
 Nel rapporto è necessario fornire una descrizione dettagliata del baco, la versione del programma (mc -v mostra quest'informazione), il sistema operativo su cui si sta facendo girare il programma e, se il programma va in crash, è gradita una traccia dello stack.
 

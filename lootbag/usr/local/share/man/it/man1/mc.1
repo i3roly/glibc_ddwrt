@@ -21,7 +21,7 @@
 .\" Prego mantenere la linea di traduzione generale (per quanto possibile).
 .\"
 .\"TOPICS "Indice degli argomenti:"
-.TH MC 1 "Gennaio 2021" "MC Version 4.8.25" "GNU Midnight Commander"
+.TH MC 1 "Marzo 2023" "MC Version 4.8.29" "GNU Midnight Commander"
 .\"SKIP_SECTION"
 .SH "NOME"
 mc \- interfaccia visuale per sistemi tipo Unix.
@@ -1314,60 +1314,14 @@ comando cd interno\&.
 .\"NODE "    Edit Extension File"
 .SH "    Modifica file estensioni"
 Questo comando invocherà l'editor sul file 
-.IR ~/.config/mc/mc.ext .
-Il fomato di questo file è il seguente (il formato è cambiato dalla 
-versione 3.0):
-.PP
-Tutte le righe che iniziano per # vengono ignorate.
-.PP
-Le righe che cominciano dalla prima colonna devono avere il seguente formato:
-.PP
-.IR parolachiave/descrizione ,
-i.e. qualsiasi cosa dopo
-.I parolachiave/
-fino al fine riga è 
-.I descrizione
-.PP
-parolachiave può essere: 
-.TP
-.I shell
-(allora descrizione è qualsiasi estensione (no caratteri jolly), 
-cioè corrisponde a tutti i file *descrizione. Esempio: .tar corrisponde a *.tar)
-.TP
-.I regex
-(descrizione è un'espressione regolare)
-.TP
-.I type
-(file corrisponde se `file %f` corrisponde all'espressione regolare descrizione
-(nome del file: a partire da `file %f` viene rimosso))
-.TP
-.I default
-(corrisponde a qualsiasi file indipendentemente dalla descrizione)
-.PP
-Le altre linee devono cominciare con uno spazio o una tabulazione e devono essere nel formato:
-.I parolachiave=comando
-(senza spazi intorno a =), dove
-.I parolachiave
-deve essere: 
-.I Open
-(se l'utente preme Invio o fa doppio clic), 
-.I View
-(F3),
-.I Edit
-(F4).
-.I command
-è qualsiasi comando shell di una riga, con la semplice
-.\"LINK2"
-sostituzione macro\&.
-.\"Macro Substitution"
-.PP
-Gli obiettivi sono valutati dalla cima al fondo, perciò l'ordine è 
-importante. Se alcune azioni mancano, la ricerca continua come se 
-la regola non corrispondesse, cioè se un file corrisponde alla prima e
-alla seconda voce e manca la voce View in cima, allora premendo F3 verrà
-usata l'azione View della seconda voce.
-.I Normalmente 
-dovrebbero corrispondere tutte le azioni.
+.IR ~/.config/mc/mc.ext.ini .
+If this file does not exist and you are not root, it will be copied from
+.IR /usr/local/etc/mc/mc.ext.ini .
+If you are root, you can choose the file to edit: user's
+.I ~/.config/mc/mc.ext.ini
+or system\-wide
+.IR /usr/local/etc/mc/mc.ext.ini .
+The format of this file is described in detail in it.
 .\"NODE "    Background jobs"
 .SH "    Processi in background"
 Questo comando permette di controllare lo stato di ogni processo
@@ -1894,7 +1848,7 @@ file system FTP
 per gli esempi.
 .PP
 Se quest'opzione è impostata, il programma farà due cose: consulterà 
-il file /usr/local/lib/mc/mc.no_proxy per le righe contenenti nomi host
+il file /usr/local/etc/mc/mc.no_proxy per le righe contenenti nomi host
 locali (se il nome host comincia con un punto, è considerato un 
 dominio) e assumendo che ogni nome host senza punti nel nome sia
 direttamente accessibile. Tutti gli altri host verranno contattati
@@ -2425,7 +2379,7 @@ un'espressione di ricerca, altrimenti trova la prossima occorrenza.
 .PP
 .B F8
 Cambia tra modalità Normale/Filtrata: questo mostrerà il file come si
-trova su disco o se è stato specificato un filtro nel file mc.ext, come
+trova su disco o se è stato specificato un filtro nel file mc.ext.ini, come
 esce dal filtro. La modalità corrente è sempre quella diversa da quella
 mostrata dall'etichetta del tasto, dato che il bottone rappresenta la
 modalità nella quale si entra premendolo.
@@ -2610,9 +2564,7 @@ e file tar compressi; l'undelfs, usato per recuperare file cancellati
 su file system di tipo ext2 (il file system predefinito per sistemi
 Unix), fish (per manipolare file su connessioni shell come rsh e ssh) e
 per ultimo l'mcfs (file system del Midnight Commander), un file system
-basato sulla rete. Se il codice è stato compilato con il supporto smbfs,
-è possibile manipolare file su file system remoti con il protocollo SMB
-(CIFS).
+basato sulla rete.
 .PP
 Il codice di commutazione di file system interpreta tutti i nomi di 
 percorso utilizzati e li dirige al file system corretto; il formato
@@ -2674,7 +2626,7 @@ al file tar usare la seguente sintassi:
 .PP
 .I /nomefile.tar/utar://[dir\-dentro\-tar]
 .PP
-Il file mc.ext già fornisce un collegamento per il file tar; ciò
+Il file mc.ext.ini già fornisce un collegamento per il file tar; ciò
 significa che normalmente basta selezionare un file tar e premere invio
 per entrare nel file tar, vedere la sezione
 .\"LINK2"
@@ -2751,36 +2703,6 @@ del primo disco SCSI su Linux, si dovrà usare il seguente percorso:
 .PP
 Il recupero può metterci un po' di tempo per caricare le informazioni
 necessarie per poter cominciare a navigare attraverso i file.
-.\"NODE "  SMB File System"
-.SH "  File system SMB"
-Il file system smb permette di gestire file su macchine remote con
-protocollo SMB (o CIFS). Queste includono Windows for Workgroups, 
-Windows 9x/ME, Windows NT/2000/XP, OS/2 e Samba.
-Per usarlo, si può provare il comando dal pannello 
-"Connessione SMB..." (accessibile dalla barra dei menu) o si può 
-direttamente cambiare directory corrente usando il comando cd verso
-un percorso simile a questo:
-.PP
-.I smb://[utente@]macchina[/servizio][/dir\-remota]
-.PP
-L'elemento
-.I utente, servizio
-e
-.I dir\-remota
-sono opzionali.
-Il
-.I nome utente, dominio
-e la
-.I password 
-possono essere specificati nella finestra di dialogo di ingresso.
-.PP
-Esempi:
-.PP
-.nf
-    smb://macchina/Condivisione
-    smb://altra_macchina
-    smb://guest@macchina/Public/Irlex
-.fi
 .\"NODE "  EXTernal File System"
 .SH "  EXTernal File System"
 .B extfs
@@ -3114,7 +3036,7 @@ pannello.
 Se questa variabile è abilitata (valore predefinito) userà il comando
 file per trovare delle corrispondenze sui tipi di file elencati nel
 .\"LINK2"
-file mc.ext\&.
+file mc.ext.ini\&.
 .\"Edit Extension File"
 .TP
 .I xtree_mode
@@ -3178,11 +3100,11 @@ e se la variabile non è impostata, passerà alla directory /usr/local/share/mc 
 .IP
 Il file di aiuto per il programma.
 .PP
-.I /usr/local/share/mc/mc.ext
+.I /usr/local/share/mc/mc.ext.ini
 .IP
 Il file delle estensioni di sistema predefinito.
 .PP
-.I ~/.config/mc/mc.ext
+.I ~/.config/mc/mc.ext.ini
 .IP
 Le estensioni dell'utente, la configurazione del visualizzatore e
 dell'editor di file. Se presenti, questi file si sovrappongono ai file di 
@@ -3251,7 +3173,7 @@ tcsh(1), zsh(1).
 .PP
 .nf
 La pagina Web del Midnight Commander:
-	http://www.midnight\-commander.org/
+	https://www.midnight\-commander.org/
 .fi
 .\"NODE "AUTHORS"
 .SH "AUTORI"
@@ -3292,7 +3214,8 @@ Vedere il file TODO nella distribuzione per informazioni su
 quello che rimane ancora da fare.
 .PP
 Se si vuole fare un rapporto di un problema nel programma, si prega di
-spedire un messaggio di posta a questo indirizzo: mc\-devel@gnome.org.
+spedire un messaggio di posta a questo indirizzo:
+mc\-devel@lists.midnight-commander.org.
 .PP
 Nel rapporto è necessario fornire una descrizione dettagliata del baco, 
 la versione del programma (mc \-v mostra quest'informazione), il sistema 

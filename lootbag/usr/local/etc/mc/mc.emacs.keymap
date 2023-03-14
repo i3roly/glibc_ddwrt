@@ -1,5 +1,5 @@
-[main]
-ChangePanel = tab
+[filemanager]
+ChangePanel = tab; ctrl-i
 Help = f1
 UserMenu = f2
 View = f3
@@ -52,12 +52,11 @@ ScreenList = alt-prime
 # Filter =
 # ConnectFish =
 # ConnectFtp =
-# ConnectSmb =
 # Undelete =
 EditorViewerHistory = alt-shift-e
 ExtendedKeyMap = ctrl-x
 
-[main:xmap]
+[filemanager:xmap]
 ChangeMode = c
 ChangeOwn = o
 ChangeAttributes = e
@@ -128,6 +127,7 @@ Bottom = alt-gt; end; c1
 # SortByExt =
 # SortBySize =
 # SortByMTime =
+# Filter =
 # ScrollLeft =
 # ScrollRight =
 

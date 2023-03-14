@@ -54,7 +54,6 @@
     System plików tar (Tar File System)Tar File System
     Transfer plików pomiędzy systemami plików (FIle transfer over SHell filesystem)FIle transfer over SHell filesystem
     Odzyskiwanie plikówUndelete File System
-    SMB File SystemSMB File System
     EXTernal File SystemEXTernal File System
   Polskie znakiPolskie znaki
   KoloryColors
@@ -100,14 +99,14 @@ użytkownicy basha i zsh:
 mc ()
 {
         MC=$HOME/tmp/mc$$-"$RANDOM"
-        /usr/bin/mc -P "$@" > "$MC"
+        %bindir%/mc -P "$@" > "$MC"
         cd "`cat $MC`"
         rm "$MC"
         unset MC;
 }
 
 użytkownicy tcsh:
-alias mc 'setenv MC `/usr/bin/mc -P !*`; cd $MC; unsetenv MC'
+alias mc 'setenv MC `%bindir%/mc -P !*`; cd $MC; unsetenv MC'
         Wiem, że ta funkcja mogłaby być krótsza dla basha i zsh, ale małe cudzysłowy nie zaakceptowały by zawieszenia programu kombinacją C-z.
 
 -s      Włącza tryb powolnego terminala, w którym program nie będzie rysował zbyt obciążających znaków graficznych oraz wyłączy opcję weryfikacji.
@@ -645,43 +644,7 @@ Powoduje to przechodzenie do częściej przeglądanych katalogów znacznie szybc
 [Edit Extension File]
 Edycja rozszerzeń pliów (Edit Extension File)
 
-Ta komenda wywoła twój edytor na plik ~/.config/mc/mc.ext. Format tego pliku jest następujący (zmienił się on począwszy od wersji 3.0):
-
-Wszystkie linie zaczynające się od #, lub puste, nie są brane pod uwagę.
-
-Linie zaczynające się od pierwszej kolumny powinny mieć następujący format:
-
-słowo kluczowe/wzorzec, tj. wszystko po słowie kluczowym/ dopóki nową linią nie jest wzorzec
-
-słowami kluczowymi mogą być:
-
-shell
-
-        (wzorzec jest wtedy wyrażeniem (bez jokerów), tj. pasują wszystkie pliki *wzorzec. Np.: .tar znaczy *.tar)
-
-regex
-
-        (wzorzec jest normalnym wyrażeniem)
-
-type
-
-        (plik spełnia wymagania jeśli `file %f` zgadza się z wyrażeniem wzorca (nazwa: część z `file %f` jest usuwana))
-
-default
-
-        (wszystkie pliki spełniają, nie ważne jaki jest wzorzec)
-
-Inne linie powinny zaczynać się od spacji lub tabulacji i powinny mieć one następujący format:
-
-słowo kluczowe=komenda (bez spacji przy znaku =), gdzie słowem kluczowym powinno być:
-
-Open (Otwórz) (jeśli użytkownik naciśnie Enter lub kliknie dwukrotnie), View (Podgląd) (F3), Edit (Edytuj) (F4).
-
-command jest jakąkolwiek jedną linią powłoki, z zastosowaniem prostego makra.
-
-Cele są przeliczane od góry do dołu (porządek jest tu istotny). Jeśli jakiejś akcji brakuje, poszukiwanie kontynuuje się tak jakby wcześniej nie nastąpiła żadna zgodność (tj. jeśli zgadza się z wzorcem pierwszym i trzecim i brakuje w pierwszym akcji View, to naciskając F3 użyta będzie akcja z trzeciego wzorca). Opcja default powinna wychwycić wszystkie możliwe akcje.
-
-[Background Jobs]
+Ta komenda wywoła twój edytor na plik ~/.config/mc/mc.ext.ini. If this file does not exist and you are not root, it will be copied from /usr/local/etc/mc/mc.ext.ini. If you are root, you can choose the file to edit: user's ~/.config/mc/mc.ext.ini or system-wide /usr/local/etc/mc/mc.ext.ini. The format of this file is described in detail in it. PP[Background Jobs]
 Prace w tle (Background jobs)
 
 Pozwalają ci one kontrolować status jakichkolwiek procesów wykonywanych w tle przez Midnight Commandera (tylko operacje kopiowania i przenoszenia, mogą być wykonywane w tle). Z tego menu możesz zastopować, zresetować i "zabić" proces w tle.
@@ -689,7 +652,7 @@ Pozwalają ci one kontrolować status jakichkolwiek procesów wykonywanych w tle
 [Edit Menu File]
 Edycja menu użytkownika (Edit Menu File)
 
-Menu użytkownika jest bardzo użytecznym menu, które może być tworzone w sposób dowolny, przez użytkownika. Kiedy tylko próbujesz coś zrobić przy użyciu tego menu, ładowany jest plik .mc.menu z aktualnego katalogu, ale tylko wtedy kiedy jest on w posiadaniu użytkownika lub roota i mamy do niego prawa zapisu. Jeśli takiego nie ma próbuje się z plikiem ~/.config/mc/menu z tymi samymi założeniami, jeśli jego też nie ma - używa się standardowego pliku systemowego, który znajduje się w /usr/share/mc/mc.menu.
+Menu użytkownika jest bardzo użytecznym menu, które może być tworzone w sposób dowolny, przez użytkownika. Kiedy tylko próbujesz coś zrobić przy użyciu tego menu, ładowany jest plik .mc.menu z aktualnego katalogu, ale tylko wtedy kiedy jest on w posiadaniu użytkownika lub roota i mamy do niego prawa zapisu. Jeśli takiego nie ma próbuje się z plikiem ~/.config/mc/menu z tymi samymi założeniami, jeśli jego też nie ma - używa się standardowego pliku systemowego, który znajduje się w /usr/local/share/mc/mc.menu.
 
 Format pliku z menu użytkownika jest bardzo prosty. Linie zaczynające się od czegokolwiek innego niż spacja lub tabulacja, są traktowane jako wtyczki do menu (aby móc używać ich potem jako gorących klawiszy, dobrze jest aby pierwszy znak był literą). Wszystkie linie zaczynające od spacji lub tabulacji, są komendami, które mają być wykonane jeśli wtyczka zostanie wybrana.
 
@@ -905,7 +868,7 @@ System plików FTP trzyma listę katalogów z odwiedzanego przez nas serwera w b
 Ponadto możesz zdefiniować serwer proxy dla transferów ftp i skonfigurować Midnight Commandera tak, aby zawsze go używał. Zobacz sekcję System plików FTP (FTP File System) po więcej szczegółów.[Save Setup]
 Zapisz ustawienia (Save Setup)
 
-Na starcie Midnight Commander będzie próbował odczytać opcje startowe z pliku ~/.config/mc/ini. Jeśli on nie istnieje, odczyta on konfiguracje z ogólnodostępnego pliku /usr/share/mc/mc.ini. Jeśli on też nie istnieje MC użyje swoich domyślnych ustawień.
+Na starcie Midnight Commander będzie próbował odczytać opcje startowe z pliku ~/.config/mc/ini. Jeśli on nie istnieje, odczyta on konfiguracje z ogólnodostępnego pliku /usr/local/share/mc/mc.ini. Jeśli on też nie istnieje MC użyje swoich domyślnych ustawień.
 
 Komenda Save Setup tworzy plik ~/.config/mc/ini zachowując aktualne ustawienia lewego, prawego menu, jak również menu opcji.
 
@@ -1148,7 +1111,7 @@ Tu jest lista akcji powiązanych z każdym klawiszem, który Midnight Commander 
 
 n. Szuka następnego wystąpienia.
 
-F8 Przełącza tryby Raw i Parsed. Pokaże to plik w postaci takiej w jakiej został znaleziony na dysku, lub jeśli został wybrany jakiś filtr, bądź też plik spełnia wymagania w pliku mc.ext, wyświetlane jest to co przekazuje filtr. Aktualne ustawienie jest zawsze przeciwne niż to napisane na przycisku, przycisk wskazuje zawsze to co się stanie po jego naciśnięciu.
+F8 Przełącza tryby Raw i Parsed. Pokaże to plik w postaci takiej w jakiej został znaleziony na dysku, lub jeśli został wybrany jakiś filtr, bądź też plik spełnia wymagania w pliku mc.ext.ini, wyświetlane jest to co przekazuje filtr. Aktualne ustawienie jest zawsze przeciwne niż to napisane na przycisku, przycisk wskazuje zawsze to co się stanie po jego naciśnięciu.
 
 F9 Przełącza pomiędzy trybami format i unformat. Kiedy tryb formatu jest włączony podgląd będzie interpretował niektóre sentencje i pokazywał tekst pogrubiony i podkreślony innymi kolorami. Wynika z tego, że przycisk wskazuje co innego niż jest aktualnie (patrz wyżej).
 
@@ -1229,7 +1192,7 @@ Przykłady:
 
 Aby połączyć się z serwerem znajdującym się za firewallem, będziesz musiał użyc przedrostka ftp://! aby wymusić na Midnight Commanderze używanie serwera proxy do transferu danch. Serwer proxy definiuje się w oknie dialogowym wirtualnego systemu plików.
 
-Inną możliwością jest ustawienie opcji Always use ftp proxy w oknie konfiguracyjnym wirtualnego systemu plików. Skonfiguruje to program tak, aby zawsze używał serwera proxy. Jeśli ta zmienna jest ustawiona, program będzie robił dwie rzeczy: konsultował plik /usr/share/mc.no_proxy w celu znalezienia linii zawierających nazwy serwerów, które są lokalne (jeśli nazwa hosta zaczyna się od kropki, uznaje się, że jest to domena) i sprawdza czy jakieś hosty bez kropek w nazwie są widoczne bezpośrednio.
+Inną możliwością jest ustawienie opcji Always use ftp proxy w oknie konfiguracyjnym wirtualnego systemu plików. Skonfiguruje to program tak, aby zawsze używał serwera proxy. Jeśli ta zmienna jest ustawiona, program będzie robił dwie rzeczy: konsultował plik /usr/local/etc/mc/mc.no_proxy w celu znalezienia linii zawierających nazwy serwerów, które są lokalne (jeśli nazwa hosta zaczyna się od kropki, uznaje się, że jest to domena) i sprawdza czy jakieś hosty bez kropek w nazwie są widoczne bezpośrednio.
 
 Jeśli używasz systemu ftpfs będąc za routerem filtrującym, który nie pozwala ci na używanie standardowej metody otwierania plików, możesz chcieć wymusić na programie używanie trybu passive-open. Aby tego używać ustaw opcję ftpfs_use_passive_connections w pliku inicjującym.
 
@@ -1242,7 +1205,7 @@ System plików tar pozwala na dostęp w trybie tylko-do-odczytu do plików typu 
 
 /nazwa_pliku.tar:utar/[katalogu-wewnątrza-archiwum]
 
-Plik mc.ext pozwala już na tworzenie skrótów do plików tar, oznacza to, że możesz wybrać jakiś plik tar i nacisnąć enter aby do niego wejść, zobacz sekcję Edycja pliku rozszerzeń po więcej szczegółów na temat tego jak zostało to pomyślane.
+Plik mc.ext.ini pozwala już na tworzenie skrótów do plików tar, oznacza to, że możesz wybrać jakiś plik tar i nacisnąć enter aby do niego wejść, zobacz sekcję Edycja pliku rozszerzeń po więcej szczegółów na temat tego jak zostało to pomyślane.
 
 Przykłady
 
@@ -1278,23 +1241,7 @@ Na przykład, aby odzyskać skasowane pliki z drugiej partycji pierwszego dysku 
 
     undel:///dev/sda2
 
-Może to chwilkę potrwać zanim pliki zostaną pokazane i będziesz mógł je normalnie oglądać.
-
-[SMB File System]
-SMB File System
-
-The smbfs allows you to manipulate files on remote machines with SMB (or CIFS) protocol. These include Windows for Workgroups, Windows 9x/ME/XP, Windows NT, Windows 2000 and Samba. To actually use it, you may try to use the panel command "SMB link..." (accessible from the menubar) or you may directly change your current directory to it using the cd command to a path name that looks like this:
-
-smb://[user@]machine[/service][/remote-dir]
-
-The user, service and remote-dir elements are optional. The user, domain and password can be specified in an input dialog.
-
-Examples:
-
-    smb://machine/Share
-    smb://other_machine
-    smb://guest@machine/Public/Irlex
-[EXTernal File System]
+Może to chwilkę potrwać zanim pliki zostaną pokazane i będziesz mógł je normalnie oglądać.[EXTernal File System]
 EXTernal File System
 
 extfs allows to integrate numerous features and file types into GNU Midnight Commander in an easy way, by writing scripts.
@@ -1492,7 +1439,7 @@ Opcje mogą być ustawione w twoim pliku ~/.config/mc/ini :
 
 use_file_to_guess_type
 
-        Jeśli ta zmienna jest ustawiona (standardowo) próbuje się dostosować rozszerzenie pliku do tego wybranego w pliku mc.ext.
+        Jeśli ta zmienna jest ustawiona (standardowo) próbuje się dostosować rozszerzenie pliku do tego wybranego w pliku mc.ext.ini.
 
 xtree_mode
 
@@ -1533,23 +1480,23 @@ PLIKI
 
 Program będzie pobierał wszystkie swoje informacje ze zmiennej MC_DATADIR, jeśli jest ona nie ustawiona to znowu przetwarzany jest katalog /usr.
 
-/usr/share/mc.hlp
+/usr/local/share/mc/help/mc.hlp
 
         Plik pomocy dla programu.
 
-/usr/share/mc/mc.ext
+/usr/local/share/mc/mc.ext.ini
 
         Standardowy plik rozszerzeń plików.
 
-~/.config/mc/mc.ext
+~/.config/mc/mc.ext.ini
 
         Własny plik użytkownika, konfiguruje podgląd i edycje plików. Ma wyższy priorytet niż plik systemowy.
 
-/usr/share/mc/mc.ini
+/usr/local/share/mc/mc.ini
 
         Standardowy plik setupu do Midnight Commandera, używany tylko wówczas, kiedy użytkownik nie ma swojego własnego pliku ~/.config/mc/ini.
 
-/usr/share/mc/mc.lib
+/usr/local/share/mc/mc.lib
 
         Globalne ustawienia Midnight Commandera. Ustawienia w tym pliku są uwzględniane przez wszystkie sesje Midnight Commandera, użyteczne do definiowania ogólnosystemowych ustawień terminali.
 
@@ -1557,11 +1504,11 @@ Program będzie pobierał wszystkie swoje informacje ze zmiennej MC_DATADIR, j
 
         Własny setup użytkownika. Jeśli ten plik jest dostępny, jest ładowany zamiast pliku globalnego.
 
-/usr/share/mc/hints/mc.hint
+/usr/local/share/mc/hints/mc.hint
 
         Plik zawierający podpowiedzi (hints) wyświetlane przez program.
 
-/usr/share/mc/mc.menu
+/usr/local/share/mc/mc.menu
 
         Ten plik zawiera informacje o ogólnosystemowych aplikacjach w menu.
 
@@ -1586,7 +1533,7 @@ ZOBACZ TAKŻE
 ed(1), gpm(1), terminfo(1), view(1), sh(1), bash(1), tcsh(1), zsh(1).
 
 Strona Midnight Commander w sieci World Wide Web:
-	http://www.midnight-commander.org/
+	https://www.midnight-commander.org/
 
 [AUTHORS]
 AUTORZY
@@ -1600,7 +1547,7 @@ BŁĘDY
 
 W pliku TODO dystrybucji znajdziesz informacje na temat tego, co pozostało jeszcze do zrobienia.
 
-Jeśli chcesz zgłosić kłopoty z programem [błędy w nim], wyślij e-mail [po angielsku], na adres mc-devel@gnome.org.
+Jeśli chcesz zgłosić kłopoty z programem [błędy w nim], wyślij e-mail [po angielsku], na adres mc-devel@lists.midnight-commander.org.
 
 Do zgłoszenia błędu dołącz opis problemu, versję programu, którego używasz (wyświetla ją mc -V), system operacyjny, na którym pracujesz i jeśli program się wykłada, chcielibyśmy dostać ślad stosu.[TŁUMACZENIE]
 TŁUMACZENIE

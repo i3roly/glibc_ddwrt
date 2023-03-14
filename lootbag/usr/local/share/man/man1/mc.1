@@ -1,6 +1,6 @@
 .\" -*- mode: troff; coding: UTF-8 -*-
 .\"TOPICS "Topics:"
-.TH MC 1 "January 2021" "MC Version 4.8.25" "GNU Midnight Commander"
+.TH MC 1 "March 2023" "MC Version 4.8.29" "GNU Midnight Commander"
 .\"SKIP_SECTION"
 .SH "NAME"
 mc \- Visual shell for Unix\-like systems.
@@ -42,9 +42,6 @@ Display configure options.
 .TP
 .I \-d, \-\-nomouse
 Disable mouse support.
-.TP
-.I \-D N, \-\-debuglevel=N
-Save the debug level for SMB VFS. N is in 0\-10 range.
 .TP
 .I \-e [file], \-\-edit[=file]
 Start the internal editor.  If the file is specified, open it on
@@ -948,9 +945,27 @@ menu (option
 .SH "    Filter..."
 The filter command allows you to specify a shell pattern (for example
 .BR "*.tar.gz" )
-which the files must match to be shown. Regardless
-of the filter pattern, the directories and the links to directories
-are always shown in the directory panel.
+which the files and directories must match to be shown.
+The
+.\"LINK2"
+input line
+.\"Input Line Keys"
+allow enter the pattern of file/directory names that will be shown
+in the panel.
+.PP
+When
+.I Files only
+checkbox is on, only files will be matched to the filter, and all
+directories will be shown. Otherwise, as files as directories will
+be filtered. When
+.I Shell Patterns
+checkbox is on, the regular expression is much like the filename globbing
+in the shell (* standing for zero or more characters and ? standing
+for one character). Otherwise, the matching of files/directoris is done
+with normal regular expressions (see ed(1)). When
+.I Case sensitive
+checkbox is on, the filtering will be case sensitive characters. Otherwise,
+the case will be ignored.
 .\"NODE "    Reread"
 .SH "    Reread"
 The reread command reload the list of files in the directory. It is
@@ -1468,87 +1483,14 @@ description.
 .\"NODE "    Edit Extension File"
 .SH "    Edit Extension File"
 This will invoke your editor on the file
-.IR ~/.config/mc/mc.ext .
-The format of this file following:
-.PP
-All lines starting with # or empty lines are thrown away.
-.PP
-Lines starting in the first column should have following format:
-.PP
-.IR keyword/expr ,
-i.e. everything after the slash until new line is
-.IR expr .
-.PP
-.I keyword
-can be:
-.TP
-.I shell
-\-
-.I expr
-is an extension (no wildcards).  File matches it its name ends
-with
-.IR expr .
-Example:
-.I shell/.tar
-matches
-.IR *.tar .
-.TP
-.I regex
-\-
-.I expr
-is a regular expression.  File matches if its name matches the regular
-expression.
-.TP
-.I directory
-\-
-.I expr
-is a regular expression.  File matches if it is a directory and its name
-matches the regular expression.
-.TP
-.I type
-\-
-.I expr
-is a regular expression.  File matches if the output of
-.I file %f
-without the initial "filename:" part matches regular expression
-.IR expr .
-.TP
-.I default
-\- matches any file.
-.I expr
-is ignored.
-.TP
-.I include
-\- denotes a common section.
-.I expr
-is the name of the section.
-.PP
-Other lines should start with a space or tab and should be of the format:
-.I keyword=command
-(with no spaces around =), where
-.I keyword
-should be:
-.I Open
-(invoked on Enter or double click),
-.I View
-(F3),
-.I Edit
-(F4) or
-.I Include
-(to add rules from the common section).
-.I command
-is any one\-line shell command, with the simple
-.\"LINK2"
-macro substitution\&.
-.\"Macro Substitution"
-.PP
-Rules are matched from top to bottom, thus the order is important.  If
-the appropriate action is missing, search continues as if this rule
-didn't match (i.e. if a file matches the first and second entry and View
-action is missing in the first one, then on pressing F3 the View action
-from the second entry will be used).
-.I default
-should match all the actions.
+.IR ~/.config/mc/mc.ext.ini .
+If this file does not exist and you are not root, it will be copied from
+.IR /usr/local/etc/mc/mc.ext.ini .
+If you are root, you can choose the file to edit: user's
+.I ~/.config/mc/mc.ext.ini
+or system\-wide
+.IR /usr/local/etc/mc/mc.ext.ini .
+The format of this file is described in detail in it.
 .\"NODE "    Background jobs"
 .SH "    Background Jobs"
 This lets you control the state of any background Midnight Commander
@@ -2113,13 +2055,17 @@ overwriting files, execution by pressing enter, quitting the program,
 directory hotlist entries deletion and history cleanup.
 .\"NODE "    Appearance"
 .SH "    Appearance"
-In this dialog you can select the skin to be used.
+In this dialog you can select the skin to be used and enable shadow
+for dialogs and drop down menus.
 .PP
 See the
 .\"LINK2"
 Skins
 .\"Skins"
 section for technical details about the skin definition files.
+.PP
+.I Shadows.
+If this option is enabled, all dialogs and drop down menus will have a shadow.
 .\"NODE "    Display bits"
 .SH "    Display bits"
 This is used to configure the range of visible characters on the
@@ -2226,7 +2172,7 @@ FTP File System
 for examples.
 .PP
 If this option is set, the program will do two things: consult the
-/usr/local/lib/mc/mc.no_proxy file for lines containing host names that
+/usr/local/etc/mc/mc.no_proxy file for lines containing host names that
 are local (if the host name starts with a dot, it is assumed to be a
 domain) and to assume that any hostnames without dots in their names are
 directly accessible.  All other hosts will be accessed through the
@@ -2461,7 +2407,10 @@ and special keyboard maps in ~/.local/share/mc/inputrc (fallback ~/.inputrc).
 .B ash/dash
 users (BusyBox or Debian) may specify startup commands in ~/.local/share/mc/ashrc (fallback ~/.profile).
 .PP
-.B tcsh, zsh, fish
+.B zsh
+users may specify startup commands in ~/.local/share/mc/.zshrc (fallback ~/.zshrc).
+.PP
+.B tcsh, fish
 users cannot specify mc-specific startup commands at present. They have to rely on
 shell-specific startup files.
 .PP
@@ -2953,7 +2902,7 @@ and vice versa.
 .TP
 .B F8
 Toggle Raw/Parsed mode: This will show the file as found on disk or if
-a processing filter has been specified in the mc.ext file, then the
+a processing filter has been specified in the mc.ext.ini file, then the
 output from the filter. Current mode is always the other than written
 on the button label, since on the button is the mode which you enter
 by that key.
@@ -3194,10 +3143,6 @@ system for Linux systems),
 If the code was compiled with
 .I sftpfs
 (for manipulating files over SFTP connections).
-If the code was compiled with
-.I smbfs
-support, you can manipulate files on remote systems with the SMB (CIFS)
-protocol.
 .PP
 A generic
 .I extfs
@@ -3262,7 +3207,7 @@ tar file by using the following syntax:
 .PP
 .I /filename.tar/utar://[dir\-inside\-tar]
 .PP
-The mc.ext file already provides a shortcut for tar files, this means
+The mc.ext.ini file already provides a shortcut for tar files, this means
 that usually you just point to a tar file and press return to enter
 into the tar file, see the
 .\"LINK2"
@@ -3357,6 +3302,21 @@ Examples:
     sftp://joe@noncompressed.ssh.edu/private
     sftp://joe@somehost.ssh.edu:2222/private
 .fi
+.PP
+When establishing the connection, server key fingerprint is verified using
+the ~/.ssh/known_hosts file. If the host/key pair is not found or the host is found,
+but the key doesn't match, an appropriate message is shown.
+There are three buttons in the message dialog:
+.PP
+.B [Yes]
+add new host/key pair to the ~/.ssh/known_hosts file and continue.
+.PP
+.B [Ignore]
+do not add new host/key pair to the ~/.ssh/known_hosts file, but continue
+nevertheless (at you own risk).
+.PP
+.B [No]
+abort connection.
 .\"NODE "  Undelete File System"
 .SH "  Undelete File System"
 On Linux systems, if you asked configure to use the ext2fs undelete
@@ -3379,37 +3339,6 @@ first SCSI disk on Linux, you would use the following path name:
 .PP
 It may take a while for the undelfs to load the required information
 before you start browsing files there.
-.\"NODE "  SMB File System"
-.SH "  SMB File System"
-The smbfs allows you to manipulate files on remote machines with SMB
-(or CIFS) protocol.  These include Windows for Workgroups,
-Windows 9x/ME/XP, Windows NT, Windows 2000 and Samba.
-To actually use it, you may try to use the panel command "SMB link..."
-(accessible from the menubar) or you may directly change your current
-directory to it using the cd command to a path name that looks like this:
-.PP
-.I smb://[user@]machine[/service][/remote\-dir]
-.PP
-The
-.IR user ,
-.I service
-and
-.I remote\-dir
-elements are optional.
-The
-.IR user ,
-.I domain
-and
-.I password
-can be specified in an input dialog.
-.PP
-Examples:
-.PP
-.nf
-    smb://machine/Share
-    smb://other_machine
-    smb://guest@machine/Public/Irlex
-.fi
 .\"NODE "  EXTernal File System"
 .SH "  EXTernal File System"
 .B extfs
@@ -4158,7 +4087,7 @@ the panel.
 If this variable is on (the default) it will spawn the file command to
 match the file types listed on the
 .\"LINK2"
-mc.ext file\&.
+mc.ext.ini file\&.
 .\"Edit Extension File"
 .TP
 .I xtree_mode
@@ -4306,11 +4235,11 @@ environment variable. If it's set, its value is used instead of
 .IP
 The help file for the program.
 .PP
-.I /usr/local/share/mc/mc.ext
+.I /usr/local/share/mc/mc.ext.ini
 .IP
 The default system\-wide extensions file.
 .PP
-.I ~/.config/mc/mc.ext
+.I ~/.config/mc/mc.ext.ini
 .IP
 User's own extension, view configuration and edit configuration
 file.  They override the contents of the system wide files if present.
@@ -4381,7 +4310,7 @@ tcsh(1), zsh(1).
 .PP
 .nf
 Midnight Commander's page on the World Wide Web:
-	http://www.midnight\-commander.org/
+	https://www.midnight\-commander.org/
 .fi
 .\"NODE "AUTHORS"
 .SH "AUTHORS"
@@ -4393,7 +4322,7 @@ See the file TODO in the distribution for information on what remains to
 be done.
 .PP
 If you want to report a problem with the program, please create bugreport
-at http://www.midnight\-commander.org/.
+at https://www.midnight\-commander.org/.
 .PP
 Provide a detailed description of the bug, the version of the program
 you are running

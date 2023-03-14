@@ -6,7 +6,7 @@
 .\"	David H. Martín Alonso <david.martin@telefonica.net>
 .\"
 .\"TOPICS "Índice de Contenidos:"
-.TH MC 1 "enero de 2021" "MC Versión 4.8.25" "GNU Midnight Commander"
+.TH MC 1 "marzo de 2023" "MC Versión 4.8.29" "GNU Midnight Commander"
 .\"SKIP_SECTION"
 .SH "NOMBRE"
 mc \- entorno visual para sistemas tipo Unix.
@@ -53,10 +53,6 @@ Muestra opciones de configuración compiladas.
 .TP
 .I \-d, \-\-nomouse
 Deshabilita el soporte de ratón.
-.TP
-.I \-D N, \-\-debuglevel=N
-Establece el nivel de depuración para el sistema de archivos virtual SMB.
-N puede estar en el rango 0\-10.
 .TP
 .I \-e [arch], \-\-edit[=arch]
 Iniciar el editor interno. Si se indica un archivo, editarlo. Véase la
@@ -1513,80 +1509,15 @@ comando cd interno\&.
 .\"NODE "    Edit Extension File"
 .SH "    Editar el Archivo de Extensiones"
 Abre el archivo
-.I ~/.config/mc/mc.ext
-en nuestro editor. El administrador puede optar por editar, en su lugar,
-el archivo de extensiones del sistema
-.IR /usr/local/share/mc/mc.ext .
-El formato del archivo es como sigue:
-.PP
-Todas las líneas que empiecen con # o estén vacías serán ignoradas.
-.PP
-Las líneas que comiencen en la primera columna deberán tener el siguiente formato:
-.PP
-.IR PalabraClave/descripción ,
-i. e. todo lo que vaya tras la «/» hasta el fin de línea será la
-.IR descripción .
-.PP
-Las palabras clave son:
-.TP
-.I shell
-\-
-.I Descripción
-será una extensión (sin comodines).  Un archivo coincide si su nombre acaba en
-.IR Descripción .
-Por ejemplo:
-.I shell/.tar
-corresponde a
-.IR *.tar .
-.TP
-.I regex
-\-
-.I Descripción
-es una expresión regular.  Un archivo coincide si la salida de
-.I file %f
-encaja con la expresión regular
-.I Descripción
-(quitando la parte inicial «nombre de archivo:»)
-.TP
-.I default
-\- Coincide para cualquier archivo. Se ignora la
-.IR descripción .
-.TP
-.I include
-\- Incorpora una sección común.
-.I Descripción
-es el nombre de la sección.
-.PP
-El resto de líneas deben comenzar con un espacio o tabulador y usar el
-siguiente formato:
-.I PalabraClave=comando
-(sin espacios alrededor de «=»), donde
-.I PalabraClave
-debe ser:
-.I Open
-(si el usuario pulsa
-.I Intro
-o dos veces el ratón),
-.I View
-(F3),
-.I Edit
-(F4) o
-.I Include
-(para agregar reglas de la sección común).
-.I Comando
-es cualquier comando en línea del shell, con
-.\"LINK2"
-sustitución de macro
-.\"Macro Substitution"
-simple.
-.PP
-Las reglas se aplican en estricto orden. Aunque se produzca una
-coincidencia, si la acción solicitada no está disponible, se ignora y la
-búsqueda continúa (por ejemplo, si un archivo encaja con dos entradas,
-pero la acción Ver no está definida en la primera, al pulsar F3, se
-ejecuta la acción Ver de la segunda).  Por eso, como último recurso
-.I default
-sí debe incluir todas las acciones.
+.I ~/.config/mc/mc.ext.ini
+en nuestro editor.
+If this file does not exist and you are not root, it will be copied from
+.IR /usr/local/etc/mc/mc.ext.ini .
+If you are root, you can choose the file to edit: user's
+.I ~/.config/mc/mc.ext.ini
+or system\-wide
+.IR /usr/local/etc/mc/mc.ext.ini .
+The format of this file is described in detail in it.
 .\"NODE "    Background jobs"
 .SH "    Trabajos en Segundo Plano"
 Nos permite controlar el estado de cualquier proceso de Midnight Commander
@@ -2246,7 +2177,7 @@ Si la opción
 .I Usar siempre proxy
 está puesta, el programa asume que cualquier nombre de máquina
 sin puntos es accesible directamente y también consulta el archivo
-/usr/local/share/mc.no_proxy en busca de nombres de máquinas locales (o
+/usr/local/etc/mc/mc.no_proxy en busca de nombres de máquinas locales (o
 dominios completos si el nombre empieza con un punto).  En todos los
 demás casos se usará siempre el proxy de FTP indicado arriba.
 .PP
@@ -2904,7 +2835,7 @@ Buscar la próxima coincidencia.
 .PP
 .B F8
 Intercambia entre el modo crudo y procesado: esto mostrará el archivo como se encuentra en disco
-o si se ha especificado un filtro de visualización en el archivo mc.ext, entonces
+o si se ha especificado un filtro de visualización en el archivo mc.ext.ini, entonces
 la salida filtrada. El modo actual es siempre el contrario al mostrado
 en la etiqueta del botón, en tanto que el botón muestra el modo en el que entraremos
 con la pulsación de esa tecla.
@@ -3108,10 +3039,7 @@ para manipular archivos a través de conexiones a shell como rsh o ssh.
 .PP
 Dependiendo de la forma en que fue compilado, puede disponer también de:
 .I sftpfs
-para manipular archivos en sistemas remotos a través de SFTP;
-.I SMBfs
-para  manipular archivos en sistemas remotos empleando el protocolo
-SMB (CIFS).
+para manipular archivos en sistemas remotos a través de SFTP.
 .PP
 Se facilita también un sistema de archivos genérico
 .I extfs
@@ -3129,7 +3057,7 @@ de directorio empleando la siguiente sintaxis:
 .PP
 .I /archivo.tar/utar://[directorio\-dentro\-tar]
 .PP
-El archivo mc.ext también ofrece un atajo para los archivos tar, esto quiere decir
+El archivo mc.ext.ini también ofrece un atajo para los archivos tar, esto quiere decir
 que normalmente basta con apuntar a un archivo tar y pulsar Intro para entrar en el
 archivo tar.  Véase la sección
 .\"LINK2"
@@ -3266,37 +3194,6 @@ Ejemplos:
     sftp://pepe:k1abe@quiero.comprension.edu/privado
     sftp://pepe@sincomprimir.ssh.edu/privado
     sftp://pepe@maquina.ssh.edu:2222/privado
-.fi
-
-.\"NODE "  SMB File System"
-.SH "  Sistema de archivos SMB"
-El SMBfs permite manipular archivos en máquinas remotas con el protocolo
-denominado SMB (o CIFS). Esto incluye Windows Trabajo en Grupo, Windows
-9x/ME/XP, Windows NT, Windows 2000 y Samba. Para comenzar a usarlo,
-se puede emplear la "Conexión por SMB..." (accesible desde la barra de
-menús) o bien cambiar de directorio a un directorio virtual cuyo nombre
-sea de la forma:
-.PP
-.I smb://[usuario@]maquina[/recurso][/directorio\-remoto]
-.PP
-Los elementos
-.IR usuario ,
-.I recurso
-y
-.I directorio\-remoto
-son opcionales. El
-.IR usuario ,
-.I dominio
-y
-.I contraseña
-se pueden especificar en un cuadro de diálogo.
-.PP
-Ejemplos:
-.PP
-.nf
-    smb://maquina/Compartido
-    smb://otramaquina
-    smb://invitado@maquina/publico/leyes
 .fi
 
 .\"NODE "  Undelete File System"
@@ -4047,7 +3944,7 @@ ya estemos ahí, en cuyo caso moverá la selección al último nombre de archivo
 Si esta variable está activada (por defecto lo está) se recurrirá al
 comando «file» para reconocer los tipos de archivo referidos en el archivo
 .\"LINK2"
-mc.ext\&.
+mc.ext.ini\&.
 .\"Edit Extension File"
 .TP
 .I xtree_mode
@@ -4197,15 +4094,15 @@ entorno
 .BR MC_DATADIR ,
 que de estar definida se emplearía en vez de /usr/local/share/mc.
 .PP
-.I /usr/local/share/mc.hlp
+.I /usr/local/share/mc/help/mc.hlp
 .IP
 Archivo de ayuda.
 .PP
-.I /usr/local/share/mc/mc.ext
+.I /usr/local/share/mc/mc.ext.ini
 .IP
 Archivo de extensiones por defecto del sistema.
 .PP
-.I ~/.config/mc/mc.ext
+.I ~/.config/mc/mc.ext.ini
 .IP
 Archivo de usuario de extensiones y configuración de visor y editor. Si
 está presente prevalece sobre el contenido de los archivos del sistema.
@@ -4280,7 +4177,7 @@ terminfo(1), gpm(1).
 .PP
 .nf
 La página web de Midnight Commander está en:
-	http://www.midnight\-commander.org/
+	https://www.midnight\-commander.org/
 .fi
 .PP
 La presente documentación recoge información relativa a la versión 4.8
@@ -4301,7 +4198,7 @@ distribución.
 Véase el archivo "TODO" en la distribución para saber qué falta por hacer.
 .PP
 Para informar de problemas con el programa, introducir una nueva incidencia
-en http://www.midnight\-commander.org/.
+en https://www.midnight\-commander.org/.
 .PP
 Se debe proporcionar una descripción detallada del problema, la
 versión del programa (que se obtiene con

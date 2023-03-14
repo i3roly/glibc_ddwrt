@@ -1,6 +1,6 @@
 MC_USER=`whoami`
 MC_PWD_FILE="${TMPDIR-/tmp}/mc-$MC_USER/mc.pwd.$$"
-/usr/bin/mc -P "$MC_PWD_FILE" "$@"
+/usr/local/bin/mc -P "$MC_PWD_FILE" "$@"
 
 if test -r "$MC_PWD_FILE"; then
 	MC_PWD="`cat "$MC_PWD_FILE"`"

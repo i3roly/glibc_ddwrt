@@ -1,1 +1,1 @@
-alias mc 'source /usr/libexec/mc/mc-wrapper.csh'
+alias mc 'source /usr/local/libexec/mc/mc-wrapper.csh'

@@ -54,7 +54,6 @@ Tartalomjegyzék
     Tar fájlrendszerTar File System
     Fájl áthelyezése a Shell fájlrendszeren túlraFIle transfer over SHell filesystem
     Törlés visszaállításaUndelete File System
-    SMB File SystemSMB File System
     EXTernal File SystemEXTernal File System
   SzínekColors
   Speciális BeállításokSpecial Settings
@@ -94,7 +93,7 @@ OPCIÓK
 "-l fájl"
         Fájlba menti a szerverrel lebonyolított ftpfs dialógus adatait.
 
-"-P"    A program befejezésekor a Midnight Commander kiírja az utolsó munkakönyvtárat, ez nem használható közvetlenül, csak olyan különleges shell funkcióval, amely lehetővé teszi az aktuális shell könyvtár helyett a Midnight Commander által utoljára meglátogatott könyvtárra való átváltást (köszönet a funkcióért és a funkcióhoz szükséges kódért Torben Fjerdingstad-nek és Sergey-nek közreműködésükért). Kérlek, ne csinálj szó szerinti másolatot a funkció beállításairól. A fájlok forrása a /usr/libexec/mc/mc.sh (bash és zsh felhasználóknak), illetőleg a /usr/libexec/mc/mc.csh (tcsh felhasználóknak) fájl. Ilyenkor, amikor a funkció beállításokat változtatod, a profil értékeket nem szükséges megváltoztatnod, csak arról gondoskodj, hogy az MC-t ne fordítsd eltérő beállításokkal.
+"-P"    A program befejezésekor a Midnight Commander kiírja az utolsó munkakönyvtárat, ez nem használható közvetlenül, csak olyan különleges shell funkcióval, amely lehetővé teszi az aktuális shell könyvtár helyett a Midnight Commander által utoljára meglátogatott könyvtárra való átváltást (köszönet a funkcióért és a funkcióhoz szükséges kódért Torben Fjerdingstad-nek és Sergey-nek közreműködésükért). Kérlek, ne csinálj szó szerinti másolatot a funkció beállításairól. A fájlok forrása a /usr/local/libexec/mc/mc.sh (bash és zsh felhasználóknak), illetőleg a /usr/local/libexec/mc/mc.csh (tcsh felhasználóknak) fájl. Ilyenkor, amikor a funkció beállításokat változtatod, a profil értékeket nem szükséges megváltoztatnod, csak arról gondoskodj, hogy az MC-t ne fordítsd eltérő beállításokkal.
 
 A bash és zsh funkciók lehetnének rövidebbek is, de a bash környezete nem fogadja el a program C-z háttérbe helyezését. A temp fájlok a saját ~/.mc/tmp könyvtáradban találhatók, mert ez biztonságosabb, mint a közös írható /tmp könyvtár.
 
@@ -602,45 +601,13 @@ A Könyvjelzők parancs megmutatja a gyorslistában szereplő könyvtárakat. A 
 Ezzel a gyakran használt könyvtárakhoz ugorhatunk. A CDPATH változó használatát megtekintheted a A cd belső parancsThe cd internal command leírásánál.[Edit Extension File]
 Társítások
 
-Ez az ~/.config/mc/mc.ext szerkesztéséhez segítségül fogja hívni a szövegszerkesztődet. A fájl formátuma a következő (a formátum a 3.0-ás verzióval megváltozott):
-
-Minden # jellel kezdődő sor, vagy üres sor kommentárnak tekinthető.
-
-A sorok az első rovatban látható formátumnak megfelelően kezdődnek:
-
-kulcsszó/desc, pl. akármi a kulcsszó/ után úgy, hogy a sor vége karakter előtt a desc áll kulcsszó lehet:
-
-shell
-
-        bármely kiterjesztés esetén, amely ponttal kezdődik (nem szükséges a helyettesítő karaktert beírni, például: .tar az *.tar párja)
-
-regex
-
-        (szabványos kifejezés; regular expression esetén)
-
-type
-
-        (azokra a fájlokra illeszkedik, amelyek tartalmazzák a `file %f` szöveget. A fájlnév a `file %f` résztől törlődik)
-
-default
-
-        (illeszkedik bármely fájlra, kiterjesztésétől függetlenül)
-
-A többi sor kezdődhet szóközzel, vagy tabulátorral, a formátumuk pedig a következő:
-
-keyword=command (szóközt nem szabad az egyenlőségjel mellé írni), ahol a kulcsszó lehet:
-
-Open (ha a felhasználó lenyomja az Enter-t, vagy duplán kattint), View (F3) és Edit (F4).
-
-command ez bármely egysoros shell parancs lehet, az egyszerű Macro HelyettesítővelMacro Substitution.
-
-A feladatokatokat fentről lefelé értékeljük ki (tehát a sorrend nagyon fontos). Ha néhány műveletet keresünk, a keresés úgy folytatódik, mintha ez a cél nem létezne (pl. ha a fájl tartalmazza az első és a második bejegyzést és a Nézet művelet hiányzik az elsőből, akkor az F3 lenyomására a Nézet művelet a második bejegyzést fogja használni. Alapértelmezésben végrehajt minden műveletet.[Background jobs]
+Ez az ~/.config/mc/mc.ext.ini szerkesztéséhez segítségül fogja hívni a szövegszerkesztődet. If this file does not exist and you are not root, it will be copied from /usr/local/etc/mc/mc.ext.ini. If you are root, you can choose the file to edit: user's ~/.config/mc/mc.ext.ini or system-wide /usr/local/etc/mc/mc.ext.ini. The format of this file is described in detail in it.[Background jobs]
 Háttérmunkák
 
 Ezzel szabályozhatod néhány Commander háttérfolyamat állapotát (csak a másolás és a mozgatás fájlműveletek tehetők háttérbe). Ezeket a háttérmunkákat állíthatod le, indíthatod újra, lőheted ki itt. A linuxban futó background processzekre hatástalan.[Edit Menu File]
 Menü szerkesztés
 
-A felhasználói menüt a felhasználó testre szabhatja. Ez az aktulis könyvtár .mc.menu fájlja, ha az létezik, de csak, ha az a felhasználó (illetve a root) a tulajdonosa, és nem lehet bárki számára írható. Ha nem talál ilyen fájlt, az ~/.config/mc/menu keresése a következő lépés, egyébként pedig az mc az alapértelmezett rendszerszintű menüt használja, pl.: /usr/share/mc/mc.menu, esetleg /usr/etc/mc/mc.menu.
+A felhasználói menüt a felhasználó testre szabhatja. Ez az aktulis könyvtár .mc.menu fájlja, ha az létezik, de csak, ha az a felhasználó (illetve a root) a tulajdonosa, és nem lehet bárki számára írható. Ha nem talál ilyen fájlt, az ~/.config/mc/menu keresése a következő lépés, egyébként pedig az mc az alapértelmezett rendszerszintű menüt használja, pl.: /usr/local/share/mc/mc.menu, esetleg /usr/local/etc/mc/mc.menu.
 
 A menü fájl formátuma nagyon egyszerű. A sorok, amelyek bármivel kezdődhetnek, de a space, vagy a tab megkülönböztetett menübejegyzések (gyorsbillentyűként definiálható az első karakter). Minden olyan sor ami szóközzel, tabulátorral kezdődik, parancs, amit lefuttat az mc, ha kiválasztottad a bejegyzést.
 
@@ -850,7 +817,7 @@ Az FTP fájlrendszerFTP File System az ftp szerverről beolvasott könyvtárs
 Ezenfelül definiálhatod a proxy host-ot az ftp adatforgalomhoz, és beállíthatod a Midnight Commander-t, hogy mindíg használja a proxy host-ot. Az ezzel kapcsolatos információkat lásd az FTP fájlrendszernélFTP File System.[Save Setup]
 Beállítások mentése
 
-A Midnight Commander indításkor megpróbálja az indítási információkat beolvasni az ~/.config/mc/ini fájlból. Ha ez a fájl nem létezik, ezeket az információkat a rendszerszintű konfigurációs fájlból fogja beolvasni, amelyek a /usr/share/mc/mc.ini fájlban találhatóak meg. Ha ez a rendszerszintű konfigurációs fájl sem létezik, a MC az alapértelmezett beállításokat használja.
+A Midnight Commander indításkor megpróbálja az indítási információkat beolvasni az ~/.config/mc/ini fájlból. Ha ez a fájl nem létezik, ezeket az információkat a rendszerszintű konfigurációs fájlból fogja beolvasni, amelyek a /usr/local/share/mc/mc.ini fájlban találhatóak meg. Ha ez a rendszerszintű konfigurációs fájl sem létezik, a MC az alapértelmezett beállításokat használja.
 
 A Beállítások mentése parancs elmenti a Bal és Jobb oldali menüLeft and Right Menus és a BeállításokOptions Menu menü beállításait az ~/.config/mc/ini fájlba.
 
@@ -1090,7 +1057,7 @@ Ez a lista tartalmazza azokat a gombokat, amelyekhez művelet kapcsolódik a Mid
 
 n. A következő egyezőt keresi.
 
-F8 Vált a Nyers és Feldolgozott mód között: ez a fájlt, úgy mutatja meg, ahogy megtalálta, vagy, ha folyamatszűrő meg van adva az mc.ext fájlban, akkor a szűrő kimenetét. A Jelenlegi mód mindig a másik, mit amit a gomb felirata mutat.
+F8 Vált a Nyers és Feldolgozott mód között: ez a fájlt, úgy mutatja meg, ahogy megtalálta, vagy, ha folyamatszűrő meg van adva az mc.ext.ini fájlban, akkor a szűrő kimenetét. A Jelenlegi mód mindig a másik, mit amit a gomb felirata mutat.
 
 F9 Vált a formázott-nem formázott mód között: amikor a formázott mód be van kapcsolva, néhány szöveg elemet, a vastagítást és az aláhúzást eltérő színnel jelenít meg. A menüsorban mindíg a másik felirat látható, jelezve, hogy milyen módba lehet átkapcsolni.
 
@@ -1162,7 +1129,7 @@ Példák:
 
 Tűzfalon keresztüli kapcsolat létrehozásához, az ftp://! kiegészítés használatára van szükséged (pl., felkiáltójel a dupla perjel után) ahhoz, hogy a Midnight Commander használni tudja a proxy host-ot az ftp átvitelhez. A Csatolt fájlrendszer...Virtual FS dialógus ablakban tudod beállítani a proxy host tulajdonságait.
 
-A Csatolt fájlrendszer...Virtual FS dialógus ablak másik beállítandó opciója az ftp proxy-n keresztül opció. Ez beállítja a program számára azt, hogy mindig használja a proxy host-ot. Ha ez a változó be van állítva, akkor a program két dolgot csinál: konzultál a /usr/share/mc.no_proxy fájl soraival, hogy azok tartalmazzák-e a host nevet, mint helyi eszközt (ha a host neve ponttal kezdődik, akkor ezt domainként tartja számon), és feltételezi azt, hogy a pont nélküli hostnevek közvetlenül felodhatók.
+A Csatolt fájlrendszer...Virtual FS dialógus ablak másik beállítandó opciója az ftp proxy-n keresztül opció. Ez beállítja a program számára azt, hogy mindig használja a proxy host-ot. Ha ez a változó be van állítva, akkor a program két dolgot csinál: konzultál a /usr/local/etc/mc/mc.no_proxy fájl soraival, hogy azok tartalmazzák-e a host nevet, mint helyi eszközt (ha a host neve ponttal kezdődik, akkor ezt domainként tartja számon), és feltételezi azt, hogy a pont nélküli hostnevek közvetlenül felodhatók.
 
 Ha ftpfs kódot használsz csomagszűrő router esetén, akkor nincs lehetőséged a fájlok megszokott módon történő megnyitására, ezért neked kell a program számára megadnod azt, hogy a fájlokat passzív módon nyissa meg. Ennek használatához állítsd be az ftpfs_use_passive_connections opciót az indító fájlban.
 
@@ -1173,7 +1140,7 @@ A Tar fájlrendszer gondoskodik arról, hogy csak olvasható módon a chdir para
 
 /filename.tar:utar/[dir-inside-tar]
 
-Az mc.ext fájl már tartalmaz gyorsbillentyűket a tar fájlokhoz, ezért csak rá kell mutatnod a tar fájlra és le kell nyomnod az entert ahhoz, hogy beléphess a tar fájlba, ehhez nézd meg a TársításokEdit Extension File részt, hogy megismerhesd az ezzel kapcsolatos információkat:
+Az mc.ext.ini fájl már tartalmaz gyorsbillentyűket a tar fájlokhoz, ezért csak rá kell mutatnod a tar fájlra és le kell nyomnod az entert ahhoz, hogy beléphess a tar fájlba, ehhez nézd meg a TársításokEdit Extension File részt, hogy megismerhesd az ezzel kapcsolatos információkat:
 
 Példák:
 
@@ -1211,21 +1178,7 @@ Például, ha a törölt fájlokat az első scsi lemez második partícióján s
 
     undel://sda2
 
-Persze várakozni kell, amíg az undelfs a szükséges információkat beolvassa, a fájl böngészés megkezdése előtt.[SMB File System]
-SMB File System
-
-The smbfs allows you to manipulate files on remote machines with SMB (or CIFS) protocol. These include Windows for Workgroups, Windows 9x/ME/XP, Windows NT, Windows 2000 and Samba. To actually use it, you may try to use the panel command "SMB link..." (accessible from the menubar) or you may directly change your current directory to it using the cd command to a path name that looks like this:
-
-smb://[user@]machine[/service][/remote-dir]
-
-The user, service and remote-dir elements are optional. The user, domain and password can be specified in an input dialog.
-
-Examples:
-
-    smb://machine/Share
-    smb://other_machine
-    smb://guest@machine/Public/Irlex
-[EXTernal File System]
+Persze várakozni kell, amíg az undelfs a szükséges információkat beolvassa, a fájl böngészés megkezdése előtt.[EXTernal File System]
 EXTernal File System
 
 extfs allows to integrate numerous features and file types into GNU Midnight Commander in an easy way, by writing scripts.
@@ -1417,23 +1370,23 @@ Fájlok
 
 A progam minden ezzel kapcsolatos infomációt az MC_DATADIR környezeti változóban tárol. Ha ezt a változót nem állítottuk be, akkor ez vissza fog állítódni a /usr könyvtárra.
 
-/usr/share/mc/help/mc.hlp
+/usr/local/share/mc/help/mc.hlp
 
         A program súgó fájlja.
 
-/usr/share/mc/mc.ext
+/usr/local/share/mc/mc.ext.ini
 
         Az alapértelmezett rendszerszintű kiterjesztés fájl.
 
-~/.config/mc/mc.ext
+~/.config/mc/mc.ext.ini
 
         A felhasználó saját kiterjesztései, nézet beállítások és szerkesztési beállítások. Ezek felülbírálják a rendszerszintű fájl bejegyzéseit, ha van ilyen.
 
-/usr/share/mc/mc.ini
+/usr/local/share/mc/mc.ini
 
         Az alapértelmezett rendszerszintű Midnight Commander beállítás, amelyet csak akkor használ, ha a felhasználónak nincs saját ~/.config/mc/ini fájlja.
 
-/usr/share/mc/mc.lib
+/usr/local/share/mc/mc.lib
 
         A Midnight Commander globális beállításai. Az ebben a fájlban elvégzett beállítások minden felhasználó Midnight Commander-jére vonatkoznak, ez használható a site-globális terminál beállításaihoz.
 
@@ -1441,11 +1394,11 @@ A progam minden ezzel kapcsolatos infomációt az MC_DATADIR környezeti vált
 
         A felhasználó saját beállításai. Ha ez a fájl elérhető, akkor a beállítások ebből a fájlból olvasódnak be a rendszerszintű indító fájl helyett.
 
-/usr/share/mc/hints/mc.hint
+/usr/local/share/mc/hints/mc.hint
 
         Ez a fájl tartalmazza a program által megjelenített útmutattásokat (cookie-kat).
 
-/usr/share/mc/mc.menu
+/usr/local/share/mc/mc.menu
 
         Ez a fájl azonos a rendszerszintű alkalmazás menüvel.
 
@@ -1473,7 +1426,7 @@ ed(1), gpm(1), terminfo(1), view(1), sh(1), bash(1), tcsh(1), zsh(1).
 
 A Midnight Commander World Wide Web oldalának címe a
 következő:
-	http://www.midnight-commander.org/
+	https://www.midnight-commander.org/
 [AUTHORS]
 Szerzők
 
@@ -1484,7 +1437,7 @@ Hibák bejelentése
 
 Nézd meg a disztribúció TODO fájlát, hogy megtudhasd, milyen teendők vannak még vissza.
 
-Ha a programmal kapcsolatos problémád van, akkor azt küld el az alábbi levélcímre: mc-devel@gnome.org.
+Ha a programmal kapcsolatos problémád van, akkor azt küld el az alábbi levélcímre: mc-devel@lists.midnight-commander.org.
 
 Gondoskodj arról, hogy tartalmazza a hiba minél pontosabb meghatározását, a futtatott program verziószámát (az mc -V parancs meg fogja jeleníttetni ezt), az operációs rendszert, amin futtatod a programot amikor az összeomlott, méltányolni fogjuk a részletes leírást.
 [main]
