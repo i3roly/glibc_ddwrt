@@ -1,13 +1,15 @@
-.TH AFMTODIT 1 "29 November 2018" "groff 1.22.4"
-.SH NAME
-afmtodit \- create font files for use with groff \-Tps and \-Tpdf
+.TH afmtodit 1 "2 July 2023" "groff 1.23.0"
+.SH Name
+afmtodit \- adapt Adobe Font Metrics files for
+.I groff
+PostScript and PDF output
 .
 .
 .\" ====================================================================
 .\" Legal Terms
 .\" ====================================================================
 .\"
-.\" Copyright (C) 1989-2018 Free Software Foundation, Inc.
+.\" Copyright (C) 1989-2020 Free Software Foundation, Inc.
 .\"
 .\" Permission is granted to make and distribute verbatim copies of this
 .\" manual provided the copyright notice and this permission notice are
@@ -25,227 +27,318 @@ afmtodit \- create font files for use with groff \-Tps and \-Tpdf
 .\" instead of in the original English.
 .
 .
+.\" Save and disable compatibility mode (for, e.g., Solaris 10/11).
+.do nr *groff_afmtodit_1_man_C \n[.cp]
+.cp 0
+.
+.\" Define fallback for groff 1.23's MR macro if the system lacks it.
+.nr do-fallback 0
+.if !\n(.f           .nr do-fallback 1 \" mandoc
+.if  \n(.g .if !d MR .nr do-fallback 1 \" older groff
+.if !\n(.g           .nr do-fallback 1 \" non-groff *roff
+.if \n[do-fallback]  \{\
+.  de MR
+.    ie \\n(.$=1 \
+.      I \%\\$1
+.    el \
+.      IR \%\\$1 (\\$2)\\$3
+.  .
+.\}
+.rr do-fallback
+.
+.
 .\" ====================================================================
-.SH SYNOPSIS
+.SH Synopsis
 .\" ====================================================================
 .
 .SY afmtodit
-.OP \-ckmnsx
-.OP \-a n
-.OP \-d desc-file
-.OP \-e enc-file
-.OP \-f internal-name
-.OP \-i n
-.OP \-o output-file
+.RB [ \-ckmnsx ]
+.RB [ \-a\~\c
+.IR slant ]
+.RB [ \-d\~\c
+.IR device-description-file ]
+.RB [ \-e\~\c
+.IR encoding-file ]
+.RB [ \-f\~\c
+.IR internal-name ]
+.RB [ \-i\~\c
+.IR italic-correction-factor ]
+.RB [ \-o\~\c
+.IR output-file ]
+.RB [ \-w\~\c
+.IR space-width ]
 .I afm-file
 .I map-file
-.I font
+.I font-description-file
 .YS
+.
+.
+.SY afmtodit
+.B \-\-help
+.YS
+.
 .
 .SY afmtodit
 .B \-v
+.
+.SY afmtodit
+.B \-\-version
 .YS
 .
 .
 .\" ====================================================================
-.SH DESCRIPTION
+.SH Description
 .\" ====================================================================
 .
-.I afmtodit
-creates a font file for use with
-.IR groff ,
-.IR grops ,
+.I \%afmtodit
+adapts an
+Adobe Font Metric
+file,
+.IR afm-file ,
+for use with the
+.B ps
 and
-.IR gropdf .
+.B pdf
+output devices of
+.MR \%troff 1 .
 .
-.I afmtodit
-is written in Perl;
-you must have Perl version 5.004 or newer installed in order to run
-.IR afmtodit .
+.I map-file
+associates a
+.I groff
+ordinary or special character name with a PostScript glyph name.
 .
-.
-.LP
-.I afm-file
-is the AFM (Adobe Font Metric) file for the font.
+Output is written in
+.MR groff_font 5
+format to
+.I font-description-file,
+a file named for the intended
+.I groff
+font name
+(but see the
+.B \-o
+option).
 .
 .
 .LP
 .I map-file
-is a file that says which
-.I groff
-character names map onto each PostScript character name;
-this file should contain a sequence of lines of the form
+should contain a sequence of lines of the form
 .
 .RS
-.I
-ps-char groff-char
+.EX
+.I ps-glyph groff-char
+.EE
 .RE
 .
 where
-.I ps-char
-is the PostScript name of the character and
+.I ps-glyph
+is the PostScript glyph name and
 .I groff-char
-is the groff name of the character (as used in the
+is a
 .I groff
-font file).
+ordinary
+(if of unit length)
+or special
+(if longer)
+character identifier.
 .
 The same
-.I ps-char
+.I ps-glyph
 can occur multiple times in the file;
 each
 .I groff-char
 must occur at most once.
 .
-Lines starting with \(oq#\(cq and blank lines are ignored.
+Lines starting with \[lq]#\[rq] and blank lines are ignored.
 .
 If the file isn't found in the current directory,
-it is searched for in the
+it is sought in the
 .I devps/generate
 subdirectory of the default font directory.
 .
 .
 .LP
-If a PostScript character is not mentioned in
+If a PostScript glyph is not mentioned in
 .IR map-file ,
-and a generic
+and a
 .I groff
-glyph name can't be deduced using the Adobe Glyph List
-(AGL, built into
+character name can't be deduced using the Adobe Glyph List
+(AGL,
+built into
 .IR afmtodit ),
 then
-.I afmtodit
-puts the PostScript character into the
+.I \%afmtodit
+puts the PostScript glyph into the
 .I groff
-font file as an unnamed character which can only be accessed by the
-\(oq\eN\(cq escape sequence in a
+font description file as an unnamed glyph which can only be accessed
+by the \[lq]\eN\[rq] escape sequence in a
 .I roff
 document.
 .
 In particular,
-this is true for glyph variants named in the form \(lqfoo.bar\(rq;
+this is true for glyph variants named in the form
+.RI \[lq] foo . bar \[rq];
 all glyph names containing one or more periods are mapped to unnamed
 entities.
 .
-If option
+Unless
 .B \-e
-is not specified, the encoding defined in the AFM file (i.e., entries
-with non-negative character codes) is used.
+is specified,
+the encoding defined in the AFM file
+(i.e.,
+entries
+with non-negative codes)
+is used.
 .
-Refer to section \(lqUsing Symbols\(rq in
+Refer to section \[lq]Using Symbols\[rq] in
 .IR "Groff: The GNU Implementation of troff" ,
 the
 .I groff
 Texinfo manual,
-which describes how
+or
+.MR groff_char 7 ,
+which describe how
 .I groff
-glyph names are constructed.
+character identifiers are constructed.
 .
 .
 .LP
-Characters not encoded in the AFM file (i.e., entries which have
-\(oq\-1\(cq as the character code) are still available in
+Glyphs not encoded in the AFM file
+(i.e.,
+entries indexed as \[lq]\-1\[rq])
+are still available in
 .IR groff ;
-they get glyph index values greater than 255 (or greater than the
-biggest character code used in the AFM file in the unlikely case that it
-is greater than 255) in the
+they get glyph index values greater than 255
+(or greater than the biggest code used in the AFM file in the unlikely
+case that it is greater than 255)
+in the
 .I groff
-font file.
+font description file.
 .
-Glyph indices of unencoded characters don't have a specific order;
-it is best to access them with glyph names only.
-.
-.
-.LP
-The
-.I groff
-font file will be output to a file called
-.IR font ,
-unless the
-.B \-o
-option is used.
+Unencoded glyph indices don't have a specific order;
+it is best to access them only via special character identifiers.
 .
 .
-.LP
-If there is a downloadable font file for the font, it may be listed in
-the file
-.IR /usr/\:local/\:share/\:groff/\:1.22.4/\:font/\:devps/\:download ;
-see
-.IR grops (1).
+.P
+If the font file proper
+(not just its metrics)
+is available,
+listing it in the files
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devps/\:\%download
+and
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devpdf/\:\%download
+enables it to be embedded in the output produced by
+.MR grops 1
+and
+.MR gropdf 1 ,
+respectively.
 .
 .
-.LP
+.P
 If the
 .B \-i
 option is used,
-.I afmtodit
-will automatically generate an italic correction,
-a left italic correction and a subscript correction
-for each character
-(the significance of these parameters is explained in
-.IR groff_font (5));
-these parameters may be specified for individual characters by
+.I \%afmtodit
+automatically generates an italic correction,
+a left italic correction,
+and a subscript correction for each glyph
+(the significance of these is explained in
+.MR groff_font 5 );
+they can be specified for individual glyphs by
 adding to the
 .I afm-file
 lines of the form:
 .
 .RS
 .EX
-.BI italicCorrection \~ps-char\~n
-.BI leftItalicCorrection \~ps-char\~n
-.BI subscriptCorrection \~ps-char\~n
+.RI italicCorrection \~ps-glyph\~n
+.RI leftItalicCorrection \~ps-glyph\~n
+.RI subscriptCorrection \~ps-glyph\~n
 .EE
 .RE
 .
 where
-.I ps-char
-is the PostScript name of the character,
+.I ps-glyph
+is the PostScript glyph name,
 and
 .I n
 is the desired value of the corresponding parameter in thousandths of an
 em.
 .
-These parameters are normally needed only for italic (or oblique) fonts.
+Such parameters are normally needed only for italic
+(or oblique)
+fonts.
 .
 .
+.P
+The
+.B \-s
+option should be given if the font is \[lq]special\[rq],
+meaning that
+.I groff
+should search it whenever a glyph is not found in the current font.
+.
+In that case,
+.I font-description-file
+should be listed as an argument to the
+.B fonts
+directive in the output device's
+.I DESC
+file;
+if it is not special,
+there is no need to do so,
+since
+.MR \%troff 1
+will automatically mount it when it is first used.
+.
+.
+.br
+.ne 7v
 .\" ====================================================================
-.SH OPTIONS
+.SH Options
 .\" ====================================================================
 .
-Whitespace is permitted between a command-line option and its argument.
+.B \-\-help
+displays a usage message,
+while
+.B \-v
+and
+.B \%\-\-version
+show version information;
+all exit afterward.
 .
 .
 .TP
-.BI \-a n
+.BI \-a\~ slant
 Use
-.I n
-as the slant parameter in the font file;
+.I slant
+as the slant (\[lq]angle\[rq]) parameter in the font description file;
 this is used by
 .I groff
 in the positioning of accents.
 .
 By default
-.I afmtodit
+.I \%afmtodit
 uses the negative of the
-.B ItalicAngle
+.B \%ItalicAngle
 specified in the AFM file;
 with true italic fonts it is sometimes desirable to use a slant that is
 less than this.
 .
-If you find that characters from an italic font have accents placed too
-far to the right over them,
-then use the
+If you find that an italic font places accents over base glyphs
+too far to the right,
+use
 .B \-a
-option to give the font a smaller slant.
+to give it a smaller slant.
 .
 .
 .TP
 .B \-c
-Include comments in the font file in order to identify the PostScript
+Include comments in the font description file identifying the PostScript
 font.
 .
 .
 .TP
-.BI \-d desc-file
+.BI \-d\~ device-description-file
 The device description file is
 .I desc-file
 rather than the default
@@ -254,13 +347,14 @@ rather than the default
 If not found in the current directory,
 the
 .I devps
-subdirectory of the default font directory is searched (this is true for
-both the default device description file and a file given with option
+subdirectory of the default font directory is searched
+(this is true for both the default device description file and a file
+given with option
 .BR \-d ).
 .
 .
 .TP
-.BI \-e enc-file
+.BI \-e\~ encoding-file
 The PostScript font should be reencoded to use the encoding described
 in
 .IR enc-file .
@@ -268,7 +362,7 @@ in
 The format of
 .I enc-file
 is described in
-.IR grops (1).
+.MR grops 1 .
 .
 If not found in the current directory,
 the
@@ -277,7 +371,7 @@ subdirectory of the default font directory is searched.
 .
 .
 .TP
-.BI \-f name
+.BI \-f\~ internal-name
 The internal name of the
 .I groff
 font is set to
@@ -285,16 +379,16 @@ font is set to
 .
 .
 .TP
-.BI \-i n
-Generate an italic correction for each character so that the
-character's width plus the character's italic correction is equal to
-.I n
+.BI \-i\~ italic-correction-factor
+Generate an italic correction for each glyph so that its width plus its
+italic correction is equal to
+.I italic-correction-factor
 thousandths of an em
-plus the amount by which the right edge of the character's bounding box
-is to the right of the character's origin.
+plus the amount by which the right edge of the glyph's bounding box is
+to the right of its origin.
 .
-If this would result in a negative italic correction, use a zero
-italic correction instead.
+If this would result in a negative italic correction,
+use a zero italic correction instead.
 .
 .
 .IP
@@ -303,17 +397,16 @@ product of the tangent of the slant of the font and
 four fifths of the x-height of the font.
 .
 If this would result in a subscript correction greater than the italic
-correction, use a subscript correction equal to the italic correction
-instead.
+correction,
+use a subscript correction equal to the italic correction instead.
 .
 .
 .IP
-Also generate a left italic correction for each character
-equal to
-.I n
+Also generate a left italic correction for each glyph equal to
+.I italic-correction-factor
 thousandths of an em
-plus the amount by which the left edge of the character's bounding box
-is to the left of the character's origin.
+plus the amount by which the left edge of the glyph's bounding box is to
+the left of its origin.
 .
 The left italic correction may be negative unless option
 .B \-m
@@ -321,9 +414,11 @@ is given.
 .
 .
 .IP
-This option is normally needed only with italic (or oblique) fonts.
+This option is normally needed only with italic
+(or oblique)
+fonts.
 .
-The font files distributed with
+The font description files distributed with
 .I groff
 were created using an option of
 .B \-i50
@@ -331,11 +426,11 @@ for italic fonts.
 .
 .
 .TP
-.BI \-o output-file
-The output file is
+.BI \-o\~ output-file
+Write to
 .I output-file
 instead of
-.IR font .
+.I font-description-file.
 .
 .
 .TP
@@ -350,12 +445,12 @@ use only for monospaced (constant-width) fonts.
 .B \-m
 Prevent negative left italic correction values.
 .
-Roman font files distributed with
+Font description files for roman styles distributed with
 .I groff
 were created with
-.B \-i0\ \-m
+.RB \[lq] \-i0\~\-m \[rq]
 to improve spacing with
-.IR eqn (1).
+.MR \%eqn 1 .
 .
 .
 .TP
@@ -368,16 +463,16 @@ use with monospaced (constant-width) fonts.
 .
 .TP
 .B \-s
-The font is special.
-.
-The effect of this option is to add the
+Add the
 .B special
-command to the font file.
+directive to the font description file.
 .
 .
 .TP
-.B \-v
-Print version and exit.
+.BI \-w\~ space-width
+Use
+.I space-width
+as the with of inter-word spaces.
 .
 .
 .TP
@@ -386,37 +481,127 @@ Don't use the built-in Adobe Glyph List.
 .
 .
 .\" ====================================================================
-.SH FILES
+.SH Files
 .\" ====================================================================
 .
 .TP
-.I /usr/\:local/\:share/\:groff/\:1.22.4/\:font/\:devps/\:DESC
-Device description file.
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devps/\:DESC
+describes the
+.B ps
+output device.
 .
 .
 .TP
-.IR /usr/\:local/\:share/\:groff/\:1.22.4/\:font/\:devps/\: F
-Font description file for font
-.IR F .
+.IR /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devps/ F
+describes the font known
+.RI as\~ F
+on device
+.BR ps .
 .
 .
 .TP
-.I /usr/\:local/\:share/\:groff/\:1.22.4/\:font/\:devps/\:download
-List of downloadable fonts.
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devps/\:\%download
+lists fonts available for embedding within the PostScript document
+(or download to the device).
 .
 .
 .TP
-.I /usr/\:local/\:share/\:groff/\:1.22.4/\:font/\:devps/\:text.enc
-Encoding used for text fonts.
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devps/\:\%generate/\:\%dingbats.map
+.TQ
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devps/\:\%generate/\:\%dingbats\-reversed.map
+.TQ
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devps/\:\%generate/\:\%slanted\-symbol.map
+.TQ
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devps/\:\%generate/\:\%symbol.map
+.TQ
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devps/\:\%generate/\:\%text.map
+map names in the Adobe Glyph List to
+.I groff
+special character identifiers for Zapf Dingbats
+.RB ( ZD ),
+reversed Zapf Dingbats
+.RB ( ZDR ),
+slanted symbol
+.RB ( SS ),
+symbol
+.RB ( S ),
+and text fonts,
+respectively.
 .
-.
-.TP
-.I /usr/\:local/\:share/\:groff/\:1.22.4/\:font/\:devps/\:generate/\:textmap
-Standard mapping.
+These
+.IR map-file s
+are used to produce the font description files provided with
+.I groff
+for the
+.I \%grops
+output driver.
 .
 .
 .\" ====================================================================
-.SH "SEE ALSO"
+.SH Diagnostics
+.\" ====================================================================
+.
+.TP
+.RI "AGL name \[aq]" x "\[aq] already mapped to groff name \[aq]" y\c
+.RI "\[aq]; ignoring AGL name \[aq]uni" XXXX \[aq]
+You can disregard these if they're in the form shown,
+where the ignored AGL name contains four hexadecimal digits
+.IR XXXX .
+.
+The Adobe Glyph List (AGL) has its own names for glyphs;
+they are often
+different from
+.IR groff 's
+special character names.
+.
+.I \%afmtodit
+is constructing a mapping from
+.I groff
+special character names to AGL names;
+this can be a one-to-one or many-to-one mapping,
+but one-to-many will not work,
+so
+.I \%afmtodit
+discards the excess mappings.
+.
+For example,
+if
+.I x
+is
+.BR *D ,
+.I y
+is
+.BR \%Delta ,
+and
+.I z
+is
+.BR uni0394 ,
+.I \%afmtodit
+is telling you that the
+.I groff
+font description that it is writing cannot map the
+.I groff
+special character
+.B \[rs][*D]
+to AGL glyphs
+.B \%Delta
+and
+.B uni0394
+at the same time.
+.
+.
+.IP
+If you get a message like this but are unhappy with which mapping is
+ignored,
+a remedy is to craft an alternative
+.I map-file
+and re-run
+.I \%afmtodit
+using it.
+.
+.
+.\" ====================================================================
+.SH "See also"
 .\" ====================================================================
 .
 .IR "Groff: The GNU Implementation of troff" ,
@@ -425,24 +610,26 @@ is the primary
 .I groff
 manual.
 .
-Section \(lqUsing Symbols\(rq may be of particular note.
+Section \[lq]Using Symbols\[rq] may be of particular note.
 .
-You can browse it interactively with \(lqinfo \(aq(groff)Using
-Symbols\(aq\(rq.
+You can browse it interactively with \[lq]info \[aq](groff)Using
+\%Symbols\[aq]\[rq].
 .
 .
 .LP
-.IR groff (1),
-.IR gropdf (1),
-.IR grops (1),
-.IR groff_font (5),
-.IR perl (1)
+.MR groff 1 ,
+.MR gropdf 1 ,
+.MR grops 1 ,
+.MR groff_font 5
 .
 .
-.\" ====================================================================
-.\" ### Emacs settings:
+.\" Restore compatibility mode (for, e.g., Solaris 10/11).
+.cp \n[*groff_afmtodit_1_man_C]
+.do rr *groff_afmtodit_1_man_C
+.
+.
 .\" Local Variables:
-.\" mode: nroff
 .\" fill-column: 72
+.\" mode: nroff
 .\" End:
 .\" vim: set filetype=groff textwidth=72:

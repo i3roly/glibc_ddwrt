@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#! /opt/local/bin/perl -w
 #
 # Written by Adam Byrtek <alpha@debian.org>, 2002
 # Rewritten by David Sterba <dave@jikos.cz>, 2009

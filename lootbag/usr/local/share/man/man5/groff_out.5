@@ -1,23 +1,16 @@
-'\" e
-.TH GROFF_OUT 5 "17 December 2018" "groff 1.22.4"
-.SH NAME
-groff_out \- groff intermediate output format
-.
-.\" groff_out(5):
-.\" Source file position: <groff_source>/man/groff_out.man
-.\" Installed position: <prefix>/share/man/man5/groff_out.5
+.TH groff_out 5 "2 July 2023" "groff 1.23.0"
+.SH Name
+groff_out \- GNU
+.I roff
+intermediate output format
 .
 .
-.\" Save and disable compatibility mode (for, e.g., Solaris 10/11).
-.do nr groff_out_C \n[.C]
-.cp 0
-.
-.
+.\" XXX: This page needs review and editing.
 .\" ====================================================================
 .\" Legal Terms
 .\" ====================================================================
 .\"
-.\" Copyright (C) 1989-2018 Free Software Foundation, Inc.
+.\" Copyright (C) 1989-2023 Free Software Foundation, Inc.
 .\"
 .\" This file is part of groff, the GNU roff type-setting system.
 .\"
@@ -31,6 +24,26 @@ groff_out \- groff intermediate output format
 .\" called FDL in the main directory of the groff source package.
 .
 .
+.\" Save and disable compatibility mode (for, e.g., Solaris 10/11).
+.do nr *groff_groff_out_5_man_C \n[.cp]
+.cp 0
+.
+.\" Define fallback for groff 1.23's MR macro if the system lacks it.
+.nr do-fallback 0
+.if !\n(.f           .nr do-fallback 1 \" mandoc
+.if  \n(.g .if !d MR .nr do-fallback 1 \" older groff
+.if !\n(.g           .nr do-fallback 1 \" non-groff *roff
+.if \n[do-fallback]  \{\
+.  de MR
+.    ie \\n(.$=1 \
+.      I \%\\$1
+.    el \
+.      IR \%\\$1 (\\$2)\\$3
+.  .
+.\}
+.rr do-fallback
+.
+.
 .\" ====================================================================
 .\" Setup
 .\" ====================================================================
@@ -38,13 +51,13 @@ groff_out \- groff intermediate output format
 .\" ================= Document configuration
 .
 .\" Number register to decide whether the commands '{' and '}' are used
-.\" 0: disable (actual default); 1: enable
+.\" 0: disable (current default); 1: enable
 .nr @USE_ENV_STACK 0
 .
 .ig
 Unfortunately, old versions of groff used an illogical position change
-after some D\~commands (Dp, DP, Dt).  If the number register
-@STUPID_DRAWING_POSITIONING is 1 (actual default) then change position
+after some D\~commands (Dp, DP, Dt).  If the register
+@STUPID_DRAWING_POSITIONING is 1 (current default) then change position
 after these commands, otherwise the position is not changed.
 ..
 .nr @STUPID_DRAWING_POSITIONING 1
@@ -86,7 +99,7 @@ after these commands, otherwise the position is not changed.
 .\" graphics command .D with a variable number of arguments
 .\" format: .D-multiarg <subcommand>
 .de D-multiarg
-\fBD\\$1\fP\ \*[hv1] \*[hv2] .\|.\|. \*[hvn]\|\*[@linebreak]
+\fBD\\$1\fP\ \*[hv1] \*[hv2] \&.\|.\|.\& \*[hvn]\|\*[@linebreak]
 ..
 .\" format: .x-command <subname> "<arguments>"
 .de x-command
@@ -100,111 +113,88 @@ after these commands, otherwise the position is not changed.
 .
 .
 .\" ====================================================================
-.SH DESCRIPTION
+.SH Description
 .\" ====================================================================
 .
-This manual page describes the
-.I intermediate output
-format of the GNU
-.BR roff (7)
-text processing system
-.BR groff (1).
+The fundamental operation of the
+.MR \%troff 1
+formatter is the translation of the
+.MR groff 7
+input language into a series of instructions concerned primarily with
+placing glyphs or geometric objects at specific positions on a
+rectangular page.
 .
-This output is produced by a run of the GNU
-.BR troff (1)
-program.
+In the following discussion,
+the term
+.I command
+refers to this intermediate output language,
+never to the
+.MR groff 7
+language intended for use by document authors.
 .
-It contains already all device-specific information, but it is not yet
-fed into a device postprocessor program.
+Intermediate output commands comprise several categories:
+glyph output;
+font,
+color,
+and text size selection;
+motion of the printing position;
+page advancement;
+drawing of geometric primitives;
+and device control commands,
+a catch-all for other operations.
+.
+The last includes directives to start and stop output,
+identify the intended output device,
+and embed URL hyperlinks in supported output formats.
 .
 .
 .P
-As the GNU
-.I roff
-processor
-.BR groff (1)
-is a wrapper program around
-.B troff
-that automatically calls a
-postprocessor, this output does not show up normally.
-.
-This is why it is called
-.I intermediate
-within the
-.I groff
-.IR system .
+Because the front-end command
+.MR groff 1
+is a wrapper that normally runs the
+.I \%troff
+formatter to generate intermediate output
+and an output driver (\[lq]postprocessor\[rq]) to consume it,
+users normally do not encounter this language.
 .
 The
-.B groff
-program provides the option
+.I groff
+program's
 .B \-Z
-to inhibit postprocessing, such that the produced
-.I intermediate output
-is sent to standard output just like calling
-.B troff
-manually.
+option inhibits postprocessing such that this intermediate output is
+sent to the standard output stream as when
+.I \%troff
+is run manually.
 .
 .
 .P
-In this document, the term
-.I troff output
-describes what is output by the GNU
-.B troff
-program, while
-.I intermediate output
-refers to the language that is accepted by the parser that prepares
-this output for the postprocessors.
+.IR groff 's
+intermediate output facilitates the development of output drivers and
+other postprocessors by offering a common programming interface.
 .
-This parser is smarter on whitespace and implements obsolete elements
-for compatibility, otherwise both formats are the same.
+It is an extension of the page description language developed by Brian
+Kernighan for AT&T device-independent
+.I troff \" AT&T
+circa 1980.
 .
-Both formats can be viewed directly with
-.BR \%gxditview (1).
-.
-.
-.P
-The main purpose of the
-.I intermediate output
-concept is to facilitate the development of postprocessors by
-providing a common programming interface for all devices.
-.
-It has a language of its own that is completely different from the
-.BR groff (7)
-language.
-.
-While the
-.I groff
-language is a high-level programming language for text processing, the
-.I intermediate output
-language is a kind of low-level assembler language by specifying all
-positions on the page for writing and drawing.
-.
-.
-.P
-The
-.RI pre- groff
-.I roff
-versions are denoted as
-.I classical
-.IR troff .
-The
-.I intermediate output
-produced by
-.B groff
-is fairly readable, while
-.I classical troff
-output was hard to understand because of strange habits that are
-still supported, but not used any longer by
-.I GNU
-.IR troff .
+Where a distinction is necessary,
+we will say
+.RI \[lq] \%troff
+output\[rq] to describe the output of GNU
+.IR troff , \" GNU
+and \[lq]intermediate output\[rq] to denote the language accepted by
+the parser implemented in
+.IR groff 's
+internal C++ library used by most of its output drivers.
+.\" XXX GBR leaves off here.
 .
 .
 .\" ====================================================================
-.SH "LANGUAGE CONCEPTS"
+.SH "Language concepts"
 .\" ====================================================================
 .
 During the run of
-.BR troff ,
+.IR \%troff ,
 the
 .I roff
 input is cracked down to the information on what has to be printed at
@@ -227,14 +217,14 @@ for device controlling.
 .
 .
 .\" ====================================================================
-.SS "Separation"
+.SS Separation
 .\" ====================================================================
 .
 .I Classical troff output
 had strange requirements on whitespace.
 .
 The
-.B groff
+.I groff
 output parser, however, is smart about whitespace by making it
 maximally optional.
 .
@@ -315,44 +305,39 @@ commands must have all of their arguments on the same line as the
 command, i.e., the arguments may not be split by a line break.
 .
 .P
-Empty lines, i.e., lines containing only space and/or a comment, can
-occur everywhere.
-.
-They are just ignored.
+Lines containing only spaces and/or a comment are treated as empty and
+ignored.
 .
 .
 .\" ====================================================================
-.SS "Argument Units"
+.SS "Argument units"
 .\" ====================================================================
 .
-Some commands take integer arguments that are assumed to represent
-values in a measurement unit, but the letter for the corresponding
-.I scale indicator
-is not written with the output command arguments;
+Some commands accept integer arguments that represent measurements,
+but the scaling units of the formatter's language are never used.
+.
+Most commands assume a scaling unit
+.RB of\~\[lq] u \[rq]
+(basic units),
+and others
+.RB use\~\[lq] z \[rq]
+(scaled points);
+.
+These are defined by the parameters specified in the device's
+.I DESC
+file;
 see
-.BR groff (7)
+.MR groff_font 5
+and,
+for more on scaling units,
+.MR groff 7
 and
 .IR "Groff: The GNU Implementation of troff" ,
 the
 .I groff
-Texinfo manual,
-for more on this topic.
+Texinfo manual.
 .
-Most commands assume the scale indicator\~\c
-.BR u ,
-the basic unit of the device, some use\~\c
-.BR z ,
-the
-.I scaled point unit
-of the device, while others, such as the color commands expect plain
-integers.
-.
-Note that these scale indicators are relative to the chosen device.
-.
-They are defined by the parameters specified in the device's
-.I DESC
-file; see
-.BR groff_font (5).
+Color-related commands use dimensionless integers.
 .
 .
 .P
@@ -377,8 +362,9 @@ argument or command.
 .
 .
 .\" ====================================================================
-.SS "Document Parts"
+.SS "Document parts"
 .\" ====================================================================
+.
 A correct
 .I intermediate output
 document consists of two parts, the
@@ -451,7 +437,7 @@ is done relative to the current location within this page.
 .
 .
 .\" ====================================================================
-.SH "COMMAND REFERENCE"
+.SH "Command reference"
 .\" ====================================================================
 .
 This section describes all
@@ -462,21 +448,17 @@ extensions.
 .
 .
 .\" ====================================================================
-.SS "Comment Command"
+.SS "Comment command"
 .\" ====================================================================
 .
 .TP
-.BI # anything \[la]end-of-line\[ra]
+.BI # anything\c
+\[la]line-break\[ra]
 A comment.
 .
 Ignore any characters from the
-.BR # \~\c
-character up to the next newline character.
-.
-.P
-This command is the only possibility for commenting in the
-.I intermediate
-.IR output .
+.BR # \~character
+up to the next newline.
 .
 Each comment can be preceded by arbitrary
 .I syntactical
@@ -485,7 +467,7 @@ every command can be terminated by a comment.
 .
 .
 .\" ====================================================================
-.SS "Simple Commands"
+.SS "Simple commands"
 .\" ====================================================================
 .
 The commands in this subsection have a command code consisting of a
@@ -506,14 +488,14 @@ same line.
 .
 A separating
 .I syntactical space
-is only necessary when two integer arguments would clash or if the
+is necessary only when two integer arguments would clash or if the
 preceding argument ends with a string argument.
 .
 .
 .if \n[@USE_ENV_STACK]=1 \{\
 .TP
 .command {
-Open a new environment by copying the actual device configuration data
+Open a new environment by copying the current device configuration data
 to the environment stack.
 .
 The current environment is setup by the device specification and
@@ -522,311 +504,344 @@ manipulated by the setting commands.
 .
 .TP
 .command }
-Close the actual environment (opened by a preceding
+Close the current environment
+(opened by a preceding
 .BR { \~command)
 and restore the previous environment from the environment
-stack as the actual device configuration data.
+stack as the current device configuration data.
 .
 .\}              \" endif @USE_ENV_STACK
 .
 .
 .TP
-.command C xxx \[la]white-space\[ra]
-Print a glyph (special character) named
-.IR xxx .
+.command C id \[la]white-space\[ra]
+Typeset the glyph of the special character
+.IR id .
 .
-The trailing
-.I syntactical space
-or
-.I line break
-is necessary to allow glyph names of arbitrary length.
+Trailing syntactical space is necessary to allow special character names
+of arbitrary length.
 .
-The glyph is printed at the current print position; the
-glyph's size is read from the font file.
-.
-The print position is not changed.
+The drawing position is not advanced.
+.\" XXX: Why does it matter that we read its size if we don't advance
+.\" the drawing position?
+.\" its size is read from the font description file.
 .
 .
 .TP
 .command c c
-Print glyph with single-letter name\~\c
-.I c
-at the current print position;
-the glyph's size is read from the font file.
+Typeset the glyph of the ordinary character
+.RI character\~ c .
 .
-The print position is not changed.
+The drawing position is not advanced.
+.\" XXX: Why does it matter that we read its size if we don't advance
+.\" the drawing position?
+.\" its size is read from the font description file.
 .
 .
 .TP
 .command f n
-Set font to font number\~\c
-.I n
-(a non-negative integer).
+Select the font mounted at
+.RI position\~ n .
+.
+.IR n\~ cannot
+be negative.
 .
 .
 .TP
 .command H n
-Move right to the absolute vertical position\~\c
-.I n
-(a non-negative integer in basic units\~\c
-.BR u )
-relative to left edge of current page.
+Horizontally move the drawing position to
+.IR n\~ basic
+units from the left edge of the page.
+.
+.IR n\~ cannot
+be negative.
 .
 .
 .TP
 .command h n
-Move
+Move the drawing position right
 .I n
-(a non-negative integer) basic units\~\c
-.B u
-horizontally to the right.
+basic units.
 .
-[CSTR\~#54]
-allows negative values for
-.I n
-also, but
-.I groff
-doesn't use this.
+AT&T
+.I troff \" AT&T
+allowed negative
+.I n;
+GNU
+.I troff \" GNU
+does not produce such values,
+but
+.IR groff 's
+output driver library handles them.
 .
 .
 .TP
-.command m "color-scheme \fR[\fPcomponent .\|.\|.\fR]\fP"
-Set the color for text (glyphs), line drawing, and the outline of
-graphic objects using different color schemes; the analogous command
-for the filling color of graphic objects is
-.BR DF .
+.command m "scheme \f[R][\f[]component\f[R] .\|.\|.]"
+Select the stroke color using the
+.IR component s
+in the color space
+.IR scheme .
 .
-The color components are specified as integer arguments between 0 and
-\n[@maxcolor].
+Each
+.I component
+is an integer between 0 and \n[@maxcolor].
 .
-The number of color components and their meaning vary for the
-different color schemes.
+The quantity of components and their meanings vary with each
+.IR scheme .
 .
-These commands are generated by the
-.I groff
-escape sequence
-.BR \*[@backslash]m .
-.
-No position changing.
-.
-These commands are a
+This command is a
 .I groff
 extension.
 .
 .
 .RS
-.
 .TP
 .command mc "cyan magenta yellow"
-Set color using the CMY color scheme, having the 3\~color components
-cyan, magenta, and yellow.
+Use the CMY color scheme with components
+cyan,
+magenta,
+and yellow.
 .
 .
 .TP
 .command md
-Set color to the default color value
-(black in most cases).
-.
-No component arguments.
+Use the default color
+(no components;
+black in most cases).
 .
 .
 .TP
-.command mg "gray"
-Set color to the shade of gray given by the argument, an integer
+.command mg gray
+Use a grayscale color scheme with a component ranging
 between 0 (black) and \n[@maxcolor] (white).
 .
 .
 .TP
 .command mk "cyan magenta yellow black"
-Set color using the CMYK color scheme, having the 4\~color components
-cyan, magenta, yellow, and black.
+Use the CMYK color scheme with components
+cyan,
+magenta,
+yellow,
+and black.
+.
 .
 .TP
 .command mr "red green blue"
-Set color using the RGB color scheme, having the 3\~color components
-red, green, and blue.
-.
+Use the RGB color scheme with components
+red,
+green,
+and blue.
 .RE
 .
 .
 .TP
 .command N n
-Print glyph with index\~\c
+Typeset the glyph with
+.RI index\~ n
+in the current font.
+.
+.IR n\~ is
+normally a non-negative integer.
+.
+The drawing position is not advanced.
+.
+The
+.B html
+and
+.B xhtml
+devices use this command with
+.RI negative\~ n
+to produce unbreakable space;
+the absolute value of
 .I n
-(an integer, normally non-negative) of the current font.
-.
-The print position is not changed.
-.
-If
-.B \-T\~html
-or
-.B \-T\~xhtml
-is used, negative values are emitted also to indicate an unbreakable
-space with given width.
-.
-For example,
-.B N\~\-193
-represents an unbreakable space which has a width of 193\|u.
-.
-This command is a
-.I groff
-extension.
+is taken and interpreted in basic units.
 .
 .
 .TP
-.command n b\ a
-Inform the device about a line break, but no positioning is done by
-this command.
+.command n b\~a
+Indicate a break.
 .
-In
-.I classical
-.IR troff ,
-the integer arguments
+No action is performed;
+the command is present to make the output more easily parsed.
+.
+The integers
 .I b
-and\~\c
-.I a
-informed about the space before and after the current line to
-make the
-.I intermediate output
-more human readable without performing any action.
+.RI and\~ a
+describe the vertical space amounts before and after the break,
+respectively.
 .
-In
-.IR groff ,
-they are just ignored, but they must be provided for compatibility
-reasons.
+GNU
+.I troff \" GNU
+issues this command but
+.IR groff 's
+output driver library ignores it.
+.
+See
+.B v
+and
+.BR V .
 .
 .
 .TP
 .command p n
-Begin a new page in the outprint.
+Begin a new page,
+setting its number
+.RI to\~ n .
 .
-The page number is set to\~\c
-.IR n .
+Each page is independent,
+even from those using the same number.
 .
-This page is completely independent of pages formerly processed even
-if those have the same page number.
+The vertical drawing position is set to\~0.
 .
-The vertical position on the outprint is automatically set to\~0.
-.
-All positioning, writing, and drawing is always done relative to a
-page, so a
+All positioning,
+writing,
+and drawing commands are interpreted in the context of a page,
+so a
 .BR p \~command
-must be issued before any of these commands.
+must precede them.
 .
 .
 .TP
 .command s n
-Set point size to
+Set type size to
 .I n
 scaled points
-(this is unit\~\c
-.B z
+.RB (unit\~ z
 in GNU
-.BR troff ).
+.IR troff ). \" GNU
 .
-.I Classical troff
-used the unit
-.I points
-(\c
-.BR p )
+AT&T
+.I troff \" AT&T
+used unscaled points
+.RB ( p )
 instead;
 see section \[lq]Compatibility\[rq] below.
 .
 .
 .TP
-.command t xyz\|.\|.\|. \[la]white-space\[ra]
+.command t xyz\f[R]\|.\|.\|.\& \f[R]\[la]white-space\[ra]
 .TQ
-.command t "xyz\|.\|.\|.\& dummy-arg" \[la]white-space\[ra]
-Print a word, i.e., a sequence of glyphs with single-letter names
+.command t "xyz\f[R]\|.\|.\|.\&\f[] dummy-arg" \[la]white-space\[ra]
+Typeset word
+.IR xyz ;
+that is,
+set a sequence of ordinary glyphs named
 .IR x ,
 .IR y ,
 .IR z ,
-etc., terminated by a space character or a line break; an optional
-second integer argument is ignored (this allows the formatter to
-generate an even number of arguments).
+\&.\|.\|.\|,
+terminated by a space or newline;
+an optional second integer argument is ignored
+(this allows the formatter to generate an even number of arguments).
+.\" XXX: Why?
 .
-The first glyph should be printed at the current position, the
-current horizontal position should then be increased by the width of
-the first glyph, and so on for each glyph.
+Each glyph is set at the current drawing position,
+and the position is then advanced horizontally by the glyph's width.
 .
-The widths of the glyph are read from the font file, scaled for the
-current point size, and rounded to a multiple of the horizontal
-resolution.
+A glyph's width is read from its metrics in the font description file,
+scaled to the current type size,
+and rounded to a multiple of the horizontal motion quantum.
 .
-Special characters (glyphs with names longer than a single letter)
-cannot be printed using this command; use the
+Use the
 .B C
-command for those glyphs.
+command to emplace glyphs of special characters.
 .
-This command is a
+The
+.BR t \~command
+is a
 .I groff
-extension; it is only used for devices whose
+extension and is output only for devices whose
 .I DESC
 file contains the
 .B tcommand
-keyword; see
-.BR groff_font (5).
+directive;
+see
+.MR groff_font 5 .
 .
 .
 .TP
-.command u "n xyz\|.\|.\|." \[la]white-space\[ra]
-Print word with track kerning.
+.command u "n xyz"\f[R]\|.\|.\|.\& \f[R]\[la]white-space\[ra]
+.TQ
+.command u "xyz\f[R]\|.\|.\|.\&\f[] dummy-arg" \[la]white-space\[ra]
+Typeset word
+.I xyz
+with track kerning.
 .
-This is the same as the
-.B t
-command except that after printing each glyph, the current
-horizontal position is increased by the sum of the width of that
-glyph and\~\c
-.I n
-(an integer in
-basic units\~\c
-.BR u ).
-This command is a
+As
+.BR t ,
+but after placing each glyph,
+the drawing position is further advanced horizontally
+.RI by\~ n
+basic units.
+.
+The
+.BR u \~command
+is a
 .I groff
-extension; it is only used for devices whose
+extension and is output only for devices whose
 .I DESC
 file contains the
 .B tcommand
-keyword; see
-.BR groff_font (5).
+directive;
+see
+.MR groff_font 5 .
 .
 .
 .TP
 .command V n
-Move down to the absolute vertical position\~\c
-.I n
-(a non-negative integer in basic units\~\c
-.BR u )
-relative to upper edge of current page.
+Vertically move the drawing position to
+.IR n\~ basic
+units from the top edge of the page.
+.
+.IR n\~ cannot
+be negative.
 .
 .
 .TP
 .command v n
-Move
+Move the drawing position down
 .I n
-basic units\~\c
-.B u
-down
-.RI ( n
-is a non-negative integer).
+basic units.
 .
-[CSTR\~#54]
-allows negative values for
-.I n
-also, but
-.I groff
-doesn't use this.
+AT&T
+.I troff \" AT&T
+allowed negative
+.I n;
+GNU
+.I troff \" GNU
+does not produce such values,
+but
+.IR groff 's
+output driver library handles them.
 .
 .
 .TP
 .command w
-Informs about a paddable whitespace to increase readability.
+Indicate an inter-word space.
 .
-The spacing itself must be performed explicitly by a move command.
+No action is performed;
+the command is present to make the output more easily parsed.
+.
+Only adjustable,
+breakable inter-word spaces are thus described;
+those resulting from
+.B \[rs]\[ti]
+or horizontal motion escape sequences are not.
+.
+GNU
+.I troff \" GNU
+issues this command but
+.IR groff 's
+output driver library ignores it.
+.
+See
+.B h
+and
+.BR H .
 .
 .
 .\" ====================================================================
-.SS "Graphics Commands"
+.SS "Graphics commands"
 .\" ====================================================================
 .
 Each graphics or drawing command in the
@@ -848,7 +863,7 @@ is terminated by a
 .
 .
 .P
-.B troff
+.I \%troff
 output follows the classical spacing rules (no space between command
 and subcommand, all arguments are preceded by a single space
 character), but the parser allows optional space between the command
@@ -884,7 +899,7 @@ to a similar
 .I groff
 .B \*[@backslash]D
 escape sequence; see
-.BR groff (7).
+.MR groff 7 .
 .
 .
 .P
@@ -985,7 +1000,7 @@ rightmost point of the ellipse.
 .
 .
 .TP
-.D-command F "color-scheme \fR[\fPcomponent .\|.\|.\fR]\fP"
+.D-command F "color-scheme \fR[\fPcomponent\fR .\|.\|.]\fP"
 Set fill color for solid drawing objects using different color
 schemes; the analogous command for setting the color of text, line
 graphics, and the outline of graphic objects is
@@ -1000,12 +1015,10 @@ different color schemes.
 These commands are generated by the
 .I groff
 escape sequences
-.BR \*[@backslash]D'F\  .\|.\|. '
+.BR \*[@backslash]D\[aq]F\  .\|.\|. '
 and
 .B \*[@backslash]M
 (with no other corresponding graphics commands).
-.
-No position changing.
 .
 This command is a
 .I groff
@@ -1081,8 +1094,6 @@ Df \-1
 sets all colors to blue.
 .
 .P
-No position changing.
-.
 This command is a
 .I groff
 extension.
@@ -1111,7 +1122,7 @@ and from there back to the starting position.
 .
 .ie \n[@STUPID_DRAWING_POSITIONING]=1 \{\
 For historical reasons, the position is changed by adding the sum of
-all arguments with odd index to the actual horizontal position and the
+all arguments with odd index to the current horizontal position and the
 even ones to the vertical position.
 .
 Although this doesn't make sense it is kept for compatibility.
@@ -1134,12 +1145,10 @@ The same macro as the corresponding
 command with the same arguments, but draws a solid polygon in the
 current fill color rather than an outlined polygon.
 .
-.ie \n[@STUPID_DRAWING_POSITIONING]=1 \{\
+.if \n[@STUPID_DRAWING_POSITIONING]=1 \{\
 The position is changed in the same way as with
 .BR Dp .
 .\}
-.el \
-No position changing.
 .
 This command is a
 .I groff
@@ -1148,31 +1157,28 @@ extension.
 .
 .TP
 .D-command t n
-Set the current line thickness to\~\c
-.I n
-(an integer in basic units\~\c
-.BR u )
+Set the current line thickness
+.RI to\~ n
+(an integer in basic
+.RB units\~ u )
 if
 .IR n \|>\|0;
 if
 .IR n \|=\|0
-select the smallest available line thickness; if
-.IR n \|<\|0
-set the line thickness proportional to the point size (this is the
-default before the first
-.B Dt
-command was specified).
+select the smallest available line thickness;
+otherwise,
+the line thickness is made proportional to the type size,
+which is the default.
 .
-.ie \n[@STUPID_DRAWING_POSITIONING]=1 \{\
-For historical reasons, the horizontal position is changed by adding
-the argument to the actual horizontal position, while the vertical
-position is not changed.
+.if \n[@STUPID_DRAWING_POSITIONING]=1 \{\
+For historical reasons,
+the horizontal position is changed by adding the argument to the current
+horizontal position,
+while the vertical position is not changed.
 .
-Although this doesn't make sense it is kept for compatibility.
-.
+Although this doesn't make sense,
+it is kept for compatibility.
 .\}
-.el \
-No position changing.
 .
 This command is a
 .I groff
@@ -1180,7 +1186,7 @@ extension.
 .
 .
 .\" ====================================================================
-.SS "Device Control Commands"
+.SS "Device control commands"
 .\" ====================================================================
 .
 Each device control command starts with the letter
@@ -1207,7 +1213,7 @@ of characters terminated by the next tab, space, or newline character.
 All characters of the subcommand word but the first are simply ignored.
 .
 For example,
-.B troff
+.I \%troff
 outputs the initialization command
 .B x\ i
 as
@@ -1238,7 +1244,7 @@ Use
 as the intended name for the current file in error reports.
 .
 This is useful for remembering the original file name when
-.B groff
+.I groff
 uses an internal piping mechanism.
 .
 The input file is not changed by this command.
@@ -1257,7 +1263,7 @@ Mount font position\~\c
 .I s
 (a text word);
 see
-.BR groff_font (5).
+.MR groff_font 5 .
 .
 .
 .TP
@@ -1326,7 +1332,7 @@ degrees (an integer in basic units\~\c
 .xsub stop
 Terminates the processing of the current file; issued as the last
 command of any
-.I intermediate troff
+.I intermediate \%troff
 .IR output .
 .
 .
@@ -1337,22 +1343,23 @@ Generate trailer information, if any.
 .
 In
 .BR groff ,
-this is actually just ignored.
+this is currently ignored.
 .
 .
 .TP
 .x-command T xxx
 .xsub Typesetter
-Set name of device to word
-.IR xxx ,
-a sequence of characters ended by the next whitespace character.
 .
-The possible device names coincide with those from the groff
+Set the name of the output driver to
+.IR xxx ,
+a sequence of non-whitespace characters terminated by whitespace.
+.
+The possible names correspond to those of
+.IR groff 's
 .B \-T
 option.
 .
-This is the first command of the
-.IR prologue .
+This is the first command of the prologue.
 .
 .
 .TP
@@ -1370,7 +1377,7 @@ is\~0, stop underlining of spaces.
 This is needed for the
 .B cu
 request in
-.B nroff
+.B \%nroff
 mode and is ignored otherwise.
 .
 This command is a
@@ -1411,7 +1418,7 @@ extension.
 .
 .
 .\" ====================================================================
-.SS "Obsolete Command"
+.SS "Obsolete command"
 .\" ====================================================================
 .
 In
@@ -1459,24 +1466,24 @@ because the width of the glyphs can become much larger than two
 decimal digits.
 .
 In
-.BR groff ,
-this is only used for the devices
+.IR groff ,
+it is used only for output to the
 .BR X75 ,
-.BR X75-12 ,
+.BR X75\-12 ,
 .BR X100 ,
 and
-.BR X100-12 .
+.B X100\-12
+devices.
 .
-For other devices,
+For others,
 the commands
 .B t
-and\~\c
-.B u
-provide a better functionality.
+.RB and\~ u
+provide greater functionality and superior troubleshooting capacity.
 .
 .
 .\" ====================================================================
-.SH "POSTPROCESSING"
+.SH Postprocessing
 .\" ====================================================================
 .
 The
@@ -1507,7 +1514,7 @@ see the reference in section \[lq]Files\[rq] below.
 .
 .
 .\" ====================================================================
-.SH "EXAMPLES"
+.SH Example
 .\" ====================================================================
 .
 This section presents the
@@ -1517,7 +1524,7 @@ generated from the same input for three different devices.
 The input is the sentence
 .I hell world
 fed into
-.B groff
+.I groff
 on the command line.
 .
 .
@@ -1529,13 +1536,12 @@ High-resolution device
 .RS
 .P
 .EX
-\fBshell>\fP echo "hell world" | groff \-Z \-T ps
+.RB "shell>\~" "echo \[dq]hell world\[dq] | groff \-Z \-T ps"
 .EE
 .
 .
 .P
-.nf
-.ft CB
+.EX
 x T ps
 x res 72000 1 1
 x init
@@ -1554,16 +1560,15 @@ n12000 0
 x trailer
 V792000
 x stop
-.ft P
-.fi
+.EE
 .RE
 .
 .
 .P
 This output can be fed into the postprocessor
-.BR grops (1)
+.MR grops 1
 to get its representation as a PostScript file, or
-.BR gropdf (1)
+.MR gropdf 1
 to output directly to PDF.
 .
 .
@@ -1590,49 +1595,39 @@ formatter.
 .
 .
 .P
-.nf
-.I "# prologue"
-.ft CB
+.EX
+.I # prologue
 x T latin1
 x res 240 24 40
 x init
-.I "# begin a new page"
-.ft CB
+.I # begin a new page
 p1
-.I "# font setup"
-.ft CB
+.I # font setup
 x font 1 R
 f1
 s10
-.I "# initial positioning on the page"
-.ft CB
+.I # initial positioning on the page
 V40
 H0
-.I "# write text \[oq]hell\[cq]"
-.ft CB
+.I # write text \[aq]hell\[aq]
 thell
-.I "# inform about a space, and do it by a horizontal jump"
-.ft CB
+.I # inform about a space, and do it by a horizontal jump
 wh24
-.I "# write text \[oq]world\[cq]"
-.ft CB
+.I # write text \[aq]world\[aq]
 tworld
-.I "# announce line break, but do nothing because ..."
-.ft CB
+.I # announce line break, but do nothing because ...
 n40 0
-.I "# ... the end of the document has been reached"
-.ft CB
+.I # ... the end of the document has been reached
 x trailer
 V2640
 x stop
-.ft P
-.fi
+.EE
 .RE
 .
 .
 .P
 This output can be fed into the postprocessor
-.BR grotty (1)
+.MR grotty 1
 to get a formatted text document.
 .
 .
@@ -1656,8 +1651,7 @@ displacements.
 .
 .
 .P
-.nf
-.ft CB
+.EX
 x T X100
 x res 100 1 1
 x init
@@ -1667,23 +1661,21 @@ f5
 s10
 V16
 H100
-.I "# write text with old-style jump-and-write command"
-.ft CB
+.I # write text with old-style jump-and-write command
 ch07e07l03lw06w11o07r05l03dh7
 n16 0
 x trailer
 V1100
 x stop
-.ft P
-.fi
+.EE
 .RE
 .
 .
 .P
 This output can be fed into the postprocessor
-.BR \%xditview (1x)
+.MR xditview 1x
 or
-.BR \%gxditview (1)
+.MR gxditview 1
 for displaying in\~X.
 .
 .
@@ -1693,7 +1685,7 @@ classical output are almost unreadable.
 .
 .
 .\" ====================================================================
-.SH "COMPATIBILITY"
+.SH Compatibility
 .\" ====================================================================
 .
 The
@@ -1701,7 +1693,7 @@ The
 language of the
 .I classical troff
 was first documented in
-[CSTR\~#97] .
+[CSTR\~#97].
 .
 The
 .I groff intermediate output
@@ -1816,133 +1808,41 @@ The differences between
 and
 .I classical troff
 are documented in
-.BR groff_diff (7).
+.MR groff_diff 7 .
 .
 .
 .\" ====================================================================
-.SH "FILES"
+.SH Files
 .\" ====================================================================
 .
 .TP
-.IR /usr/\:local/\:share/\:groff/\:1.22.4/\:font/dev name /DESC
-Device description file for device
+.IR /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%dev name /\:DESC
+describes the output device
 .IR name .
 .
-.TP
-.I src/libs/libdriver/input.cpp
-Defines the parser and postprocessor for the
-.I intermediate
-.IR output .
 .
-It is located relative to the top directory of the
-.I groff
-source tree.
-.
-This parser is the definitive specification of the
-.I groff intermediate output
-format.
-.
-.
+.br
+.ne 4v
 .\" ====================================================================
-.SH AUTHORS
+.SH Authors
 .\" ====================================================================
-James Clark wrote an early version of this document, which described
-only the differences between
-.BR ditroff (7)'s
+.
+James Clark wrote an early version of this document,
+which described only the differences between AT&T
+device-independent
+.IR troff 's
 output format and that of GNU
 .IR roff .
 .
 The present version was completely rewritten in 2001 by
-.MT groff\-bernd.warken\-72@\:web.de
+.MT groff\-bernd\:.warken\-72@\:web\:.de
 Bernd Warken
 .ME .
 .
 .
 .\" ====================================================================
-.SH "SEE ALSO"
+.SH "See also"
 .\" ====================================================================
-.
-A reference like
-.BR groff (7)
-refers to a manual page; here
-.B groff
-in section\~\c
-.I 7
-of the man page documentation system.
-.
-To read the example, look up section\~7 in your desktop help
-system or call from the shell prompt
-.
-.
-.RS
-.P
-.EX
-\fBshell>\fP man 7 groff
-.EE
-.RE
-.
-.
-.P
-For more details, see
-.BR man (1).
-.
-.
-.TP
-.BR groff (1)
-option
-.B \-Z
-and further readings on groff.
-.
-.
-.TP
-.BR groff (7)
-for details of the
-.I groff
-language such as numerical units and escape sequences.
-.
-.
-.TP
-.BR groff_font (5)
-for details on the device scaling parameters of the
-.I DESC
-file.
-.
-.
-.TP
-.BR troff (1)
-generates the device-independent intermediate output.
-.
-.
-.TP
-.BR roff (7)
-for historical aspects and the general structure of roff systems.
-.
-.
-.TP
-.BR groff_diff (7)
-The differences between the intermediate output in groff and classical
-troff.
-.
-.
-.TP
-.BR gxditview (1)
-Viewer for the
-.I intermediate
-.IR output .
-.
-.
-.P
-.BR \%grodvi (1),
-.BR \%grohtml (1),
-.BR \%grolbp (1),
-.BR \%grolj4 (1),
-.BR \%grops (1),
-.BR \%grotty (1)
-.br
-.RS
-the groff postprocessor programs.
-.RE
-.
 .
 .P
 .IR "Groff: The GNU Implementation of troff" ,
@@ -1955,52 +1855,109 @@ You can browse it interactively with \[lq]info groff\[rq].
 .
 .
 .P
-The
-.I classical troff output language
-is described in two AT&T Bell Labs CSTR documents available on-line at
-.UR http://\:cm.bell\-labs.com/\:cm/\:cs/\:cstr.html
-Bell Labs CSTR site
-.UE .
+\[lq]Troff User's Manual\[rq]
+by Joseph F.\& Ossanna,
+1976
+(revised by Brian W.\& Kernighan,
+1992),
+AT&T Bell Laboratories Computing Science Technical Report No.\& 54,
+widely called simply \[lq]CSTR\~#54\[rq],
+documents the language,
+device and font description file formats,
+and device-independent output format
+referred to collectively in
+.I groff
+documentation as
+.RI \[lq]AT&T\~ troff \[rq].
+.
+.
+.P
+\[lq]A Typesetter-independent TROFF\[rq]
+by Brian W.\& Kernighan,
+1982,
+AT&T Bell Laboratories Computing Science Technical Report No.\& 97,
+provides additional insights into the
+device and font description file formats
+and device-independent output format.
 .
 .
 .TP
-[CSTR #97]
-.I A Typesetter-independent TROFF
-by
-.I Brian Kernighan
-is the original and most comprehensive documentation on the output
-language; see
-.UR http://\:cm.bell\-labs.com/\:cm/\:cs/\:cstr/\:97.ps.gz
-CSTR\~#97
-.UE .
+.MR groff 1
+documents the
+.B \-Z
+option and contains pointers to further
+.I groff
+documentation.
 .
 .
 .TP
-[CSTR\~#54]
-The 1992 revision of the
-.I Nroff/\:Troff User's Manual
-by
-.I J.\& F.\& Ossanna
+.MR groff 7
+describes the
+.I groff
+language,
+including its escape sequences and system of units.
+.
+.
+.TP
+.MR groff_font 5
+details the device scaling parameters of device
+.I DESC
+files.
+.
+.
+.TP
+.MR \%troff 1
+generates the device-independent intermediate output documented here.
+.
+.
+.TP
+.MR roff 7
+presents historical aspects and the general structure of
+.I roff
+systems.
+.
+.
+.TP
+.MR groff_diff 7
+enumerates differences between the intermediate output produced by AT&T
+.I troff \" AT&T
+and that of
+.IR groff .
+.
+.
+.TP
+.MR gxditview 1
+is a viewer for intermediate output.
+.
+.
+.TP
+.UR https://\:github.com/\:Alhadis/\:Roff\:.js/
+.I Roff.js
+.UE
+is a viewer for intermediate output written in JavaScript.
+.
+.
+.P
+.MR grodvi 1 ,
+.MR grohtml 1 ,
+.MR grolbp 1 ,
+.MR grolj4 1 ,
+.MR gropdf 1 ,
+.MR grops 1 ,
 and
-.I Brian Kernighan
-isn't as comprehensive as
-[CSTR\~#97]
-regarding the output language; see
-.UR http://\:cm.bell\-labs.com/\:cm/\:cs/\:cstr/\:54.ps.gz
-CSTR\~#54
-.UE .
+.MR grotty 1
+are
+.I groff
+postprocessors.
 .
 .
 .\" Restore compatibility mode (for, e.g., Solaris 10/11).
-.cp \n[groff_out_C]
+.cp \n[*groff_groff_out_5_man_C]
+.do rr *groff_groff_out_5_man_C
 .
-.
-.\" ====================================================================
-.\" Editor settings
-.\" ====================================================================
 .
 .\" Local Variables:
-.\" mode: nroff
 .\" fill-column: 72
+.\" mode: nroff
 .\" End:
 .\" vim: set filetype=groff textwidth=72:

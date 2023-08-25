@@ -27,7 +27,7 @@ do_view_action() {
         ;;
     lib)
         gplib -t "${MC_EXT_FILENAME}" | \
-            /usr/bin/perl -e 'while (<>) { @a=split /[\s\t]+/, $_; printf ("%-30s | %10d | %s.%s.%02d | %s\n", $a[0], ($a[1]*1),$a[7], lc($a[4]), $a[5], $a[6]);}'
+            /opt/local/bin/perl -e 'while (<>) { @a=split /[\s\t]+/, $_; printf ("%-30s | %10d | %s.%s.%02d | %s\n", $a[0], ($a[1]*1),$a[7], lc($a[4]), $a[5], $a[6]);}'
         ;;
     so)
         file "${MC_EXT_FILENAME}" && nm -C -D "${MC_EXT_FILENAME}"

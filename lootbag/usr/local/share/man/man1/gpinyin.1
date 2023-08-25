@@ -1,13 +1,16 @@
 '\" t
-.TH GPINYIN 1 "18 November 2018" "groff 1.22.4"
-.SH NAME
-gpinyin \- use Hanyu Pinyin Chinese in roff
+.TH gpinyin 1 "2 July 2023" "groff 1.23.0"
+.SH Name
+gpinyin \- use Hanyu Pinyin Chinese in
+.I groff
+documents
+.
 .
 .\" ====================================================================
 .\" Legal Terms
 .\" ====================================================================
 .\"
-.\" Copyright (C) 2014-2018 Free Software Foundation, Inc.
+.\" Copyright (C) 2014-2020 Free Software Foundation, Inc.
 .\"
 .\" This file is part of gpinyin, which is part of groff, a free
 .\" software project.
@@ -19,6 +22,27 @@ gpinyin \- use Hanyu Pinyin Chinese in roff
 .\" The license text is available in the internet at
 .\" <http://www.gnu.org/licenses/gpl-2.0.html>.
 .
+.
+.\" Save and disable compatibility mode (for, e.g., Solaris 10/11).
+.do nr *groff_gpinyin_1_man_C \n[.cp]
+.cp 0
+.
+.\" Define fallback for groff 1.23's MR macro if the system lacks it.
+.nr do-fallback 0
+.if !\n(.f           .nr do-fallback 1 \" mandoc
+.if  \n(.g .if !d MR .nr do-fallback 1 \" older groff
+.if !\n(.g           .nr do-fallback 1 \" non-groff *roff
+.if \n[do-fallback]  \{\
+.  de MR
+.    ie \\n(.$=1 \
+.      I \%\\$1
+.    el \
+.      IR \%\\$1 (\\$2)\\$3
+.  .
+.\}
+.rr do-fallback
+.
+.
 .\" ====================================================================
 .\" Local definitions
 .\" ====================================================================
@@ -27,49 +51,50 @@ gpinyin \- use Hanyu Pinyin Chinese in roff
 .ie t .ds TeX T\h'-.1667m'\v'.224m'E\v'-.224m'\h'-.125m'X
 .el   .ds TeX TeX
 .
-.\" Define a string for an ellipsis.
-.ie t .ds EL \f[S]\N'188'\f[P]\"
-.el .ds EL \&.\|.\|.\&\"
-.
 .
 .\" ====================================================================
-.SH "SYNOPSIS"
+.SH Synopsis
 .\" ====================================================================
 .
 .SY gpinyin
-.RI [ input-file
-\*(EL]
+.RI [ file\~ .\|.\|.]
 .YS
+.
 .
 .SY gpinyin
 .B \-h
+.
 .SY gpinyin
 .B \-\-help
 .YS
 .
 .SY gpinyin
 .B \-v
+.
 .SY gpinyin
 .B \-\-version
 .YS
 .
 .
 .\" ====================================================================
-.SH DESCRIPTION
+.SH Description
 .\" ====================================================================
 .
-.B gpinyin
+.I gpinyin
 is a preprocessor for
-.BR \%groff (1)
-that facilitates use of the Hanyu Pinyin
-.BR groff (7)
+.MR groff 1
+that facilitates use of Hanyu Pinyin in
+.MR groff 7
 files.
 .
-Pinyin is a method for writing the Chinese language with the Latin
-alphabet.
+Pinyin is a method for writing the Mandarin Chinese language with the
+Latin alphabet.
 .
-The Chinese language consists of more than four hundred syllables,
-each with one of five different tones.
+Mandarin consists of more than four hundred base syllables,
+each spoken with one of five different tones.
+.
+Changing the tone applied to the syllable generally alters the meaning
+of the word it forms.
 .
 In Pinyin,
 a syllable is written in the Latin alphabet and a numeric tone indicator
@@ -79,19 +104,34 @@ can be appended to each syllable.
 .P
 Each
 .I input-file
-is a file name or the hyphen-minus character \[lq]\-\[rq] to indicate
-that standard input should be read.
+is a file name or the character
+.RB \[lq] \- \[rq]
+to indicate that the standard input stream should be read.
 .
 As usual,
-the argument \[lq]\-\-\[rq] can be used in order to force interpretation
-of all remaining arguments as file names,
+the argument
+.RB \[lq] \-\- \[rq]
+can be used in order to force interpretation of all remaining arguments
+as file names,
 even if an
 .I input-file
-argument begins with the hyphen-minus character.
+argument begins with a
+.RB \[lq] \- \[rq].
+.
+.B \-h
+and
+.B \-\-help
+display a usage message,
+while
+.B \-v
+and
+.B \-\-version
+show version information;
+all exit afterward.
 .
 .
 .\" ====================================================================
-.SS "Pinyin Sections"
+.SS "Pinyin sections"
 .\" ====================================================================
 .
 Pinyin sections in
@@ -128,21 +168,13 @@ or
 .
 .
 .\" ====================================================================
-.SS "Syllables"
+.SS Syllables
 .\" ====================================================================
 .
-The spoken Chinese language is based on about 411
-.IR syllables ;
-see
-.UR http://\:en.wikipedia.org/\:wiki/\:Pinyin_table
-.UE .
-.
-.
-.P
 In Pinyin,
-each syllable consists of one to six letters from the Latin alphabet;
-these letters comprise the fifty-two upper- and lowercase letters from
-the ASCII character set,
+each syllable is represented by one to six letters drawn from the
+fifty-two upper- and lowercase letters of the Unicode basic Latin
+character set,
 plus the letter \[lq]U\[rq] with dieresis (umlaut) in both cases\[em]in
 other words,
 the members of the set \[lq][a\[en]zA\[en]Z\[:u]\[:U]]\[rq].
@@ -152,7 +184,7 @@ the members of the set \[lq][a\[en]zA\[en]Z\[:u]\[:U]]\[rq].
 In
 .I groff
 input,
-all ASCII letters are written as themselves.
+all basic Latin letters are written as themselves.
 .
 The \[lq]u with dieresis\[rq] can be written as
 \[lq]\e[:u]\[rq]
@@ -174,7 +206,7 @@ for uppercase.
 .
 .
 .\" ====================================================================
-.SS "Tones"
+.SS Tones
 .\" ====================================================================
 .
 Each syllable has exactly one of five
@@ -199,24 +231,46 @@ The tone numbers 0 and 5 are synonymous.
 .
 .
 .P
-The following table summarizes the tones.
-.
-Some output devices will not be able to render every output example.
+.nr gpinyin*do-table 0
+.if t .nr gpinyin*do-table 1
+.if n .if '\*[.T]'utf8' .nr gpinyin*do-table 1
+.\" XXX: One hack necessitates another; since our table is conditional,
+.\" we need to save the input line counter.
+.nr gpinyin*.c \n[.c]
+.ie \n[gpinyin*do-table] \{\
+The tones are written as follows.
 .
 .
 .P
+.\" XXX: This is so gross.  Why can't grops and gropdf figure this out?
+.if t .ds a- \za\[a-]
+.if n .ds a- \[a a-]
+.if t .ds a< \za\[ah]
+.if n .ds a< \[a ah]
 .if t .ne 8 \" Try to keep the table on one page for printed output.
 .TS
 l l l l l.
 Tone	Description	Diacritic	Example Input	Example Output
 _
-first	flat	\[a-]	ma1	m\[u0061_0304]
-second	rising	\[aa]	ma2	m\[u0061_0301]
-third	falling-rising	\[ah]	ma3	m\[u0061_030C]
-fourth	falling	\[ga]	ma4	m\[u0061_0300]
+first	flat	\[a-]	ma1	m\*[a-]
+second	rising	\[aa]	ma2	m\[a aa]
+third	falling-rising	\[ah]	ma3	m\*[a<]
+fourth	falling	\[ga]	ma4	m\[a ga]
 fifth	neutral	(none)	ma0	ma
 \^	\^	\^	ma5	\^
 .TE
+.\}
+.lf (\n[gpinyin*.c] + 25) \" XXX part 2: Restore input line counter.
+.el \{\
+[The tone mark table is omitted from this rendering of the man page
+because the selected output device \[lq]\*[.T]\[rq] lacks the character
+repertoire to display it.
+.
+Try another output device.]
+.\}
+.rm a-
+.rm a<
+.rr gpinyin*do-table
 .
 .
 .P
@@ -225,82 +279,52 @@ but not otherwise.
 .
 .
 .\" ====================================================================
-.SH OPTIONS
+.SH Authors
 .\" ====================================================================
 .
-.TP
-.B \-h
-.TQ
-.B \-\-help
-Print usage information and exit.
-.
-.
-.TP
-.B \-v
-.TQ
-.B \-\-version
-Print version information and exit.
-.
-.
-.\" ====================================================================
-.SH AUTHORS
-.\" ====================================================================
-.
-.B gpinyin
+.I gpinyin
 was written by
-.MT <groff\-bernd.warken\-72@\:web.de>
+.MT groff\-bernd\:.warken\-72@\:web\:.de
 Bernd Warken
 .ME .
 .
 .
 .\" ====================================================================
-.SH "SEE ALSO"
+.SH "See also"
 .\" ====================================================================
 .
 Useful documents on the World Wide Web related to Pinyin include
 .RS 4n
-.br
-.UR http://\:en.wikipedia.org/\:wiki/\:Pinyin
-\[lq]Pinyin\[rq] (Wikipedia)
-.UE ,
-.
-.br
-.UR http://\:en.wikipedia.org/\:wiki/\:Pinyin_table
-\[lq]Pinyin table\[rq] (Wikipedia)
-.UE ,
-.
-.\" XXX: dead link
-.\".br
-.\".UR http://\:www.sino.uni\-heidelberg.de/\:course_resources/\:s02/\:\
-.\"py\-vowels.htm
-.\".I Unicode vowels for Pinyin
-.\".UE ,
-.\".
-.br
-.UR http://\:www.foolsworkshop.com/\:ptou/\:index.html
+.UR http://\:www\:.foolsworkshop\:.com/\:ptou/\:index\:.html
 .I Pinyin to Unicode
 .UE ,
 .
 .br
-.UR http://\:www.mandarintools.com/
-.I On-line Chinese Tools
+.UR http://\:www\:.mandarintools\:.com/
+.I On-line Chinese Tools \" sic: On-line
 .UE ,
 .
 .br
-.UR http://\:www.pinyin.info/\:index.html
+.\" XXX: Turning off adjustment like this is ugly; thanks to meter-long
+.\" URLs we need an escape sequence that selectively disables adjustment
+.\" at the end of a word.
+.na
+.UR http://\:www\:.pinyin\:.info/\:index\:.html
 .I Pinyin.info: a guide to the writing of Mandarin Chinese in \
 romanization
 .UE ,
+.ad \*[AD]
 .
 .br
-.UR http://\:www.pinyin.info/\:rules/\:where.html
-\[lq]Where do the tone marks go?\[rq] (Pinyin.info)
+.UR http://\:www\:.pinyin\:.info/\:rules/\:where.html
+\[lq]Where do the tone marks go?\[rq]
 .UE ,
 .
 .br
-.UR http://\:git.savannah.gnu.org/\:gitweb/\:\
-?p=cjk.git;a=blob_plain;f=doc/\:pinyin.txt;hb=HEAD
-pinyin.txt from the CJK macro package for \*[TeX]
+.UR http://\:git\:.savannah\:.gnu\:.org/\:gitweb/\:\
+?p=cjk\:.git\:;a=blob_plain\:;f=doc/\:pinyin\:.txt\:;hb=HEAD
+.I pinyin.txt
+from the CJK macro package for \*[TeX]
 .UE ,
 .br
 .RS -4n
@@ -308,38 +332,47 @@ and
 .RE
 .
 .br
-.UR http://\:git.savannah.gnu.org/\:gitweb/\:\
-?p=cjk.git;a=blob_plain;f=texinput/p\:inyin.sty;hb=HEAD
-pinyin.sty from the CJK macro package for \*[TeX]
+.\" XXX: Same ugliness as before.
+.na
+.UR http://\:git\:.savannah\:.gnu\:.org/\:gitweb/\:\
+?p=cjk\:.git\:;a=blob_plain\:;f=texinput/\:pinyin\:.sty\:;hb=HEAD
+.I pinyin.sty
+from the CJK macro package for \*[TeX]
 .UE .
+.ad \*[AD]
 .
 .RE
 .
+.
 .P
-.BR \%groff (1),
-.BR \%grog (1),
+.MR groff 1
 and
-.BR \%groffer (1)
+.MR grog 1
 explain how to view
 .I roff
 documents.
 .
 .
 .P
-.BR \%groff (7)
+.MR groff 7
 and
-.BR \%groff_char (7)
+.MR groff_char 7
 are comprehensive references covering the language elements of GNU
-.I roff
+.I troff \" GNU
 and the available glyph repertoire,
 respectively.
 .
 .
-.\" ====================================================================
-.\" Editor settings
-.\" ====================================================================
+.\" Clean up.
+.rm TeX
+.
+.\" Restore compatibility mode (for, e.g., Solaris 10/11).
+.cp \n[*groff_gpinyin_1_man_C]
+.do rr *groff_gpinyin_1_man_C
+.
 .
 .\" Local Variables:
+.\" fill-column: 72
 .\" mode: nroff
 .\" End:
-.\" vim: set filetype=groff:
+.\" vim: set filetype=groff textwidth=72:

@@ -1,24 +1,20 @@
 '\" t
-.TH GROLBP 1 "17 December 2018" "groff 1.22.4"
-.SH NAME
-grolbp \- groff driver for Canon CAPSL printers (LBP-4 and LBP-8 \
-series laser printers)
+.TH grolbp 1 "2 July 2023" "groff 1.23.0"
+.SH Name
+grolbp \-
+.I groff
+output driver for Canon CaPSL printers
 .
 .
-.\" Save and disable compatibility mode (for, e.g., Solaris 10/11).
-.do nr grolbp_C \n[.C]
-.cp 0
-.
-.
-.\" Modified by Francisco Andrés Verdú <pandres@dragonet.es> for the
-.\" grolbp program.
+.\" Modified from grolj4 man page by Francisco AndrÃ©s VerdÃº
+.\" <pandres@dragonet.es> for the grolbp program.
 .
 .
 .\" ====================================================================
 .\" Legal Terms
 .\" ====================================================================
 .\"
-.\" Copyright (C) 1994-2018 Free Software Foundation, Inc.
+.\" Copyright (C) 1994-2020 Free Software Foundation, Inc.
 .\"
 .\" Permission is granted to make and distribute verbatim copies of this
 .\" manual provided the copyright notice and this permission notice are
@@ -36,19 +32,44 @@ series laser printers)
 .\" instead of in the original English.
 .
 .
+.\" Save and disable compatibility mode (for, e.g., Solaris 10/11).
+.do nr *groff_grolbp_1_man_C \n[.cp]
+.cp 0
+.
+.\" Define fallback for groff 1.23's MR macro if the system lacks it.
+.nr do-fallback 0
+.if !\n(.f           .nr do-fallback 1 \" mandoc
+.if  \n(.g .if !d MR .nr do-fallback 1 \" older groff
+.if !\n(.g           .nr do-fallback 1 \" non-groff *roff
+.if \n[do-fallback]  \{\
+.  de MR
+.    ie \\n(.$=1 \
+.      I \%\\$1
+.    el \
+.      IR \%\\$1 (\\$2)\\$3
+.  .
+.\}
+.rr do-fallback
+.
+.
 .\" ====================================================================
-.SH SYNOPSIS
+.SH Synopsis
 .\" ====================================================================
 .
 .SY grolbp
-.OP \-l
-.OP \-c num-copies
-.OP \-F font-directory
-.OP \-o orientation
-.OP \-p paper-size
-.OP \-w width
-.RI [ file
-\&.\|.\|.\&]
+.RB [ \-l ]
+.RB [ \-c\~\c
+.IR num-copies ]
+.RB [ \-F\~\c
+.IR font-directory ]
+.RB [ \-o\~\c
+.IR orientation ]
+.RB [ \-p\~\c
+.IR paper-format ]
+.RB [ \-w\~\c
+.IR width ]
+.RI [ file\~ .\|.\|.]
+.
 .SY grolbp
 [\c
 .BI \-\-copies= num-copies\c
@@ -61,66 +82,301 @@ series laser printers)
 ] [\c
 .BI \-\-orientation= orientation\c
 ] [\c
-.BI \-\-papersize= paper-size\c
+.BI \-\-papersize= paper-format\c
 ]
-.RI [ file
-\&.\|.\|.\&]
+.RI [ file\~ .\|.\|.]
 .YS
+.
 .
 .SY grolbp
 .B \-h
+.
 .SY grolbp
 .B \-\-help
 .YS
 .
+.
 .SY grolbp
 .B \-v
+.
 .SY grolbp
 .B \-\-version
 .YS
 .
 .
 .\" ====================================================================
-.SH DESCRIPTION
+.SH Description
 .\" ====================================================================
 .
-.B grolbp
-is a driver for
-.B groff
-that produces output in CAPSL and VDM format suitable for Canon LBP-4
-and LBP-8 printers.
+This GNU
+.I roff
+output driver translates the output of
+.MR \%troff 1
+into a CaPSL and VDM format suitable for Canon LBP-4 and LBP-8 printers.
+.
+Normally,
+.I grolbp
+is invoked by
+.MR groff 1
+when the latter is given the
+.RB \[lq] \-T\~lbp \[rq]
+option.
+.
+(In this installation,
+.B \%ps
+is the default output device.)
+.
+Use
+.IR groff 's
+.B \-P
+option to pass any options shown above to
+.IR grolbp .
+.
+If no
+.I file
+arguments are given,
+or if
+.I file
+is \[lq]\-\[rq],
+.I grolbp
+reads the standard input stream.
+.
+Output is written to the standard output stream.
 .
 .
-.LP
+.\" ====================================================================
+.SS Typefaces
+.\" ====================================================================
+.
+The driver supports the Dutch,
+Swiss,
+and Swiss-Narrow scalable typefaces,
+each in the regular,
+bold,
+italic,
+and bold-italic styles.
+.
+Additionally,
+the bitmapped,
+monospaced Courier and Elite typefaces are available in regular,
+bold,
+and
+italic styles;
+Courier at 8 and 12 points,
+Elite at 8 and 10 points.
+.
+The following chart summarizes the
+.I groff
+font names used to access them.
+.
+.
+.P
+.TS
+tab(|) allbox center;
+Cb Cb Cb Cb Cb
+L L L L L
+.
+Typeface | Roman | Bold | Italic | Bold-Italic
+Dutch | TR | TB | TI | TBI
+Swiss | HR | HB | HI | HBI
+Swiss Narrow | HNR | HNB | HNI | HNBI
+Courier | CR | CB | CI |
+Elite | ER | EB | EI |
+.TE
+.
+.
+.\" ====================================================================
+.SS "Paper format, orientation, and device description file"
+.\" ====================================================================
+.
+.I grolbp
+supports paper formats
+.RB \[lq] A4 \[rq],
+.RB \[lq] letter \[rq],
+.RB \[lq] legal \[rq],
+and
+.RB \[lq] executive \[rq].
+.
+These are matched case-insensitively.
+.
+The
+.BR \-p ,
+.B \-\-papersize
+option overrides any setting in the device description file
+.IR DESC .
+.
+If neither specifies a paper format,
+A4 is assumed.
+.
+.
+.P
+In its
+.I DESC
+file,
+.I grolbp
+(case-insensitively) recognizes an
+.B orientation
+directive accepting one mandatory argument,
+.B portrait
+or
+.BR landscape .
+.
+The first valid orientation directive encountered controls.
+.\" XXX: This is inconsistent with other description file processing.
+.
+The
+.BR \-l ,
+.BR \-o ,
+and
+.B \-\-orientation
+command-line options
+override any setting in
+.IR DESC .
+.
+If none of the foregoing specify the orientation,
+portrait is assumed.
+.
+.
+.\" ====================================================================
+.SS "Font description files"
+.\" ====================================================================
+.
+In addition to the font description file directives documented in
+.MR groff_font 5 ,
+.I grolbp
+recognizes
+.BR lbpname ,
+which maps the
+.I groff
+font name to the font name used internally by the printer.
+.
+Its syntax is as follows.
+.RS
+.EX
+.RI lbpname\~ printer-font-name
+.EE
+.RE
+.
+.
+.BR lbpname 's
+argument is case-sensitive.
+.
+The printer's font names are encoded as follows.
+.
+.
+.P
+For bitmapped fonts,
+.I printer-font_name
+has the form
+.RS
+.EX
+.RI N\[la] base-font-name \[ra]\[la] font-style \[ra]
+.EE
+.RE
+.I base-font-name
+is the font name as it appears in the printer's font listings without
+the first letter,
+up to
+(but not including)
+the font size.
+.
+.I font-style
+can be one of the letters
+.BR R ,
+.BR I ,
+or
+.BR B ,
+.\" The bold-italic style apparently was not supported for bitmap fonts.
+indicating the roman,
+italic,
+and bold styles,
+respectively.
+.
+For instance,
+if the printer's \[lq]font listing A\[rq]
+shows \[lq]Nelite12I.ISO_USA\[rq],
+the corresponding entry in the
+.I groff
+font description file is
+.RS
+.EX
+lbpname NeliteI
+.EE
+.RE
+.
+You may need to modify
+.I grolbp
+to add support for new bitmapped fonts,
+since the available font names and font sizes of bitmapped fonts
+(as documented above)
+are hard-coded into the program.
+.
+.
+.P
+For scalable fonts,
+.I printer-font-name
+is identical to the font name as it appears in the printer's \[lq]font
+listing A\[rq].
+.
+For instance,
+to select the \[lq]Swiss\[rq] font in bold-italic style,
+which appears in the font listing
+as \%\[lq]Swiss\-BoldOblique\[rq],
+.RS
+.EX
+lbpname Swiss\-BoldOblique
+.EE
+.RE
+is the required directive,
+and this is what we find in the
+.I groff
+font description file
+.I HBI
+for the
+.B lbp
+device.
+.
+.
+.\" ====================================================================
+.SS "Drawing commands"
+.\" ====================================================================
+.
 For compatibility with
-.BR grolj4 (1)
-there is an additional drawing command available:
+.MR grolj4 1 ,
+an additional drawing command is available.
+.
 .
 .TP
-.BI \eD'R\  dh\ dv '
+.BI \[rs]D\[aq]R\~ "dh dv" \[aq]
 Draw a rule
-(i.e., a solid black rectangle),
-with one corner at the current position,
-and the diagonally opposite corner at the current
-position
+(solid black rectangle)
+with one corner at the drawing position,
+and the diagonally opposite corner at the drawing position
 .RI +( dh , dv ).
+.\" XXX , at which the drawing position will be afterward. ?
 .
 .
 .\" ====================================================================
-.SH OPTIONS
+.SH Options
 .\" ====================================================================
 .
-Note that there can be whitespace between a one-letter option and its
-argument;
-on the other hand, there must be whitespace and/or an equal sign
-(\(oq=\(cq) between a long-name option and its argument.
+.B \-h
+and
+.B \-\-help
+display a usage message,
+while
+.B \-v
+and
+.B \-\-version
+show version information;
+all exit afterward.
 .
 .
 .TP
 .BI \-c " num-copies"
 .TQ
 .BI \-\-copies= num-copies
-Print
+Produce
 .I num-copies
 copies of each page.
 .
@@ -133,48 +389,37 @@ Prepend directory
 .RI font-directory /dev name
 to the search path for font and device description files;
 .I name
-is the name of the device, usually
+is the name of the device,
+usually
 .BR lbp .
-.
-.
-.TP
-.B \-h
-.TQ
-.B \-\-help
-Print a short help text.
 .
 .
 .TP
 .B \-l
 .TQ
 .B \-\-landscape
-Print the document with a landscape orientation.
+Format the document in landscape orientation.
 .
 .
 .TP
 .BI \-o " orientation"
 .TQ
 .BI \-\-orientation= orientation
-Print the document with
-.I orientation
-orientation, which must be \(oqportrait\(cq or \(oqlandscape\(cq.
+Format the document in the given
+.IR orientation ,
+which must be
+.RB \%\[lq] portrait \[rq]
+or
+.RB \%\[lq] landscape \[rq].
 .
 .
 .TP
-.BI \-p " paper-size"
+.BI \-p " paper-format"
 .TQ
-.BI \-\-papersize= paper-size
-Set the paper size to
-.IR paper-size ,
-which must be a valid paper size description as indicated in section
-\[lq]Paper Sizes\[rq], below.
-.
-.
-.TP
-.B \-v
-.TQ
-.B \-\-version
-Print the version number.
+.BI \-\-papersize= paper-format
+Set the paper format to
+.IR paper-format ,
+which must be a valid paper format as described above.
 .
 .
 .TP
@@ -183,274 +428,77 @@ Print the version number.
 .BI \-\-linewidth= width
 Set the default line thickness to
 .I width
-thousandths of an em.
-.
-If this option isn't specified, the line thickness defaults to 0.04\~em.
-.
-.
-.\" ====================================================================
-.SH TYPEFACES
-.\" ====================================================================
-.
-The driver supports the Dutch, Swiss and Swiss-Narrow scalable
-typefaces, each one in the Regular, Bold, Italic and Bold-Italic styles.
-.
-Additionally, the Courier and Elite monospaced typefaces at the sizes 8
-and 12 points (for Courier) resp.\& 8 and 10 points (for Elite) are
-supported, each one in the Regular, Bold and Italic styles.
-.
-.
-.PP
-The following chart summarizes the font names you can use to access
-these fonts:
-.
-.
-.PP
-.TS
-tab(|) allbox center;
-c c c c c
-ab c c c c
-.
-Typeface | Regular | Bold | Italic | Bold-Italic
-Dutch | TR | TB | TI | TBI
-Swiss | HR | HB | HI | HBI
-Swiss Narrow | HNR | HNB | HNI | HNBI
-Courier | CR | CB | CI |
-Elite | ER | EB | EI |
-.TE
+thousandths of an em;
+the default is
+.B 40
+(0.04\~em).
 .
 .
 .\" ====================================================================
-.SH PAPER SIZES
-.\" ====================================================================
-.
-The paper size can be set in the
-.I DESC
-file or with command-line options to
-.BR grolbp .
-If the paper size is specified both ways, the command-line options take
-precedence over the contents of the
-.I DESC
-file (this applies to the page orientation too).
-.
-.
-.PP
-See
-.BR groff_font (5)
-how to set the paper dimensions in the
-.I DESC
-file.
-.
-.
-.PP
-To set the paper size in the command line, add
-.sp 1
-.in +2m
-.BI \-p \ paper-size
-.in -2m
-.sp 1
-or
-.sp 1
-.in +2m
-.BI \-\-papersize= paper-size
-.in -2m
-.sp 1
-to the other
-.B grolbp
-options, where
-.I paper-size
-is in the same format as in the
-.I DESC
-file.
-.
-.
-.PP
-If no paper size is specified in the
-.I DESC
-file or the command line, a default size of A4 is used.
-.
-.
-.\" ====================================================================
-.SH PAGE ORIENTATION
-.\" ====================================================================
-.
-As with the page size, the orientation of the printed page
-.RB ( portrait
-or
-.BR landscape )
-can be set in the
-.I DESC
-file or with command-line options.
-.
-It is also case insensitive.
-.
-.
-.PP
-To set the orientation in the
-.I DESC
-file, insert a line with the following content:
-.sp 1
-.in +2m
-.B orientation
-.RB [ portrait | landscape ]
-.in -2m
-.sp 1
-.
-Only the first valid orientation command in the
-.I DESC
-file is used.
-.
-.
-.PP
-To set the page orientation with command-line options you can use the
-.B \-o
-or
-.B \-\-orientation
-option with the same parameters
-.RB ( portrait
-or
-.BR landscape )
-as in the
-.I DESC
-file.
-Or you can use the
-.B \-l
-option to force the pages to be printed in landscape.
-.
-.
-.\" ====================================================================
-.SH FONT FILE FORMAT
-.\" ====================================================================
-.
-In addition to the usual commands described in
-.BR groff_font (5),
-.B grolbp
-provides the command
-.I lbpname
-which sets the font name sent to the printer when requesting this font.
-.
-The syntax of this command is:
-.sp 1
-.in +2m
-.B lbpname
-.I printer_font_name
-.in -2m
-.
-.IP \(bu
-For bitmapped fonts,
-.I printer_font_name
-has the form
-.sp 1
-.in +2m
-.RI N\(la base_fontname \(ra\(la font_style \(ra
-.in -2m
-.sp 1
-.I base_fontname
-is the font name as it appears in the printers font listings without the
-first letter, up to (but not including) the font size.
-.I font_style
-can be one of the letters
-.BR R ,
-.BR I ,
-or
-.BR B ,
-indicating the font styles Roman, Italic and Bold respectively.
-.
-.IP
-For instance, if the printer's
-.I font listing A
-shows font \(oqNelite12I.ISO_USA\(cq, the corresponding entry in the
-font description file is
-.sp 1
-.in +2m
-.B lbpname NeliteI
-.in -2m
-.
-.IP
-Note that you may need to modify
-.B grolbp
-to add support for new bitmapped fonts, since the available font names
-and font sizes of bitmapped fonts (as documented above) are hard-coded
-into the program.
-.
-.IP \(bu
-For scalable fonts,
-.I printer_font_name
-is identical to the font name as it appears in the printer's
-.IR "font listing A" .
-.
-.IP
-For instance, to select the \(oqSwiss\(cq font in bold style, which
-appears in the printer's
-.I font listing A
-as \(oqSwiss-Bold\(cq, the required
-.B lbpname
-command line is
-.sp 1
-.in +2m
-.B lbpname Swiss-Bold
-.in -2m
-.sp 1
-.
-.PP
-The argument of
-.B lbpname
-is case sensitive.
-.
-.
-.\" ====================================================================
-.SH ENVIRONMENT
+.SH Environment
 .\" ====================================================================
 .
 .TP
 .I GROFF_FONT_PATH
-A list of directories in which to search for the
-.IR dev name
-directory in addition to the default ones.
+lists directories in which to seek the selected output device's
+directory of device and font description files.
 .
 See
-.BR troff (1)
+.MR \%troff 1
 and
-.BR \%groff_font (5)
-for more details.
+.MR groff_font 5 .
 .
 .
 .\" ====================================================================
-.SH FILES
+.SH Files
 .\" ====================================================================
 .
 .TP
-.I /usr/\:local/\:share/\:groff/\:1.22.4/\:font/devlbp/DESC
-Device description file.
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devlbp/\:DESC
+describes the
+.B lbp
+output device.
+.
 .
 .TP
-.IR /usr/\:local/\:share/\:groff/\:1.22.4/\:font/devlbp/ F
-Font description file for font
-.IR F .
+.IR /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devlbp/ F
+describes the font known
+.RI as\~ F
+on device
+.BR lbp .
+.
 .
 .TP
-.I /usr/\:local/\:share/\:groff/\:1.22.4/\:tmac/lbp.tmac
-Macros for use with
-.BR grolbp .
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%tmac/\:lbp\:.tmac
+defines macros for use with the
+.B lbp
+output device.
+.
+It is automatically loaded by
+.I troffrc
+when the
+.B lbp
+output device is selected.
 .
 .
 .\" ====================================================================
-.SH SEE ALSO
+.SH "See also"
 .\" ====================================================================
 .
-.BR groff (1),
-.BR troff (1),
-.BR groff_out (5),
-.BR groff_font (5),
-.BR groff_char (7)
+.MR groff 1 ,
+.MR \%troff 1 ,
+.MR groff_out 5 ,
+.MR groff_font 5 ,
+.MR groff_char 7
 .
 .
 .\" Restore compatibility mode (for, e.g., Solaris 10/11).
-.cp \n[grolbp_C]
+.cp \n[*groff_grolbp_1_man_C]
+.do rr *groff_grolbp_1_man_C
 .
 .
-.\"
 .\" Local Variables:
+.\" fill-column: 72
 .\" mode: nroff
 .\" End:
-.\" vim: set filetype=groff:
+.\" vim: set filetype=groff textwidth=72:

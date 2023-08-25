@@ -1,18 +1,14 @@
-.TH GROFF_HDTBL 7 "29 November 2018" "groff 1.22.4"
-.SH NAME
-groff_hdtbl \- Heidelberger table macros for GNU roff
-.
-.
-.\" Save and disable compatibility mode (for, e.g., Solaris 10/11).
-.do nr groff_hdtbl_C \n[.C]
-.cp 0
+.TH groff_hdtbl 7 "2 July 2023" "groff 1.23.0"
+.SH Name
+groff_hdtbl \- Heidelberger table macros for GNU
+.I roff
 .
 .
 .\" ====================================================================
 .\" Legal Terms
 .\" ====================================================================
 .\"
-.\" Copyright (C) 2005-2018 Free Software Foundation, Inc.
+.\" Copyright (C) 2005-2020 Free Software Foundation, Inc.
 .\"
 .\" This file is part of groff, the GNU roff type-setting system.
 .\"
@@ -26,11 +22,31 @@ groff_hdtbl \- Heidelberger table macros for GNU roff
 .\" called FDL in the main directory of the groff source package.
 .
 .
+.\" Save and disable compatibility mode (for, e.g., Solaris 10/11).
+.do nr *groff_groff_hdtbl_7_man_C \n[.cp]
+.cp 0
+.
+.\" Define fallback for groff 1.23's MR macro if the system lacks it.
+.nr do-fallback 0
+.if !\n(.f           .nr do-fallback 1 \" mandoc
+.if  \n(.g .if !d MR .nr do-fallback 1 \" older groff
+.if !\n(.g           .nr do-fallback 1 \" non-groff *roff
+.if \n[do-fallback]  \{\
+.  de MR
+.    ie \\n(.$=1 \
+.      I \%\\$1
+.    el \
+.      IR \%\\$1 (\\$2)\\$3
+.  .
+.\}
+.rr do-fallback
+.
+.
 .ig
   Some simple formatting macros.  Note that we use '.ig' here and not a
   comment to make 'mandb' 2.4.1 (and probably more recent versions also)
-  happy; otherwise the '.char' lines and the stuff which follows is included
-  in the 'whatis' database.
+  happy; otherwise the '.char' lines and the stuff which follows is
+  included in the 'whatis' database.
 ..
 .
 .
@@ -68,6 +84,7 @@ groff_hdtbl \- Heidelberger table macros for GNU roff
 .      fam C
 .      \\$2 \&\\\\$*\F[]\F[\\\\*[old-fam]]
 .      fam
+.      rm old-fam
 \\..
 .  .
 .
@@ -81,6 +98,7 @@ groff_hdtbl \- Heidelberger table macros for GNU roff
 .      fam C
 .      \\$1 \\\\$@ \F[]\F[\\\\*[old-fam]]
 .      fam
+.      rm old-fam
 \\..
 .  .
 .
@@ -129,7 +147,10 @@ groff_hdtbl \- Heidelberger table macros for GNU roff
 .
 .de XAA
 .  TQ
-.  CRI \\$@
+.  ie (\\n[.$] < 2) \
+.    CR \\$@
+.  el \
+.    CRI \\$@
 ..
 .
 .
@@ -162,84 +183,87 @@ groff_hdtbl \- Heidelberger table macros for GNU roff
 ..
 .
 .\" ====================================================================
-.SH DESCRIPTION
+.SH Description
 .\" ====================================================================
 .
 The
-.B hdtbl
-macros consist of four base and three optional macros, controlled by about
-twenty arguments.
+.I hdtbl
+macros consist of four base and three optional macros,
+controlled by about twenty arguments.
 .
-The syntax is simple and similar to the
-.B HTML
-table model and nearly as flexible: You can write sequences of tokens (macro
-calls with their arguments and content data), separated by blanks and
-beginning with a macro call, into the same line to get compact and cleanly
-arrranged input.
+The syntax is simple and similar to the HTML table model and nearly as
+flexible:
+you can write sequences of tokens
+(macro calls with their arguments and content data),
+separated by blanks and beginning with a macro call,
+into the same line to get compact and cleanly arrranged input.
 .
 An advantage of
-.B hdtbl
-is that the tables are constructed without calling a preprocessor; this
-means that
-.BR groff 's
+.I hdtbl
+is that the tables are constructed without calling a preprocessor;
+this means that
+.MR groff 7 's
 full macro capabilities are available.
 .
-On the other hand, table processing with
-.B hdtbl
+On the other hand,
+table processing with
+.I hdtbl
 is much slower than using the
-.BR tbl (1)
+.MR \%tbl 1
 preprocessor.
 .
 A further advantage is that the HTML-like syntax of
-.B hdtbl
-will be easily converted to HTML; this is not implemented yet.
+.I hdtbl
+will be easily converted to HTML;
+this is not implemented yet.
 .
 .
 .\" ====================================================================
-.SH USAGE
+.SH Usage
 .\" ====================================================================
 .
 In this and the next section, we present examples to help users
 understand the basic workflow of
-.BR hdtbl .
+.IR hdtbl .
 .
 First of all, you must load the
 .I hdtbl.tmac
 file.
 .
-As with nearly all other groff macro packages, there are two possibilities
-to do so:
+As with nearly all other
+.I groff
+macro packages,
+there are two possibilities to do so:
 .
 Either add the line
 .
+.
 .PP
-.nf
-.nh
 .RS
-.CR .mso hdtbl.tmac
-.fi
-.hy
+.EX
+\&.mso hdtbl.tmac
+.EE
 .RE
+.
 .
 .PP
 to your
 .I roff
 file before using any macros of the
-.B hdtbl
+.I hdtbl
 package, or add the option
 .
 .PP
-.nf
-.nh
 .RS
-.CR \-m hdtbl
-.fi
-.hy
+.EX
+\-m hdtbl
+.EE
 .RE
+.
 .
 .PP
 to the command line of groff (before the document file which contains
-.B hdtbl
+.I hdtbl
 macros).
 .
 Then you can include on or more tables in your document, where each one
@@ -251,11 +275,15 @@ macros, respectively.
 .
 .
 .PP
-In this man page, we approximate the result of each example in the
-.I tty
-format to be as generic as possible since
-.B hdtbl
-currently only supports the PS and PDF output devices.
+In this man page,
+we approximate the result of each example as terminal output to be as
+generic as possible since
+.I hdtbl
+currently only supports the
+.B ps
+and
+.B pdf
+output drivers.
 .
 .
 .PP
@@ -264,49 +292,46 @@ four base table macros in the right order.
 .
 Here we construct a table with only one cell.
 .
+.
 .PP
 .RS
-.nf
-.nh
-.CR .TBL
-.CR .TR
-.CR .TD
-.CI contents of the table cell
-.CR .ETB
-.fi
-.hy
+.EX
+\&.TBL
+\&.TR
+\&.TD
+.I contents of the table cell
+\&.ETB
+.EE
 .RE
 .
 .
 .PP
-A
-.I tty
-representation is
+A terminal representation is
+.
 .
 .PP
-.nf
-.nh
-.ft CR
+.if t .ne 3v
 .RS
+.EX
+.tr -\-
 +------------------------------------------------------+
-| contents-of-the-table-cell                           |
+.\" That's 27 spaces below.
+.RI "| " contents-of-the-table-cell "                           |"
 +------------------------------------------------------+
+.tr --
+.EE
 .RE
-.ft
-.hy
-.fi
 .
 .
 .PP
 Equivalent to the above is the following notation.
 .
+.
 .PP
 .RS
-.nh
-.nf
-.CRI ".TBL .TR .TD \[dq]" "contents of the table cell" "\[dq] .ETB"
-.fi
-.hy
+.EX
+.RI ".TBL .TR .TD \[dq]" "contents of the table cell" "\[dq] .ETB"
+.EE
 .RE
 .
 .
@@ -329,37 +354,32 @@ can be written as
 .
 .PP
 .RS
-.nf
-.nh
-.CR ".TBL cols=2"
-.CR ".  TR .TD 1*1 .TD 1*2"
-.CR ".  TR .TD 2*1 .TD 2*2"
-.CR ".ETB"
-.fi
-.hy
+.EX
+\&.TBL cols=2
+\&.\&  TR .TD 1*1 .TD 1*2
+\&.\&  TR .TD 2*1 .TD 2*2
+\&.ETB
+.EE
 .RE
 .
 .
 .PP
-A
-.I tty
-representation is
+A terminal representation is
 .
 .
 .PP
-.nf
-.nh
-.ft CR
+.if t .ne 5v
 .RS
+.EX
+.tr -\-
 +--------------------------+---------------------------+
 | 1*1                      | 1*2                       |
 +--------------------------+---------------------------+
 | 2*1                      | 2*2                       |
 +--------------------------+---------------------------+
+.tr --
+.EE
 .RE
-.ft
-.hy
-.fi
 .
 .
 .PP
@@ -372,11 +392,13 @@ argument, see below).
 .
 .
 .PP
-The contents of a table cell is arbitrary; for example, it can be another
-table, without restriction to the nesting depth.
+The contents of a table cell is arbitrary;
+for example,
+it can be another table,
+without restriction to the nesting depth.
 .
-A given table layout can be either constructed with suitably nested tables
-or with proper arguments to
+A given table layout can be either constructed with suitably nested
+tables or with proper arguments to
 .CR .TD
 and
 .CR .TH\c
@@ -384,48 +406,48 @@ and
 .
 Note, however, that this table
 .
+.
 .PP
 .RS
-.nf
-.nh
-.CR ".TBL"
-.CR ".  TR"
-.CR ".    TD"
-.CR ".      nop 1*1 1*2"
-.CR ".  TR"
-.CR ".    TD"
-.CR ".      TBL cols=2 border="
-.CR ".        TR"
-.CR ".          TD"
-.CR ".            nop 2*1"
-.CR ".          TD"
-.CR ".            nop 2*2"
-.CR ".      ETB"
-.CR ".ETB"
-.fi
-.hy
+.EX
+\&.TBL
+\&.\&  TR
+\&.\&    TD
+\&.\&      nop 1*1 1*2
+\&.\&  TR
+\&.\&    TD
+\&.\&      TBL cols=2 border=
+\&.\&        TR
+\&.\&          TD
+\&.\&            nop 2*1
+\&.\&          TD
+\&.\&            nop 2*2
+\&.\&      ETB
+\&.ETB
+.EE
 .RE
+.
 .
 .PP
 and this table
 .
+.
 .PP
 .RS
-.nf
-.nh
-.CR ".TBL cols=2"
-.CR ".  TR"
-.CR ".    TD colspan=2"
-.CR ".      nop 1*1 1*2"
-.CR ".  TR"
-.CR ".    TD"
-.CR ".      nop 2*1"
-.CR ".    TD"
-.CR ".      nop 2*2"
-.CR ".ETB"
-.fi
-.hy
+.EX
+\&.TBL cols=2
+\&.\&  TR
+\&.\&    TD colspan=2
+\&.\&      nop 1*1 1*2
+\&.\&  TR
+\&.\&    TD
+\&.\&      nop 2*1
+\&.\&    TD
+\&.\&      nop 2*2
+\&.ETB
+.EE
 .RE
+.
 .
 .PP
 are similar but not identical (the use of
@@ -437,10 +459,10 @@ is purely cosmetic to get proper indentation).
 The first table looks like
 .
 .PP
-.nf
-.nh
-.ft CR
+.if t .ne 7v
 .RS
+.EX
+.tr -\-
 +------------------------------------------------------+
 | 1*1 1*2                                              |
 +------------------------------------------------------+
@@ -448,57 +470,58 @@ The first table looks like
 | 2*1                         2*2                      |
 |                                                      |
 +------------------------------------------------------+
+.tr --
+.EE
 .RE
-.ft
-.hy
-.fi
+.
 .
 .PP
 and the second one like
 .
+.
 .PP
-.nf
-.nh
-.ft CR
+.if t .ne 5v
 .RS
+.EX
+.tr -\-
 +------------------------------------------------------+
 | 1*1 1*2                                              |
 +---------------------------+--------------------------+
 | 2*1                       | 2*2                      |
 +---------------------------+--------------------------+
+.tr --
+.EE
 .RE
-.ft
-.hy
-.fi
+.
 .
 .PP
-Here the latter table in a more compact form.
+Here is the latter table in a more compact form.
 .
 .PP
 .RS
-.nf
-.nh
-.CR ".TBL cols=2 .TR \[dq].TD colspan=2\[dq] 1*1 1*2"
-.CR ".            TR .TD 2*1 .TD 2*2 .ETB"
-.fi
-.hy
+.EX
+\&.TBL cols=2 .TR \[dq].TD colspan=2\[dq] 1*1 1*2
+\&.\&            TR .TD 2*1 .TD 2*2 .ETB
+.EE
 .RE
 .
 .
 .PP
-If a macro has one or more arguments (see below), and it is not starting a
-line, everything belonging to this macro including the macro itself must be
+If a macro has one or more arguments
+(see below),
+and it is not starting a line,
+everything belonging to this macro including the macro itself must be
 enclosed in double quotes.
 .
 .
 .\" ====================================================================
-.SH MACROS AND ARGUMENTS
+.SH "Macros and arguments"
 .\" ====================================================================
 .
 The order of macro calls and other tokens follows the HTML model.
 .
 In the following list, valid predecessors and successors of all
-.B hdtbl
+.I hdtbl
 macros are given, together with the possible arguments.
 .
 .PP
@@ -535,15 +558,16 @@ Another possible form is
 .
 .
 .PP
-However, this is limited to the case where the macro is the first one in the
-line and not already enclosed in double quotes.
+However,
+this is limited to the case where the macro is the first one in the line
+and not already enclosed in double quotes.
 .
 .
 .PP
 Argument values specified below as\~\c
 .CI c
 are colors predefined by
-.B groff
+.I groff
 or colors defined by the user with the
 .CR .defcolor
 request.
@@ -559,7 +583,7 @@ are natural numbers.
 Argument values\~\c
 .CI n
 are numerical values with the usual
-.B groff
+.I groff
 scaling indicators.
 .
 Some of the arguments are specific to one or two macros, but most of
@@ -614,7 +638,8 @@ Border color.
 .XAA cols= m
 Number of table columns.
 .
-This argument is necessary if more than one column is in the table and no
+This argument is necessary if more than one column is in the table and
+no
 .CR \[oq]width\[cq]
 arguments are present.
 .
@@ -657,11 +682,12 @@ Widths of table cells.
 .CI n
 or natural numbers with the pseudo-scaling indicator
 .CR \[oq]%\[cq]\c
-, with the meaning \[lq]percent of the actual line length (or column length
-for inner tables, respectively)\[rq].
+, with the meaning \[lq]percent of the actual line length
+(or column length for inner tables,
+respectively)\[rq].
 .
-If there are less width values than table columns, the last width value is
-used for the remaining cells.
+If there are less width values than table columns,
+the last width value is used for the remaining cells.
 .
 The argument
 .
@@ -675,8 +701,8 @@ for example indicates that the first column is 1.5\~inches wide; the
 remaining columns take 1/10 of the column length each.
 .
 .XDEF
-The table width equals the outer line length or column length; the columns
-have equal widths.
+The table width equals the outer line length or column length;
+the columns have equal widths.
 .
 .XAA height= n
 Height of the table.
@@ -789,49 +815,48 @@ cells left and right of this column.
 .
 .IP
 .B Remark:
-Overlapping of column and row spanning, as in the following table fragment
-(the overlapping happens in the second cell in the second row), is invalid
-and causes incorrect results.
+Overlapping of column and row spanning,
+as in the following table fragment
+(the overlapping happens in the second cell in the second row),
+is invalid and causes incorrect results.
+.
 .
 .RS
 .IP
-.nh
-.nf
-.CR ".TR .TD 1*1 \[dq].TD 1*2 rowspan=2\[dq] .TD 1*3"
-.CR ".TR \[dq].TD 2*1 colspan=2\[dq]         .TD 2*3"
-.fi
-.hy
+.EX
+\&.TR .TD 1*1 \[dq].TD 1*2 rowspan=2\[dq] .TD 1*3
+\&.TR \[dq].TD 2*1 colspan=2\[dq]         .TD 2*3
+.EE
 .RE
+.
 .
 .PP
 A working example for headers and cells with
 .B colspan
 is
 .
+.
 .PP
 .RS
-.nf
-.nh
-.CR .TBL cols=3
-.CR ".  TR" \[dq].TH colspan=2\[dq] header1+2 .TH header3
-.CR ".  TR" .TD 1*1 .TD 1*2 .TD 1*3
-.CR ".  TR" .TD 2*1 \[dq].TD colspan=2\[dq] 2*2+3
-.CR .ETB
-.fi
-.hy
+.EX
+\&.TBL cols=3
+\&.\&  TR \[dq].TH colspan=2\[dq] header1+2 .TH header3
+\&.\&  TR .TD 1*1 .TD 1*2 .TD 1*3
+\&.\&  TR .TD 2*1 \[dq].TD colspan=2\[dq] 2*2+3
+\&.ETB
+.EE
 .RE
+.
 .
 .PP
 This looks like
 .
+.
 .PP
-.ft CR
-.if t \{\
-.  ne 7v
-.\}
+.if t .ne 7v
 .RS
-.nf
-.nh
+.EX
+.tr -\-
 +------------------------------+---------------+
 |          header1+2           |    header3    |
 +--------------+---------------+---------------+
@@ -839,56 +864,56 @@ This looks like
 +--------------+---------------+---------------+
 | 2*1          | 2*2+3                         |
 +--------------+-------------------------------+
+.tr --
+.EE
 .RE
-.ft
-.hy
-.fi
+.
 .
 .PP
 A working example with
 .B rowspan
 is
 .
+.
 .PP
 .RS
-.nf
-.nh
-.CR .TBL cols=3
-.CR ".  TR"
-.CR ".  TD" 1*1
-.CR ".  TD" rowspan=2 1+2*2
-.CR ".  TD" 1*3
-.CR .
-.CR ".  TR"
-.CR ".  TD" 2*1
-.CR ".  TD" 2*3
-.CR .ETB
-.fi
-.hy
+.EX
+\&.TBL cols=3
+\&.\&  TR
+\&.\&  TD 1*1
+\&.\&  TD rowspan=2 1+2*2
+\&.\&  TD 1*3
+\&.\&
+\&.\&  TR
+\&.\&  TD 2*1
+\&.\&  TD 2*3
+\&.ETB
+.EE
 .RE
+.
 .
 .PP
 which looks like
 .
+.
 .PP
-.ft CR
+.if t .ne 5v
 .RS
-.nf
-.nh
+.EX
+.tr -\-
 +--------------+---------------+---------------+
 | 1*1          | 1+2*2         | 1*3           |
 +--------------+               +---------------+
 | 2*1          |               | 2*3           |
 +--------------+---------------+---------------+
-.hy
-.fi
+.tr --
+.EE
 .RE
-.ft CR
-.
 .RE
 .RE
 .
 .\"==================================================================
+.
 .
 .TP
 .CB ".ETB \[lB]hold\[rB]"
@@ -905,9 +930,9 @@ If the argument
 .CR \[oq]hold\[cq]
 is given, the table is held until it is freed by calling the macro
 .CR .t*free\c
-, which in turn prints the table immediately, either at the current position
-or at the top of the next page if its height is larger than the remaining
-space on the page.
+, which in turn prints the table immediately,
+either at the current position or at the top of the next page if its
+height is larger than the remaining space on the page.
 .
 .IP \[bu] 3
 Otherwise, if the table is higher than the remaining space on the page,
@@ -952,7 +977,8 @@ macro.
 .
 .
 .\" ====================================================================
-.SS "Arguments common to \f[CB].TBL\f[], \f[CB].TR\f[], \f[CB].TD\f[], and \f[CB].TH\f[]"
+.SS "Arguments common to \f[CB].TBL\f[], \f[CB].TR\f[], \f[CB].TD\f[], \
+and \f[CB].TH\f[]"
 .\" ====================================================================
 .
 The arguments described in this section can be specified with the
@@ -961,8 +987,11 @@ and
 .CR .TR
 macros, but they are eventually passed on to the table cells.
 .
-If omitted, the defaults take place, which the user can change by setting
-the corresponding default registers or strings, as documented below.
+If omitted,
+the defaults take place,
+which the user can change by setting the corresponding default registers
+or strings,
+as documented below.
 .
 Setting an argument with the
 .CR .TBL
@@ -1000,11 +1029,14 @@ The foreground color of the cell contents.
 The font family for the table.
 .
 .CI name
-is one of the groff font families, for example
+is a
+.I groff
+font family identifier,
+such as
 .CR A
-for the AvantGarde fonts or
+for Avant Garde or
 .CR HN
-for Helvetica-Narrow.
+for Helvetica Narrow.
 .
 .XDEF
 The font family found before the table (string
@@ -1025,15 +1057,17 @@ One of
 for roman,
 .BR bold ,
 .IR italic ,
-or \f[BI]bold italic\f[], respectively.
+or \f[BI]bold italic\f[], \" \f[BI] is not portable man(7)
+respectively.
 .
 As with
-.BR roff 's
-.CR .ft
-request the
+.IR roff 's
+.B .ft
+request,
+the
 .CR \[oq]fst\[cq]
-argument can be used to specify the font family and font style together, for
-example
+argument can be used to specify the font family and font style together,
+for example
 .CR \[oq]fst=HNBI\[cq]
 instead of
 .CR \[oq]ff=HN\[cq]
@@ -1114,7 +1148,8 @@ this is a separator line to the cell below.
 : a double separator line.
 .
 .IP
-The thickness of the separator lines is the half of the border thickness,
+The thickness of the separator lines is the half of the border
+thickness,
 but at least 0.1\~inches.
 .
 The distance between the double lines is equal to the line thickness.
@@ -1125,8 +1160,8 @@ Together with
 .CR \[oq]border=0\[cq]
 for proper formatting the value of
 .CR \[oq]csp\[cq]
-must be at least .05\~inches for single separator lines and .15\~inches for
-double separator lines.
+must be at least \&.05\~inches for single separator lines and
+\&.15\~inches for double separator lines.
 .
 .XDEFS hl=s t*hl
 .
@@ -1156,7 +1191,7 @@ argument above.
 .
 .
 .\" ====================================================================
-.SH HDTBL CUSTOMIZATION
+.SH "\f[I]hdtbl\f[] customization"
 .\" ====================================================================
 .
 .PP
@@ -1164,20 +1199,22 @@ Before creating the first table, you should configure default values
 to minimize the markup needed in each table.
 .
 The following example sets up defaults suitable for typical papers:
+.
+.
 .PP
 .RS
-.nf
-.CR ".ds t*bgc white\e\[dq] background color
-.CR ".ds t*fgc black\e\[dq] foreground color
-.CR ".ds t*bc black\e\[dq]  border color
-.CR ".nr t*cpd 0.1n\e\[dq]  cell padding
-.fi
+.EX
+\&.ds t*bgc white\[rs]\[dq] background color
+\&.ds t*fgc black\[rs]\[dq] foreground color
+\&.ds t*bc black\[rs]\[dq]  border color
+\&.nr t*cpd 0.1n\[rs]\[dq]  cell padding
+.EE
 .RE
 .
 .
 .PP
 The file
-.B examples/common.roff
+.I /usr/\:\%share/\:\%doc/\:\%groff\-1.23.0/\:\%examples/\:hdtbl/\:\%common\:.roff
 provides another example setup
 in the \[lq]minimal Page setup\[rq] section.
 .
@@ -1191,19 +1228,20 @@ to the page header macro of your document's main macro package.
 .
 For example, say
 .
+.
 .PP
 .RS
-.nf
-.CR ".am pg@top"
-.CR ".  t*hm"
-.CR ".."
-.fi
+.EX
+\&.am pg@top
+\&.\&  t*hm
+\&..
+.EE
 .RE
 .
 .
 .PP
 if you use the
-.B ms
+.I ms
 macro package.
 .
 .
@@ -1215,81 +1253,94 @@ and for missing
 .CR ETB
 macros (table not closed).
 .
-You can append this macro
-to the \[lq]end\[rq] macro of your document's main macro package.
+You can call this macro by appending it the to end-of-input macro of
+the main,
+or \[lq]full-service\[rq],
+macro package your document uses.
 .
-For example:
+For example,
+try
 .
-.PP
+.
 .RS
-.nf
-.nh
-.CR ".am pg@end-text"
-.CR ".  t*EM"
-.CR ".."
-.fi
-.hy
+.EX
+\&.am pg@end\-text
+\&.\&  t*EM
+\&..
+.EE
 .RE
 .
-.PP
-If you use the
-.B ms
-macro package.
+if you use the
+.I ms
+package.
 .
 .
 .\" ====================================================================
-.SH BUGS AND SUGGESTIONS
+.SH "Bugs and suggestions"
 .\" ====================================================================
 .
-Please send your commments to the
-.MT groff@\:gnu.org
-groff mailing list
+Please send your comments to the
+.MT groff@\:gnu\:.org
+.I groff
+mailing list
 .ME
 or directly to the author.
 .
 .
 .\" ====================================================================
-.SH AUTHORS
+.SH Authors
 .\" ====================================================================
+.
 The
-.B hdtbl
+.I hdtbl
 macro package was written by
-.MT Joachim.Walsdorff@\:urz.uni\-heidelberg.de
+.MT Joachim\:.Walsdorff@\:urz\:.uni\-heidelberg\:.de
 Joachim Walsdorff
 .ME .
 .
 .
 .\" ====================================================================
-.SH SEE ALSO
+.SH "See also"
 .\" ====================================================================
+.
 .TP
-.BR groff (1)
+.MR groff 1
 provides an overview of GNU
 .I roff
 and details how to invoke
 .I groff
 at the command line.
+.
+.
 .TP
-.BR groff (7)
+.MR groff 7
 summarizes the
 .I roff
 language and GNU extensions to it.
+.
+.
 .TP
-.BR tbl (1)
+.MR \%tbl 1
 describes the traditional
 .I roff
 preprocessor for tables.
 .
 .
+.\" Unwind (some of) the stuff we've done.
+.rchar \[lB]
+.rchar \[rB]
+.rchar \[or]
+.rchar \[ell]
+.rchar \[oq]
+.rchar \[cq]
+.
 .\" Restore compatibility mode (for, e.g., Solaris 10/11).
-.cp \n[groff_hdtbl_C]
+.cp \n[*groff_groff_hdtbl_7_man_C]
+.do rr *groff_groff_hdtbl_7_man_C
 .
-.
-.\" ====================================================================
-.\" Emacs settings
-.\" ====================================================================
 .
 .\" Local Variables:
+.\" fill-column: 72
 .\" mode: nroff
 .\" End:
-.\" vim: filetype=groff:
+.\" vim: set filetype=groff textwidth=72:

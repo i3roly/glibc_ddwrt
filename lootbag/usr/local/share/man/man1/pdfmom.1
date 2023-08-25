@@ -1,13 +1,16 @@
-.TH PDFMOM 1 "18 November 2018" "groff 1.22.4"
-.SH NAME
-pdfmom \- produce PDF documents using the mom macro package for groff
+.TH pdfmom 1 "2 July 2023" "groff 1.23.0"
+.SH Name
+pdfmom \- produce PDF documents using the
+.I mom
+macro package for
+.I groff
 .
 .
 .\" ====================================================================
 .\" Legal Terms
 .\" ====================================================================
 .\"
-.\" Copyright (C) 2012-2018 Free Software Foundation, Inc.
+.\" Copyright (C) 2012-2020 Free Software Foundation, Inc.
 .\"
 .\" Permission is granted to make and distribute verbatim copies of this
 .\" manual provided the copyright notice and this permission notice are
@@ -25,37 +28,60 @@ pdfmom \- produce PDF documents using the mom macro package for groff
 .\" instead of in the original English.
 .
 .
+.\" Save and disable compatibility mode (for, e.g., Solaris 10/11).
+.do nr *groff_pdfmom_1_man_C \n[.cp]
+.cp 0
+.
+.\" Define fallback for groff 1.23's MR macro if the system lacks it.
+.nr do-fallback 0
+.if !\n(.f           .nr do-fallback 1 \" mandoc
+.if  \n(.g .if !d MR .nr do-fallback 1 \" older groff
+.if !\n(.g           .nr do-fallback 1 \" non-groff *roff
+.if \n[do-fallback]  \{\
+.  de MR
+.    ie \\n(.$=1 \
+.      I \%\\$1
+.    el \
+.      IR \%\\$1 (\\$2)\\$3
+.  .
+.\}
+.rr do-fallback
+.
+.
 .\" ====================================================================
-.SH SYNOPSIS
+.SH Synopsis
 .\" ====================================================================
 .
 .SY pdfmom
-.OP \-Tpdf
+.RB [ \-Tpdf ]
 .RI [ groff-options ]
-.I file
-\&.\|.\|.\&
+.RI [ file\~ .\|.\|.]
 .YS
+.
 .
 .SY pdfmom
 .B \-Tps
 .RI [ pdfroff-options ]
 .RI [ groff-options ]
-.I file
-\&.\|.\|.\&
+.RI [ file\~ .\|.\|.]
 .YS
+.
 .
 .SY pdfmom
 .B \-v
+.
+.SY pdfmom
+.B \-\-version
 .YS
 .
 .
 .\" ====================================================================
-.SH DESCRIPTION
+.SH Description
 .\" ====================================================================
 .
 .I pdfmom
 is a wrapper around
-.IR groff (1)
+.MR groff 1
 that facilitates the production of PDF documents from files
 formatted with the
 .I mom
@@ -66,9 +92,10 @@ macros.
 .I pdfmom
 prints to the standard output,
 so output must usually be redirected to a destination file.
+.
 The size of the final PDF can be reduced by piping the output
 through
-.IR ps2pdf (1).
+.MR ps2pdf 1 .
 .
 .
 .P
@@ -76,43 +103,47 @@ If called with the
 .B \-Tpdf
 option (which is the default),
 .I pdfmom
-processes files using groff's native PDF driver,
-.IR gropdf (1).
+processes files using
+.IR groff 's
+native PDF driver,
+.MR gropdf 1 .
 .
 If
 .B \-Tps
-is given, processing is passed over to
+is given,
+processing is passed over to
 .IR pdfroff ,
 which uses
 .IR groff 's
 PostScript driver.
 .
-In either case, multiple runs of the source file are performed in
-order to satisfy any forward references in the document.
+In either case,
+multiple runs of the source file are performed in order to satisfy any
+forward references in the document.
 .
 .
 .P
 .I pdfmom
 accepts all the same options as
 .IR groff .
+.
 If
 .B \-Tps
-is given, the options associated with
+is given,
+the options associated with
 .I pdfroff
 are accepted as well.
 .
-Please note that when
+When
 .I pdfmom
 calls
 .IR pdfroff ,
-the
-.RS
-.B \-mpdfmark \-mom \-\-no-toc
-.RE
-options are implied and should not be given on the
-command line.
+the options
+.RB \[lq] "\-mpdfmark \-mom \-\-no\-toc" \[rq]
+options are implied and should not be given on the command line.
 .
-Equally, it is not necessary to supply the
+Equally,
+it is not necessary to supply the
 .B \-mom
 or
 .B "\-m\~mom"
@@ -125,7 +156,10 @@ is absent.
 PDF integration with the
 .I mom
 macros is discussed in full in the manual
-.IR "Producing PDFs with groff and mom" ,
+\[lq]Producing PDFs with
+.I groff
+and
+.IR mom \[rq],
 which was itself produced with
 .IR pdfmom .
 .
@@ -133,58 +167,63 @@ which was itself produced with
 .P
 If called with the
 .B \-v
-option,
+or
+.B \-\-version
+options,
 .I pdfmom
-simply displays its version information and exits.
+displays its version information and exits.
 .
 .
 .\" ====================================================================
-.SH BUGS
+.SH Authors
 .\" ====================================================================
 .
 .I pdfmom
-sometimes issues warnings of the type
-.RS
-\&.\|.\|.:
-can't transparently output node at top level
-.RE
-.
-but this is more of an annoyance than a bug, and may safely be ignored.
-.
-.
-.\" ====================================================================
-.SH AUTHORS
-.\" ====================================================================
-.
-.I pfdmom
 was written by
-.MT deri@\:chuzzlewit.demon.co.uk
+.MT deri@\:chuzzlewit\:.myzen\:.co\:.uk
 Deri James
 .ME
 and
-.MT peter@\:schaffter.ca
+.MT peter@\:schaffter\:.ca
 Peter Schaffter
-.ME .
+.ME ,
+and is maintained by James.
 .
 .
 .\" ====================================================================
-.SH "SEE ALSO"
+.SH "See also"
 .\" ====================================================================
 .
-.IR "Producing PDFs with groff and mom" ,
-by Deri James and Peter Schaffter;
-a copy is installed at
-.IR \%/usr/\:local/\:share/\:doc/\:groff\-1.22.4/\:pdf/\:mom\-pdf.pdf .
+.TP
+.I /usr/\:\%share/\:\%doc/\:\%groff\-1.23.0/\:\%pdf/\:mom\-pdf.pdf
+\[lq]Producing PDFs with
+.I groff
+and
+.IR mom \[rq],
+by Deri James and Peter Schaffter.
+.
+This file,
+together with its source,
+.IR mom\-pdf.mom ,
+is part of the
+.I groff
+distribution.
 .
 .
 .P
-.IR groff (1),
-.IR gropdf (1),
-.IR pdfroff (1),
-.IR ps2pdf (1)
+.MR groff 1 ,
+.MR gropdf 1 ,
+.MR pdfroff 1 ,
+.MR ps2pdf 1
+.
+.
+.\" Restore compatibility mode (for, e.g., Solaris 10/11).
+.cp \n[*groff_pdfmom_1_man_C]
+.do rr *groff_pdfmom_1_man_C
 .
 .
 .\" Local Variables:
+.\" fill-column: 72
 .\" mode: nroff
 .\" End:
-.\" vim: set filetype=groff:
+.\" vim: set filetype=groff textwidth=72:

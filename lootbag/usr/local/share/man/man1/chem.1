@@ -1,17 +1,15 @@
-.TH CHEM 1 "29 November 2018" "groff 1.22.4"
-.SH NAME
-chem \- groff preprocessor for producing chemical structure diagrams
-.
-.\" chem.1 - man page for chem (section 1).
-.\" Source file position:  <groff_source_top>/contrib/chem/chem.man
-.\" Installed position:    $prefix/share/man/man1/chem.1
+.TH \%chem 1 "2 July 2023" "groff 1.23.0"
+.SH Name
+\%chem \- embed chemical structure diagrams in
+.I groff
+documents
 .
 .
 .\" ====================================================================
 .\" Legal Terms
 .\" ====================================================================
 .\"
-.\" Copyright (C) 2006-2018 Free Software Foundation, Inc.
+.\" Copyright (C) 2006-2020 Free Software Foundation, Inc.
 .\"
 .\" This file is part of chem, which is part of groff, a free software
 .\" project.
@@ -24,51 +22,54 @@ chem \- groff preprocessor for producing chemical structure diagrams
 .\" <http://www.gnu.org/licenses/gpl-2.0.html>.
 .
 .
-.\" ====================================================================
-.\" Setup
-.\" ====================================================================
-.
-.
 .\" Save and disable compatibility mode (for, e.g., Solaris 10/11).
-.do nr chem_C \n[.C]
+.do nr *groff_chem_1_man_C \n[.cp]
 .cp 0
 .
+.\" Define fallback for groff 1.23's MR macro if the system lacks it.
+.nr do-fallback 0
+.if !\n(.f           .nr do-fallback 1 \" mandoc
+.if  \n(.g .if !d MR .nr do-fallback 1 \" older groff
+.if !\n(.g           .nr do-fallback 1 \" non-groff *roff
+.if \n[do-fallback]  \{\
+.  de MR
+.    ie \\n(.$=1 \
+.      I \%\\$1
+.    el \
+.      IR \%\\$1 (\\$2)\\$3
+.  .
+.\}
+.rr do-fallback
+.
 .
 .\" ====================================================================
-.\" Characters
+.SH Synopsis
 .\" ====================================================================
 .
-.\" Ellipsis ...
-.ie t .ds EL \fS\N'188'\fP\"
-.el .ds EL \&.\|.\|.\&\"
-.\" called with \*(EL
-.
-.
-.\" ====================================================================
-.SH "SYNOPSIS"
-.\" ====================================================================
-.
-.SY chem
-.OP \-\-
-.RI [ filespec
-\*(EL]
+.SY \%chem
+.RB [ \-\- ]
+.RI [ file\~ .\|.\|.]
 .YS
 .
-.SY chem
+.
+.SY \%chem
 .B \-h
-.SY chem
+.
+.SY \%chem
 .B \-\-help
 .YS
 .
-.SY chem
+.
+.SY \%chem
 .B \-v
-.SY chem
+.
+.SY \%chem
 .B \-\-version
 .YS
 .
 .
 .\" ====================================================================
-.SH DESCRIPTION
+.SH Description
 .\" ====================================================================
 .
 .I chem
@@ -77,13 +78,13 @@ produces chemical structure diagrams.
 Today's version is best suited for organic chemistry (bonds, rings).
 .
 The
-.B chem
+.I \%chem
 program is a
-.B groff
+.I groff
 preprocessor like
-.BR eqn ,
-.BR pic ,
-.BR tbl ,
+.IR \%eqn ,
+.IR \%pic ,
+.IR \%tbl ,
 etc.
 .
 It generates
@@ -96,15 +97,13 @@ language.
 .
 .
 .P
-A
-.I filespec
-argument is either a file name of an existing file or a minus
-character
-.BR \- ,
-meaning standard input.
-.
-If no argument is specified then standard input is taken
-automatically.
+If no operands are given,
+or if
+.I file
+is
+.RB \[lq] \- \[rq],
+.I \%chem
+reads the standard input stream.
 .
 .B \-h
 and
@@ -120,12 +119,12 @@ all exit.
 .
 .P
 The program
-.B chem
+.I \%chem
 originates from the Perl source file
 .IR chem.pl .
 .
 It tells
-.B pic
+.I \%pic
 to include a copy of the macro file
 .IR chem.pic .
 .
@@ -153,13 +152,11 @@ lines looks like this
 .
 .
 .IP
-.nf
-.ft B
+.EX
 \&.cstart
-\fIchem data\fP
+.I chem data
 \&.cend
-.ft
-.fi
+.EE
 .
 .
 .P
@@ -168,7 +165,7 @@ Lines containing the keywords
 and
 .B .cend
 start and end the input for
-.BR chem ,
+.IR \%chem ,
 respectively.
 .
 In
@@ -195,15 +192,13 @@ commands to draw the diagram.
 As an example,
 .
 .IP
-.nf
-.ft B
+.EX
 \&.cstart
 CH3
 bond
 CH3
 \&.cend
-.ft
-.fi
+.EE
 .
 .
 .P
@@ -213,45 +208,43 @@ groups with a bond between them.
 .
 .
 .P
-To actually view this, you must run
-.B chem
-followed by
-.BR groffer :
-.
-.IP
-.B chem [file \*(EL] | groffer
-.
-.P
 If you want to create just
-.B groff
+.I groff
 output, you must run
-.B chem
+.I \%chem
 followed by
-.B groff
+.I groff
 with the option
 .B \-p
 for the activation of
-.BR pic :
+.IR \%pic :
 .IP
-.B chem [file \*(EL] | groff \-p \*(EL
+.I \%chem
+.RI [ file\~ .\|.\|.\&]
+.BR "| groff \-p\~" .\|.\|.
 .
 .
 .\" ====================================================================
-.SH THE LANGUAGE
+.SH Language
 .\" ====================================================================
 .
 The
 .I chem
-input language is rather small.  It provides rings of several styles
-and a way to glue them together as desired, bonds of several styles,
-moieties (e.g.,
+input language is rather small.
+.
+It provides rings of several styles and a way to glue them together as
+desired,
+bonds of several styles,
+moieties
+(e.g.,
 .BR C ,
 .BR NH3 ,
-\*(EL, and strings.
+\&.\|.\|.,
+and strings.
 .
 .
 .\" ====================================================================
-.SS Setting Variables
+.SS "Setting variables"
 .\" ====================================================================
 .
 There are some variables that can be set by commands.
@@ -389,11 +382,11 @@ place.
 .SS Rings
 .\" ====================================================================
 .
-There are lots of rings, but only 5 and 6-sided rings get
-much support.
+There are lots of rings,
+but only five- and six-sided rings get much support.
 .
 .B ring
-by itself is a 6-sided ring;
+by itself is a six-sided ring;
 .B benzene
 is the benzene ring with a circle inside.
 .B aromatic
@@ -407,14 +400,14 @@ puts a circle into any kind of ring.
 .RB [ \%double\ \c
 .IR i , j\ \/\c
 .IR k , l\ \/\c
-\*(EL
+\&.\|.\|.\&
 .RI [ picstuff ]
 .YS
 .RE
 .
 .
 .P
-The vertices of a ring are numbered 1, 2, \*(EL from the
+The vertices of a ring are numbered 1, 2, \&.\|.\|.\& from the
 vertex that points in the natural compass direction.
 .
 So for a hexagonal ring with the point at the top, the top vertex
@@ -424,18 +417,16 @@ vertex\~1.
 This is expressed as
 .
 .IP
-.ft B
-.nf
+.EX
 R1: ring pointing up
 R2: ring pointing right
-.fi
-.ft
+.EE
 .
 .
 .P
 The ring vertices are named
 .BR .V1 ,
-\*(EL,
+\&.\|.\|.,
 .BI .V n\fR,\fP
 with
 .B .V1
@@ -459,23 +450,26 @@ is the rightmost vertex and
 .B R2.V4
 the leftmost.
 .
-These vertex names are used for connecting bonds or other rings.  For
-example,
+These vertex names are used for connecting bonds or other rings.
+.
+For example,
 .
 .IP
-.ft B
-.nf
+.EX
 R1: benzene pointing right
 R2: benzene pointing right with .V6 at R1.V2
-.fi
-.ft
+.EE
+.
+.
 .P
 creates two benzene rings connected along a side.
 .
 .
 .P
 Interior double bonds are specified as
-.BI \%double\  n1 , n2\ n3 , n4\ \fR\*(EL;\fP
+.B \%double
+.IB n1 , "n2 n3" , n4
+.RB .\|.\|. ;
 each number pair adds an interior bond.
 .
 So the alternate form of a benzene ring is
@@ -506,16 +500,16 @@ and
 .
 .
 .P
-There are two 5-sided rings.
+There are two five-sided rings.
 .
 .B ring5
-is pentagonal with a side that matches the 6-sided ring; it has four
-natural directions.
+is pentagonal with a side that matches the six-sided ring;
+it has four natural directions.
 .
 A
 .B \%flatring
-is a 5-sided ring created by chopping one corner of a 6-sided ring so
-that it exactly matches the 6-sided rings.
+is a five-sided ring created by chopping one corner of a six-sided ring
+so that it exactly matches the six-sided rings.
 .
 .
 .P
@@ -523,7 +517,7 @@ The description of a ring has to fit on a single line.
 .
 .
 .\" ====================================================================
-.SS Moieties and Strings
+.SS "Moieties and strings"
 .\" ====================================================================
 .
 A moiety is a string of characters beginning with a capital letter,
@@ -612,8 +606,10 @@ command.
 .
 It represents a string that should be printed (without the quotes).
 .
-Text within quotes \(dq\*(EL\(dq is treated more or less
-like a moiety except that no changes are made to the quoted part.
+Text within quotes
+.BR \(dq .\|.\|.\& \(dq
+is treated more or less like a moiety except that no changes are made to
+the quoted part.
 .
 .
 .\" ====================================================================
@@ -632,7 +628,7 @@ A name is just
 .
 .IP
 .IB Name :
-\*(EL
+\&.\|.\|.
 .
 .
 .P
@@ -661,17 +657,15 @@ only letters and numbers is valid:
 The specific construction
 .RS
 .TP
-.BR bond\  \*(EL " ; moiety"
+.BR bond \~.\|.\|.\&\~ "; moiety"
 .RE
 .P
 is equivalent to
 .IP
-.ft B
-.nf
+.EX
 bond
 moiety
-.fi
-.ft
+.EE
 .
 .
 .P
@@ -684,7 +678,7 @@ the commands.
 A period character
 .B .\&
 or a single quote
-.B '
+.B \[aq]
 in the first column of a line signals a
 .I troff
 command, which is copied through as-is.
@@ -725,9 +719,9 @@ code, which is copied through with a label.
 .
 .P
 Since
-.B chem
+.I \%chem
 is a
-.B pic
+.I \%pic
 preprocessor, it is possible to include
 .I pic
 statements in the middle of a diagram to draw things not provided for
@@ -787,7 +781,7 @@ command as well.
 .
 .
 .\" ====================================================================
-.SS WISH LIST
+.SS "Wish list"
 .\" ====================================================================
 .
 .P
@@ -813,8 +807,12 @@ properties of built-in objects.
 .
 .
 .P
-There is no in-line chemistry yet (e.g., analogous to the $\*(EL$
-construct of eqn).
+There is no in-line chemistry yet
+(e.g.,
+analogous to the
+.BR $ .\|.\|. $
+construct of
+.IR eqn ).
 .
 .
 .P
@@ -843,99 +841,85 @@ A squiggle bond is needed.
 .
 .
 .\" ====================================================================
-.SH "FILES"
+.SH Files
 .\" ====================================================================
 .
 .TP
-.I /usr/\:local/\:share/\:groff/\:1.22.4/pic/chem.pic
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:pic/\:chem\:.pic
 A collection of
 .I pic
 macros needed by
-.BR chem .
+.IR \%chem .
 .
 .TP
-.I /usr/\:local/\:share/\:groff/\:1.22.4/\:tmac/pic.tmac
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%tmac/\:pic\:.tmac
 A macro file which redefines
-.B .PS
+.BR .PS ,
+.BR .PE ,
 and
-.B .PE
+.B .PF
 to center
 .I pic
 diagrams.
 .
 .TP
-.IR /usr/\:local/\:share/\:doc/\:groff\-1.22.4/examples/chem/ * .chem
+.IR /usr/\:\%share/\:\%doc/\:\%groff\-1.23.0/\:\%examples/\:chem/\: * .chem
 Example files for
 .IR chem .
 .
 .TP
-.IR /usr/\:local/\:share/\:doc/\:groff\-1.22.4/examples/chem/122/ * .chem
-Example files from the classical
+.IR /usr/\:\%share/\:\%doc/\:\%groff\-1.23.0/\:\%examples/\:chem/\:122/\: * .chem
+Example files from the
 .I chem
-article
-.I "CHEM \[en] A Program for Typesetting Chemical Structure Diagrams"
-[CSTR\~#122].
+article by its authors,
+\[lq]CHEM\[em]A Program for Typesetting Chemical Structure Diagrams:
+User Manual\[rq]
+(CSTR\~#122).
 .
 .
 .\" ====================================================================
-.SH AUTHORS
+.SH Authors
 .\" ====================================================================
 .
 The GNU version of
-.B chem
+.I chem
 was written by
-.MT groff\-bernd.warken\-72@\:web.de
+.MT groff\-bernd\:.warken\-72@\:web\:.de
 Bernd Warken
 .ME .
 .
 It is based on the documentation of Brian Kernighan's original
 .I awk
 version of
-.I chem
-at
-.UR http://\:cm.bell\-labs.com/\:cm/\:cs/\:who/\:bwk/\:index.html
-.UE .
+.IR chem .
 .
 .
 .\" ====================================================================
-.SH "SEE ALSO"
+.SH "See also"
 .\" ====================================================================
 .
-.BR \%groff (1),
-.BR \%pic (1),
-.BR \%groffer (1).
+\[lq]CHEM\[em]A Program for Typesetting Chemical Diagrams: User
+Manual\[rq]
+by Jon L.\& Bentley,
+Lynn W.\& Jelinski,
+and
+Brian W.\& Kernighan,
+1992,
+AT&T Bell Laboratories Computing Science Technical Report No.\& 122
 .
 .
 .P
-You can still get the original
-.UR http://\:cm.bell\-labs.com/\:netlib/\:typesetting/\:chem.gz
-chem awk source
-.UE .
-.
-Its
-.B README
-file was used for this manual page.
-.
-.
-.P
-The other classical document on
-.I chem
-is
-.UR http://\:cm.bell\-labs.com/\:cm/\:cs/\:cstr/\:122.ps.gz
-.I "CHEM \[en] A Program for Typesetting Chemical Structure Diagrams"
-[CSTR\~#122]
-.UE .
+.MR groff 1 ,
+.MR \%pic 1
 .
 .
 .\" Restore compatibility mode (for, e.g., Solaris 10/11).
-.cp \n[chem_C]
+.cp \n[*groff_chem_1_man_C]
+.do rr *groff_chem_1_man_C
 .
-.
-.\" ====================================================================
-.\" Emacs settings
-.\" ====================================================================
 .
 .\" Local Variables:
+.\" fill-column: 72
 .\" mode: nroff
 .\" End:
-.\" vim: set filetype=groff:
+.\" vim: set filetype=groff textwidth=72:

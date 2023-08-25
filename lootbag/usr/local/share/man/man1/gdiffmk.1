@@ -1,13 +1,15 @@
-.TH GDIFFMK 1 "17 December 2018" "groff 1.22.4"
-.SH NAME
-gdiffmk \- mark differences between groff/nroff/troff files
+.TH gdiffmk 1 "2 July 2023" "groff 1.23.0"
+.SH Name
+gdiffmk \- mark differences between
+.IR groff / nroff / troff
+files
 .
 .
 .\" ====================================================================
 .\" Legal Terms
 .\" ====================================================================
 .\"
-.\" Copyright (C) 2004-2018 Free Software Foundation, Inc.
+.\" Copyright (C) 2004-2020 Free Software Foundation, Inc.
 .\"
 .\" This file is part of gdiffmk, which is part of groff, the GNU roff
 .\" type-setting system.
@@ -27,143 +29,175 @@ gdiffmk \- mark differences between groff/nroff/troff files
 .\" <http://www.gnu.org/licenses/>.
 .
 .
+.\" Save and disable compatibility mode (for, e.g., Solaris 10/11).
+.do nr *groff_gdiffmk_1_man_C \n[.cp]
+.cp 0
+.
+.\" Define fallback for groff 1.23's MR macro if the system lacks it.
+.nr do-fallback 0
+.if !\n(.f           .nr do-fallback 1 \" mandoc
+.if  \n(.g .if !d MR .nr do-fallback 1 \" older groff
+.if !\n(.g           .nr do-fallback 1 \" non-groff *roff
+.if \n[do-fallback]  \{\
+.  de MR
+.    ie \\n(.$=1 \
+.      I \%\\$1
+.    el \
+.      IR \%\\$1 (\\$2)\\$3
+.  .
+.\}
+.rr do-fallback
+.
+.
 .\" ====================================================================
-.SH SYNOPSIS
+.SH Synopsis
 .\" ====================================================================
 .
 .SY gdiffmk
-.OP \-a addmark
-.OP \-c changemark
-.OP \-d deletemark
+.RB [ \-a\~\c
+.IR add-mark ]
+.RB [ \-c\~\c
+.IR change-mark ]
+.RB [ \-d\~\c
+.IR delete-mark ]
+.RB [ \-x\~\c
+.IR diff-command ]
 .RB [ \-D
 .RB [ \-B ]
 .RB [ \-M
 .IR "mark1 mark2" ]]
-.OP \-x diffcmd
-.OP \-\-
+.RB [ \-\- ]
 .I file1
 .I file2
 .RI [ output ]
 .YS
 .
+.
 .SY gdiffmk
 .B \-\-help
 .YS
+.
 .
 .SY gdiffmk
 .B \-\-version
 .YS
 .
+.
 .\" ====================================================================
-.SH DESCRIPTION
+.SH Description
 .\" ====================================================================
 .
-.B gdiffmk
+.I gdiffmk
 compares two
-.BR groff (1),
-.BR nroff (1),
-or
-.BR troff (1)
+.MR roff 7
 documents,
 .I file1
 and
 .IR file2 ,
-and creates an output which is
+and creates a
+.I roff
+document consisting of
 .I file2
-with added \[lq]margin character\[rq] (.mc) commands that indicate the
-differences.
+with added margin character
+.RB ( .mc )
+requests indicating output lines that differ from
+.I file1.
 .
-.
-.LP
-If the
-.I output
-filename is present,
-the output is written there.
-.
-If it is
-.B \-
-or absent the output is written to the standard output.
-.
-.
-.LP
 If the
 .I file1
 or
 .I file2
 argument is
-.B \-
-the standard input is read for that input.
+.RB \[lq] \- \[rq],
+.I gdiffmk
+reads the standard input stream for that input.
 .
-Clearly both cannot be
-.BR \- .
+If the
+.I output
+operand is present,
+.I gdiffmk
+writes output to a file of that name.
 .
+If it is
+.RB \[lq] \- \[rq]
+or absent,
+.I gdiffmk
+writes output to the standard output stream.
 .
-.LP
-Note that the output is not necessarily compatible with all macro packages
-and all preprocessors.
-.
-See section \(lqBugs\(rq below.
+.RB \[lq] \- \[rq]
+cannot be both an input and output operand.
 .
 .
 .\" ====================================================================
-.SH OPTIONS
+.SH Options
 .\" ====================================================================
+.
+.B \-\-help
+displays a usage message
+and
+.B \-\-version
+shows version information;
+both exit afterward.
+.
 .
 .TP
-.BI \-a addmark
-Use the
-.I addmark
+.BI \-a\~ add-mark
+Use
+.I add-mark
 for source lines not in
 .I file1
 but present in
 .IR file2 .
 .
 Default:
-.BR + .
+.RB \[lq] + \[rq].
+.
 .
 .TP
 .B \-B
-By default, the deleted texts marked by the
+By default,
+the deleted texts marked by the
 .B \-D
-option end
-with an added troff break command,
+option end with an added
+.I roff
+break request,
 .BR .br ,
 to ensure that the deletions are marked properly.
 .
 This is the only way to guarantee that deletions and small
 changes get flagged.
 .
-This option directs the program not to insert these breaks; it makes
-no sense to use it without
+This option directs the program not to insert these breaks;
+it makes no sense to use it without
 .BR \-D .
 .
+.
 .TP
-.BI \-c changemark
-Use the
-.I changemark
+.BI \-c\~ change-mark
+Use
+.I change-mark
 for changed source lines.
 .
 Default:
-.BR | .
+.RB \[lq] | \[rq].
+.
 .
 .TP
-.BI \-d deletemark
+.BI \-d\~ delete-mark
 Use the
-.I deletemark
+.I delete-mark
 for deleted source lines.
 .
 Default:
-.BR * .
+.RB \[lq] * \[rq].
 .
 .TP
 .B \-D
 Show the deleted portions from changed and deleted text.
 .
-Default delimiting marks:
-.BR "[[" " \&.\|.\|.\& " "]]" .
 .
 .TP
-.BI \-M "mark1 mark2"
+.BI \-M\~ "mark1 mark2"
 Change the delimiting marks for the
 .B \-D
 option.
@@ -171,90 +205,100 @@ option.
 It makes no sense to use this option without
 .BR \-D .
 .
+Default delimiting marks:
+.RB \[lq] [[ "\[rq] .\|.\|.\& \[lq]" ]] \[rq].
+.
+.
 .TP
-.BI \-x diffcmd
+.BI \-x\~ diff-command
 Use the
-.I diffcmd
+.I diff-command
 command to perform the comparison of
 .I file1
 and
 .IR file2 .
 .
 In particular,
-.I diffcmd
+.I diff-command
 should accept the GNU
-.B diff
-.BI \-D name
+.MR diff 1
+.B \-D
 option.
 .
 Default:
-.BR diff (1).
+.BR diff .
+.
 .
 .TP
 .B \-\-
-All the following arguments are treated as file names,
+Treat all subsequent arguments as file names,
 even if they begin with
-.BR \- .
-.
-.TP
-.B \-\-help
-Print a usage message on standard error output and exit.
-.
-.TP
-.B \-\-version
-Print version information on the standard output and exit.
+.RB \[lq] \- \[rq].
 .
 .
 .\" ====================================================================
-.SH BUGS
+.SH Bugs
 .\" ====================================================================
 .
 The output is not necessarily compatible with all macro packages
 and all preprocessors.
 .
-A workaround that is often successful against preprocessor problems is
-to run
-.B gdiffmk
+A workaround that often overcomes preprocessor problems is to run
+.I gdiffmk
 on the output of all the preprocessors instead of the input source.
 .
 .
 .LP
-.B gdiffmk
+.I gdiffmk
 relies on the
-.BI \-D name
+.B \-D
 option of GNU
-.BR diff (1)
+.I diff
 to make a merged \[lq]#ifdef\[rq] output format.
 .
-It hasn't been tested whether other versions of
-.BR diff (1)
-do support this option.
+Busybox
+.I diff
+is known to not support it.
 .
-See also the
-.BI \-x diffcmd
+Also see the
+.BI \-x\~ diff-command
 option.
 .
 .
 .\" ====================================================================
-.SH AUTHORS
+.SH Authors
 .\" ====================================================================
-.B gdiffmk
-was written and is maintained by
-.MT MBianchi@\:Foveal.com
+.
+.I gdiffmk
+was written by
+.MT MBianchi@\:Foveal\:.com
 Mike Bianchi
-.ME .
+.ME ,
+now retired.
+.
+It is maintained by the
+.I groff
+developers.
 .
 .
 .\" ====================================================================
-.SH "SEE ALSO"
+.SH "See also"
 .\" ====================================================================
 .
-.BR groff (1),
-.BR nroff (1),
-.BR gtroff (1),
-.BR diff (1)
+.MR groff 1 ,
+.MR nroff 1 ,
+.MR gtroff 1 ,
+.MR roff 7 ,
+.MR diff 1
+.
+.
+.\" Restore compatibility mode (for, e.g., Solaris 10/11).
+.cp \n[*groff_gdiffmk_1_man_C]
+.do rr *groff_gdiffmk_1_man_C
+.
 .
 .\" Local Variables:
+.\" fill-column: 72
 .\" mode: nroff
 .\" End:
-.\" vim: set filetype=groff:
+.\" vim: set filetype=groff textwidth=72:

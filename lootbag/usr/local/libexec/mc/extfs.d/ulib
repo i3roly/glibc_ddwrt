@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#! /opt/local/bin/perl -w
 #
 # VFS to manage the gputils archives.
 # Written by Molnár Károly (proton7@freemail.hu) 2012

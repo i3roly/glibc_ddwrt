@@ -1,13 +1,16 @@
-.TH ADDFTINFO 1 "18 November 2018" "groff 1.22.4"
-.SH NAME
-addftinfo \- add information to troff font files for use with groff
+.TH addftinfo 1 "2 July 2023" "groff 1.23.0"
+.SH Name
+addftinfo \- add font metrics to
+.I troff
+fonts for use with
+.I groff
 .
 .
 .\" ====================================================================
 .\" Legal Terms
 .\" ====================================================================
 .\"
-.\" Copyright (C) 1989-2018 Free Software Foundation, Inc.
+.\" Copyright (C) 1989-2020 Free Software Foundation, Inc.
 .\"
 .\" Permission is granted to make and distribute verbatim copies of this
 .\" manual provided the copyright notice and this permission notice are
@@ -25,171 +28,209 @@ addftinfo \- add information to troff font files for use with groff
 .\" instead of in the original English.
 .
 .
-.\" ====================================================================
-.\" Characters
-.\" ====================================================================
+.\" Save and disable compatibility mode (for, e.g., Solaris 10/11).
+.do nr *groff_addftinfo_1_man_C \n[.cp]
+.cp 0
 .
-.\" Ellipsis ...
-.ie t .ds EL \fS\N'188'\fP\"
-.el .ds EL \&.\|.\|.\&\"
-.\" called with \*(EL
+.\" Define fallback for groff 1.23's MR macro if the system lacks it.
+.nr do-fallback 0
+.if !\n(.f           .nr do-fallback 1 \" mandoc
+.if  \n(.g .if !d MR .nr do-fallback 1 \" older groff
+.if !\n(.g           .nr do-fallback 1 \" non-groff *roff
+.if \n[do-fallback]  \{\
+.  de MR
+.    ie \\n(.$=1 \
+.      I \%\\$1
+.    el \
+.      IR \%\\$1 (\\$2)\\$3
+.  .
+.\}
+.rr do-fallback
 .
 .
 .\" ====================================================================
-.SH SYNOPSIS
+.SH Synopsis
 .\" ====================================================================
 .
 .SY addftinfo
-.OP \-asc\-height n
-.OP \-body\-depth n
-.OP \-body\-height n
-.OP \-cap\-height n
-.OP \-comma\-depth n
-.OP \-desc\-depth n
-.OP \-fig\-height n
-.OP \-x\-height n
-.I res
-.I unitwidth
+.RB [ \-asc\-height\~\c
+.IR n ]
+.RB [ \-body\-depth\~\c
+.IR n ]
+.RB [ \-body\-height\~\c
+.IR n ]
+.RB [ \-cap\-height\~\c
+.IR n ]
+.RB [ \-comma\-depth\~\c
+.IR n ]
+.RB [ \-desc\-depth\~\c
+.IR n ]
+.RB [ \-fig\-height\~\c
+.IR n ]
+.RB [ \-x\-height\~\c
+.IR n ]
+.I resolution
+.I unit-width
 .I font
 .YS
+.
 .
 .SY addftinfo
 .B \-\-help
 .YS
 .
+.
 .SY addftinfo
 .B \-v
+.
 .SY addftinfo
 .B \-\-version
 .YS
 .
 .
 .\" ====================================================================
-.SH DESCRIPTION
+.SH Description
 .\" ====================================================================
 .
-.B addftinfo
-reads a troff font file and adds some additional font-metric
-information that is used by the groff system.
+.I addftinfo
+reads an
+.RI AT&T \~troff
+font description file
+.IR font ,
+adds additional font metric information required by
+.\" We need the "GNU" below because the \% prefix might be empty.
+.RI GNU \~\%troff (1),
+and writes the combined result to the standard output.
 .
-The font file with the information added is written on the standard
-output.
+The information added is derived from the font's existing parameters and
+assumptions about traditional
+.I troff
+names for characters.
 .
-The information added is guessed using some parametric information
-about the font and assumptions about the traditional troff names for
-characters.
-.
-The main information added is the heights and depths of characters.
+Among the font metrics added are the heights and depths of characters
+(how far each extends vertically above and below the baseline).
 .
 The
-.I res
+.I resolution
 and
-.I unitwidth
+.I unit-width
 arguments should be the same as the corresponding parameters in the
-DESC file;
+.I DESC
+file.
+.
 .I font
 is the name of the file describing the font;
 if
 .I font
 ends with
-.B I
-the font will be assumed to be italic.
+.RB \[lq] I \[rq],
+the font is assumed to be oblique
+(or italic).
 .
 .
 .\" ====================================================================
-.SH OPTIONS
+.SH Options
 .\" ====================================================================
 .
+.B \-\-help
+displays a usage message,
+while
 .B \-v
-prints the version number.
-.
-.
-.LP
-All other options change one of the parameters that are used to derive
-the heights and depths.
-.
-Like the existing quantities in the font file, each
-.I value
-is in
-.RI inches/ res
-for a font whose point size is
-.IR unitwidth .
-.
-.I param-option
-must be one of:
-.
-.TP
-.B \-x\-height
-The height of lowercase letters without ascenders such as x.
-.
-.TP
-.B \-fig\-height
-The height of figures (digits).
-.
-.TP
-.B \-asc\-height
-The height of characters with ascenders, such as b, d or l.
-.
-.TP
-.B \-body\-height
-The height of characters such as parentheses.
-.
-.TP
-.B \-cap\-height
-The height of uppercase letters such as A.
-.
-.TP
-.B \-comma\-depth
-The depth of a comma.
-.
-.TP
-.B \-desc\-depth
-The depth of characters with descenders, such as p, q, or y.
-.
-.TP
-.B \-body\-depth
-The depth of characters such as parentheses.
-.
-.
-.LP
-.B addftinfo
-makes no attempt to use the specified parameters to guess the
-unspecified parameters.
-.
-If a parameter is not specified the default will be used.
-.
-The defaults are chosen to have the reasonable values for a Times
-font.
-.
-.
-.\" ====================================================================
-.SH "SEE ALSO"
-.\" ====================================================================
-.
-.BR groff_font (5),
-.BR groff (1),
-.BR groff_char (7)
+and
+.B \-\-version
+show version information;
+all exit afterward.
 .
 .
 .P
-You can view a man page
-.IB name ( n )
-with
-.RS
-.EX
-.BI "man" " n name"
-.EE
-.RE
-in text mode and with
-.RS
-.EX
-.BI "groffer" " n name"
-.EE
-.RE
-in graphical mode (PDF, etc.).
+All other options change parameters that are used to derive the heights
+and depths.
+.
+Like the existing quantities in the font description file,
+each
+.RI value\~ n
+is in
+.I "scaled points,"
+.RI inches/ resolution
+for a font whose type size is
+.IR unit-width ;
+see
+.MR groff_font 5 .
+.
+.
+.TP
+.BI \-asc\-height \~n
+height of characters with ascenders,
+such as \[lq]b\[rq],
+\[lq]d\[rq],
+or \[lq]l\[rq]
+.
+.
+.TP
+.BI \-body\-depth \~n
+depth of characters such as parentheses
+.
+.
+.TP
+.BI \-body\-height \~n
+height of characters such as parentheses
+.
+.
+.TP
+.BI \-cap\-height \~n
+height of uppercase letters such as \[lq]A\[rq]
+.
+.
+.TP
+.BI \-comma\-depth \~n
+depth of a comma
+.
+.
+.TP
+.BI \-desc\-depth \~n
+depth of characters with descenders,
+such as \[lq]p\[rq],
+\[lq]q\[rq],
+or \[lq]y\[rq]
+.
+.
+.TP
+.B \-fig\-height
+height of figures (numerals)
+.
+.
+.TP
+.BI \-x\-height \~n
+height of lowercase letters without ascenders such as \[lq]x\[rq]
+.
+.
+.P
+.I addftinfo
+makes no attempt to use the specified parameters to infer unspecified
+parameters.
+.
+If a parameter is not specified,
+the default will be used.
+.
+The defaults are chosen to produce reasonable values for a Times font.
+.
+.
+.\" ====================================================================
+.SH "See also"
+.\" ====================================================================
+.
+.MR groff_font 5 ,
+.MR groff 1 ,
+.MR groff_char 7
+.
+.
+.\" Restore compatibility mode (for, e.g., Solaris 10/11).
+.cp \n[*groff_addftinfo_1_man_C]
+.do rr *groff_addftinfo_1_man_C
 .
 .
 .\" Local Variables:
+.\" fill-column: 72
 .\" mode: nroff
 .\" End:
-.\" vim: set filetype=groff:
+.\" vim: set filetype=groff textwidth=72:

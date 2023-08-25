@@ -1,5 +1,5 @@
 #! /bin/sh
-# Copyright (C) 2014-2018 Free Software Foundation, Inc.
+# Copyright (C) 2014-2020 Free Software Foundation, Inc.
 #
 # This file is part of groff.
 # 
@@ -18,7 +18,7 @@
 # Provision of this shell script should not be taken to imply that use of
 # GNU eqn with groff -Tascii|-Tlatin1|-Tutf8|-Tcp1047 is supported.
 
-GROFF_RUNTIME="${GROFF_BIN_PATH=/usr/local/bin}:"
+GROFF_RUNTIME="${GROFF_BIN_PATH=/usr/bin}:"
 PATH="$GROFF_RUNTIME$PATH"
 export PATH
 exec eqn -Tascii ${1+"$@"}

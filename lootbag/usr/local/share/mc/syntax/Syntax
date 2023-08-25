@@ -63,7 +63,7 @@ include sh.syntax
 file ..\*\\.((?i:ini)|desktop|busname|(auto)?mount|net(dev|work)|link|path|service|slice|socket|swap|target|timer)$ INI-based\sFile
 include ini.syntax
 
-file ..\*\\.((?i:pl|pm|psgi)|t)$ Perl\sProgram ^#!.\*([\s/]perl|/usr/bin/perl)
+file ..\*\\.((?i:pl|pm|psgi)|t)$ Perl\sProgram ^#!.\*([\s/]perl|/opt/local/bin/perl)
 include perl.syntax
 
 file ..\*\\.(?i:py)$ Python\sProgram ^#!.\*([\s/]python|/opt/local/bin/python)

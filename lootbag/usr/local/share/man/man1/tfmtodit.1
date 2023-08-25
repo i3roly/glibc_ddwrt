@@ -1,13 +1,16 @@
-.TH TFMTODIT 1 "17 December 2018" "groff 1.22.4"
-.SH NAME
-tfmtodit \- create font files for use with groff \-Tdvi
+.TH tfmtodit 1 "2 July 2023" "groff 1.23.0"
+.SH Name
+tfmtodit \- adapt TeX Font Metrics files for use with
+.I groff
+and
+.I grodvi
 .
 .
 .\" ====================================================================
 .\" Legal Terms
 .\" ====================================================================
 .\"
-.\" Copyright (C) 1989-2018 Free Software Foundation, Inc.
+.\" Copyright (C) 1989-2020 Free Software Foundation, Inc.
 .\"
 .\" Permission is granted to make and distribute verbatim copies of this
 .\" manual provided the copyright notice and this permission notice are
@@ -25,6 +28,26 @@ tfmtodit \- create font files for use with groff \-Tdvi
 .\" instead of in the original English.
 .
 .
+.\" Save and disable compatibility mode (for, e.g., Solaris 10/11).
+.do nr *groff_tfmtodit_1_man_C \n[.cp]
+.cp 0
+.
+.\" Define fallback for groff 1.23's MR macro if the system lacks it.
+.nr do-fallback 0
+.if !\n(.f           .nr do-fallback 1 \" mandoc
+.if  \n(.g .if !d MR .nr do-fallback 1 \" older groff
+.if !\n(.g           .nr do-fallback 1 \" non-groff *roff
+.if \n[do-fallback]  \{\
+.  de MR
+.    ie \\n(.$=1 \
+.      I \%\\$1
+.    el \
+.      IR \%\\$1 (\\$2)\\$3
+.  .
+.\}
+.rr do-fallback
+.
+.
 .\" ====================================================================
 .\" Definitions
 .\" ====================================================================
@@ -34,218 +57,359 @@ tfmtodit \- create font files for use with groff \-Tdvi
 .
 .
 .\" ====================================================================
-.SH SYNOPSIS
+.SH Synopsis
 .\" ====================================================================
 .
 .SY tfmtodit
-.OP \-s
-.OP \-g gf_file
-.OP \-k skewchar
-.I tfm_file
-.I map_file
-.I font
+.RB [ \-s ]
+.RB [ \-g\~\c
+.IR gf-file ]
+.RB [ \-k\~\c
+.IR skew-char ]
+.I tfm-file
+.I map-file
+.I font-description
 .YS
+.
 .
 .SY tfmtodit
 .B \-\-help
 .YS
 .
+.
 .SY tfmtodit
 .B \-v
+.
 .SY tfmtodit
 .B \-\-version
 .YS
 .
 .
 .\" ====================================================================
-.SH DESCRIPTION
+.SH Description
 .\" ====================================================================
 .
-.B tfmtodit
-creates a font file for use with
-.B
-groff \-Tdvi\fR.
+.I tfmtodit
+creates a font description file for use with
+.MR groff 1 's
+.B dvi
+output device.
 .
-.I tfm_file
+.I tfm-file
 is the name of the \*(tx font metric file for the font.
 .
-.I map_file
-is a file giving the groff names for characters in the font;
-this file should consist of a sequence of lines of the form:
-.IP
-.I
-n c1 c2 \fR.\|.\|.
+.I map-file
+assigns
+.I groff
+ordinary or special character identifiers to glyph indices in the font;
+it should consist of a sequence of lines of the form
 .
+.RS
+.IR "i c1" \~\&.\|.\|.\&\~ cn
+.RE
 .
-.LP
 where
-.I n
-is a decimal integer giving the position of the character in the font,
+.I i
+is a position of the glyph in the font in decimal,
 and
-.IR c1 ,
-.IR c2 ,.\|.\|.
-are the groff names of the character.
+.I c1
+through
+.I cn
+are glyph identifiers in the form used by
+.I groff
+font descriptions.
 .
-If a character has no groff names but exists in the tfm file,
-then it will be put in the groff font file as an unnamed character.
+If a glyph has no
+.I groff
+names but exists in
+.I tfm-file,
+it is put in the
+.I groff
+font description file as an unnamed glyph.
 .
-.I font
-is the name of the groff font file.
+Output is written in
+.MR groff_font 5
+format to
+.I font-description,
+a file named for the intended
+.I groff
+font name.
 .
-The groff font file is written to
-.IR font .
 .
-.
-.LP
-The
+.P
+If the font is \[lq]special\[rq],
+meaning that
+.I groff
+should search it whenever a glyph is not found in the current font,
+use the
 .B \-s
-option should be given if the font is special
-(a font is
-.I special
-if
-.B troff
-should search it whenever
-a character is not found in the current font.)
-.
-If the font is special,
-it should be listed in the
+option and name
+.I font-description
+in the
 .B fonts
-command in the DESC file;
-if it is not special, there is no need to list it, since
-.B troff
-can automatically mount it when it's first used.
+directive in the output device's
+.I DESC
+file.
 .
 .
-.LP
-To do a good job of math typesetting, groff requires font metric
-information not present in the tfm file.
+.P
+To do a good job of math typesetting,
+.I groff
+requires font metric information not present in
+.I tfm-file.
 .
-The reason for this is that \*(tx has separate math italic fonts
-whereas groff uses normal italic fonts for math.
+This is because \*(tx has separate math italic fonts,
+whereas
+.I groff
+uses normal italic fonts for math.
 .
-The additional information required by groff is given by the two
-arguments to the
+The additional information required by
+.I groff
+is given by the two arguments to the
 .B math_fit
 macro in the Metafont programs for the Computer Modern fonts.
 .
 In a text font (a font for which
-.B math_fitting
-is false), Metafont normally ignores these two arguments.
+.B math_fit
+is false),
+Metafont normally ignores these two arguments.
 .
-Metafont can be made to put this information in the gf file by loading
-the following definition after
+Metafont can be made to put this information into the GF
+(\[lq]generic font\[rq])
+files it produces by loading the following definition after
 .B cmbase
 when creating
-.IR cm.base :
-.IP
-.nf
-.ft B
+.IR cm.base .
+.
+.RS
+.EX
 def ignore_math_fit(expr left_adjustment,right_adjustment) =
     special "adjustment";
     numspecial left_adjustment*16/designsize;
     numspecial right_adjustment*16/designsize;
     enddef;
-.fi
-.ft R
-.LP
-For the EC font family, load the following definition after
-.B exbase
-(it is probably easiest to patch
+.EE
+.RE
+.
+For the EC font family,
+load the following definition after
+.BR exbase ;
+consider patching
 .I exbase.mf
-locally):
-.IP
-.nf
-.ft B
+locally.
+.
+.RS
+.EX
 def ignore_math_fit(expr left_adjustment,right_adjustment) =
     ori_special "adjustment";
     ori_numspecial left_adjustment*16/designsize;
     ori_numspecial right_adjustment*16/designsize;
     enddef;
-.fi
-.ft R
-.LP
-The gf file created using this modified
+.EE
+.RE
+.
+The only difference from the previous example is the \[lq]ori_\[rq]
+prefix to \[lq]special\[rq] and \[lq]numspecial\[rq].
+.
+The GF file created using this modified
 .I cm.base
 or
-.I exbase
+.I exbase.mf
 should be specified with the
 .B \-g
-option.
-.
-The
-.B \-g
-option should not be given for a font for which
-.B math_fitting
+option,
+which should
+.I not
+be given for a font for which
+.B math_fit
 is true.
 .
 .
 .\" ====================================================================
-.SH OPTIONS
+.SH Options
 .\" ====================================================================
 .
-Whitespace is permitted between a command-line option and its argument.
+.B \-\-help
+displays a usage message,
+while
+.B \-v
+and
+.B \-\-version
+show version information;
+all exit afterward.
 .
 .
 .TP
-.B \-v
-Print the version number.
+.BI \-g \~gf-file
+Use the
+.I gf-file
+produced by Metafont containing
+.RB \[lq] special \[rq]
+and
+.RB \[lq] numspecial \[rq]
+commands to obtain additional font metric information.
+.
+.
+.TP
+.BI \-k \~skew-char
+The skew character of this font is at position
+.I skew-char.
+.
+.I skew-char
+should be an integer;
+it may be given in decimal,
+with a leading 0 in octal,
+or with a leading 0x in hexadecimal.
+.
+Any kerns whose second component is
+.I skew-char
+are ignored.
+.
 .
 .TP
 .B \-s
-The font is special.
-.
-The effect of this option is to add the
+Add the
 .B special
-command to the font file.
-.
-.TP
-.BI \-k n
-The skewchar of this font is at position
-.IR n .
-.
-.I n
-should be an integer;
-it may be given in decimal,
-or with a leading
-.B 0
-in octal,
-or with a leading
-.B 0x
-in hexadecimal.
-.
-The effect of this option is to ignore any kerns whose second
-component is the specified character.
-.
-.TP
-.BI \-g gf_file
-.I gf_file
-is a gf file produced by Metafont containing special and numspecial
-commands giving additional font metric information.
+directive to the font description file.
 .
 .
 .\" ====================================================================
-.SH FILES
+.SH Files
 .\" ====================================================================
 .
 .TP
-.I /usr/\:local/\:share/\:groff/\:1.22.4/\:font/devdvi/DESC
-Device description file.
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devdvi/\:DESC
+describes the
+.B dvi
+output device.
+.
 .
 .TP
-.IR /usr/\:local/\:share/\:groff/\:1.22.4/\:font/devdvi/ F
-Font description file for font
-.IR F .
+.IR /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devdvi/ F
+describes the font known
+.RI as\~ F
+on device
+.BR dvi .
+.
+.
+.TP
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devdvi/\:\%generate/\:\%ec.map
+.TQ
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devdvi/\:\%generate/\:\%msam.map
+.TQ
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devdvi/\:\%generate/\:\%msbm.map
+.TQ
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devdvi/\:\%generate/\:\%tc.map
+.TQ
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devdvi/\:\%generate/\:\%texb.map
+.TQ
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devdvi/\:\%generate/\:\%texex.map
+.TQ
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devdvi/\:\%generate/\:\%texi.map
+.TQ
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devdvi/\:\%generate/\:\%texitt.map
+.TQ
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devdvi/\:\%generate/\:\%texmi.map
+.TQ
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devdvi/\:\%generate/\:\%texr.map
+.TQ
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devdvi/\:\%generate/\:\%texsy.map
+.TQ
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devdvi/\:\%generate/\:\%textex.map
+.TQ
+.I /usr/\:\%share/\:\%groff/\:\%1.23.0/\:\%font/\:\%devdvi/\:\%generate/\:\%textt.map
+map glyph indices in \*[tx] fonts to
+.I groff
+ordinary and special character identifiers.
+.
+.I \%ec.map
+is used for
+.BR TREC ,
+.BR TIEC ,
+.BR TBEC ,
+.BR TBIEC ,
+.BR HREC ,
+.BR HIEC ,
+.BR HBEC ,
+.BR HBIEC ,
+.BR CWEC ,
+and
+.BR CWIEC ;
+.I \%msam.map
+for
+.BR SA ;
+.I \%msbm.map
+for
+.BR SB ;
+.I \%tc.map
+for
+.BR TRTC ,
+.BR TITC ,
+.BR TBTC ,
+.BR TBITC ,
+.BR HRTC ,
+.BR HITC ,
+.BR HBTC ,
+.BR HBITC ,
+.BR CWTC ,
+and
+.BR CWITC ;
+.I \%texb.map
+for
+.BR TB ,
+.BR HR ,
+.BR HI ,
+.BR HB ,
+and
+.BR HBI ;
+.I \%texex.map
+for
+.BR EX ;
+.I \%texi.map
+for
+.B TI
+and
+.BR TBI ;
+.I \%texitt.map
+for
+.BR CWI ;
+.I \%texmi.map
+for
+.BR MI ;
+.I \%texr.map
+for
+.BR TR ;
+.I \%texsy.map
+for
+.BR S ;
+.I \%textex.map
+for
+.BR SC ;
+and
+.I \%textt.map
+for
+.BR CW .
 .
 .
 .\" ====================================================================
-.SH "SEE ALSO"
+.SH "See also"
 .\" ====================================================================
-.BR groff (1),
-.BR grodvi (1),
-.BR groff_font (5)
+.
+.MR groff 1 ,
+.MR grodvi 1 ,
+.MR groff_font 5
+.
+.
+.\" Clean up.
+.rm tx
+.
+.\" Restore compatibility mode (for, e.g., Solaris 10/11).
+.cp \n[*groff_tfmtodit_1_man_C]
+.do rr *groff_tfmtodit_1_man_C
 .
 .
 .\" Local Variables:
+.\" fill-column: 72
 .\" mode: nroff
 .\" End:
-.\" vim: set filetype=groff:
+.\" vim: set filetype=groff textwidth=72:

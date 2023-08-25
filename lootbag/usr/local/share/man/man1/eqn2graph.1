@@ -1,6 +1,8 @@
-.TH EQN2GRAPH 1 "18 November 2018" "groff 1.22.4"
-.SH NAME
-eqn2graph \- convert an EQN equation into a cropped image
+.TH eqn2graph 1 "2 July 2023" "groff 1.23.0"
+.SH Name
+eqn2graph \- convert an
+.I eqn \" generic
+equation into a cropped image
 .
 .
 .\" ====================================================================
@@ -10,33 +12,57 @@ eqn2graph \- convert an EQN equation into a cropped image
 .\" This documentation is released to the public domain.
 .
 .
+.\" Save and disable compatibility mode (for, e.g., Solaris 10/11).
+.do nr *groff_eqn2graph_1_man_C \n[.cp]
+.cp 0
+.
+.\" Define fallback for groff 1.23's MR macro if the system lacks it.
+.nr do-fallback 0
+.if !\n(.f           .nr do-fallback 1 \" mandoc
+.if  \n(.g .if !d MR .nr do-fallback 1 \" older groff
+.if !\n(.g           .nr do-fallback 1 \" non-groff *roff
+.if \n[do-fallback]  \{\
+.  de MR
+.    ie \\n(.$=1 \
+.      I \%\\$1
+.    el \
+.      IR \%\\$1 (\\$2)\\$3
+.  .
+.\}
+.rr do-fallback
+.
+.
 .\" ====================================================================
-.SH SYNOPSIS
+.SH Synopsis
 .\" ====================================================================
 .
 .SY eqn2graph
-.OP \-format output-format
-.RI [ convert-arguments ]
+.RB [ \-format\~\c
+.IR output-format ]
+.RI [ convert-argument \~.\|.\|.]
 .YS
+.
 .
 .SY eqn2graph
 .B \-\-help
 .YS
 .
+.
 .SY eqn2graph
 .B \-v
+.
 .SY eqn2graph
 .B \-\-version
 .YS
 .
 .
 .\" ====================================================================
-.SH DESCRIPTION
+.SH Description
 .\" ====================================================================
 .
 .I eqn2graph
 reads a one-line
-.IR eqn (1)
+.MR \%eqn 1
 equation from the standard input and writes an image file,
 by default in Portable Network Graphics (PNG) format,
 to the standard output.
@@ -46,9 +72,9 @@ to the standard output.
 The input EQN code should
 .I not
 be preceded by the
-.B \&.EQ
+.B .EQ
 macro that normally precedes it within
-.IR groff (1)
+.MR groff 1
 macros;
 nor do you need to have dollar-sign or other delimiters around the
 equation.
@@ -64,7 +90,7 @@ equation.
 Arguments not recognized by
 .I eqn2graph
 are passed to the ImageMagick or GraphicsMagick program
-.IR \%convert (1).
+.MR convert 1 .
 .
 .
 By specifying these, you can give your image a border,
@@ -83,11 +109,21 @@ pixels.
 .
 .
 .\" ====================================================================
-.SH OPTIONS
+.SH Options
 .\" ====================================================================
 .
+.B \-\-help
+displays a usage message,
+while
+.B \-v
+and
+.B \-\-version
+show version information;
+all exit afterward.
+.
+.
 .TP
-.BI "\-format " output-format
+.BI \-format\~ output-format
 Write the image in
 .IR output-format ,
 which must be understood by
@@ -95,20 +131,8 @@ which must be understood by
 the default is PNG.
 .
 .
-.TP
-.B \-\-help
-Display a usage message and exit.
-.
-.
-.TP
-.B \-v
-.TQ
-.B \-\-version
-Display version information and exit.
-.
-.
 .\" ====================================================================
-.SH ENVIRONMENT
+.SH Environment
 .\" ====================================================================
 .
 .TP
@@ -128,31 +152,37 @@ is used.
 .
 .
 .\" ====================================================================
-.SH AUTHORS
+.SH Authors
 .\" ====================================================================
 .
 .I eqn2graph
 was written by
-.MT esr@\:thyrsus.com
+.MT esr@\:thyrsus\:.com
 Eric S.\& Raymond
 .ME ,
 based on a recipe for
-.IR pic2graph (1),
+.MR pic2graph 1 ,
 by W.\& Richard Stevens.
 .
 .
 .\" ====================================================================
-.SH "SEE ALSO"
+.SH "See also"
 .\" ====================================================================
 .
-.IR pic2graph (1),
-.IR grap2graph (1),
-.IR eqn (1),
-.IR groff (1),
-.IR \%convert (1)
+.MR pic2graph 1 ,
+.MR grap2graph 1 ,
+.MR \%eqn 1 ,
+.MR groff 1 ,
+.MR convert 1
+.
+.
+.\" Restore compatibility mode (for, e.g., Solaris 10/11).
+.cp \n[*groff_eqn2graph_1_man_C]
+.do rr *groff_eqn2graph_1_man_C
 .
 .
 .\" Local Variables:
+.\" fill-column: 72
 .\" mode: nroff
 .\" End:
-.\" vim: set filetype=groff:
+.\" vim: set filetype=groff textwidth=72:
