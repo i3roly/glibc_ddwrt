@@ -1,4 +1,4 @@
-.TH VIM 1 "2006 Apr 11"
+.TH VIM 1 "2021 Jun 13"
 .SH NAME
 vim \- Vi IMproved, a programmer's text editor
 .SH SYNOPSIS
@@ -146,7 +146,7 @@ See ":help search\-pattern" for the available search patterns.
 {command} is interpreted as an Ex command.
 If the {command} contains spaces it must be enclosed in double quotes (this
 depends on the shell that is used).
-Example: Vim "+set si" main.c
+Example: vim "+set si" main.c
 .br
 Note: You can use up to 10 "+" or "\-c" commands.
 .TP
@@ -186,7 +186,7 @@ behave mostly like Vi, even though a .vimrc file exists.
 .TP
 \-d
 Start in diff mode.
-There should be two, three or four file name arguments.
+There should between two to eight file name arguments.
 .B Vim
 will open all the files and show differences between them.
 Works like vimdiff(1).
@@ -416,6 +416,10 @@ Denotes the end of the options.
 Arguments after this will be handled as a file name.
 This can be used to edit a filename that starts with a '\-'.
 .TP
+\-\-clean
+Do not use any personal configuration (vimrc, plugins, etc.).  Useful to see if
+a problem reproduces with a clean Vim setup.
+.TP
 \-\-echo\-wid
 GTK GUI only: Echo the Window ID on stdout.
 .TP
@@ -459,6 +463,9 @@ Use {name} as the server name.  Used for the current Vim, unless used with a
 \-\-socketid {id}
 GTK GUI only: Use the GtkPlug mechanism to run gvim in another window.
 .TP
+\-\-startuptime {file}
+During startup write timing messages to the file {fname}.
+.TP
 \-\-version
 Print version information and exit.
 .SH ON-LINE HELP
@@ -474,19 +481,19 @@ All documentation files can be viewed in this way, for example
 ":help syntax.txt".
 .SH FILES
 .TP 15
-/usr/local/share/vim/vim81/doc/*.txt
+/usr/local/share/vim/vim90/doc/*.txt
 The
 .B Vim
 documentation files.
 Use ":help doc\-file\-list" to get the complete list.
 .TP
-/usr/local/share/vim/vim81/doc/tags
+/usr/local/share/vim/vim90/doc/tags
 The tags file used for finding information in the documentation files.
 .TP
-/usr/local/share/vim/vim81/syntax/syntax.vim
+/usr/local/share/vim/vim90/syntax/syntax.vim
 System wide syntax initializations.
 .TP
-/usr/local/share/vim/vim81/syntax/*.vim
+/usr/local/share/vim/vim90/syntax/*.vim
 Syntax files for various languages.
 .TP
 /usr/local/share/vim/vimrc
@@ -505,22 +512,22 @@ System wide gvim initializations.
 ~/.gvimrc
 Your personal gvim initializations.
 .TP
-/usr/local/share/vim/vim81/optwin.vim
+/usr/local/share/vim/vim90/optwin.vim
 Script used for the ":options" command, a nice way to view and set options.
 .TP
-/usr/local/share/vim/vim81/menu.vim
+/usr/local/share/vim/vim90/menu.vim
 System wide menu initializations for gvim.
 .TP
-/usr/local/share/vim/vim81/bugreport.vim
+/usr/local/share/vim/vim90/bugreport.vim
 Script to generate a bug report.  See ":help bugs".
 .TP
-/usr/local/share/vim/vim81/filetype.vim
+/usr/local/share/vim/vim90/filetype.vim
 Script to detect the type of a file by its name.  See ":help 'filetype'".
 .TP
-/usr/local/share/vim/vim81/scripts.vim
+/usr/local/share/vim/vim90/scripts.vim
 Script to detect the type of a file by its contents.  See ":help 'filetype'".
 .TP
-/usr/local/share/vim/vim81/print/*.ps
+/usr/local/share/vim/vim90/print/*.ps
 Files used for PostScript printing.
 .PP
 For recent info read the VIM home page:
