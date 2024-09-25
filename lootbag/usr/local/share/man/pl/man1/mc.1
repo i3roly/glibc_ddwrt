@@ -1,6 +1,6 @@
 .\" -*- mode: troff; coding: UTF-8 -*-
 .\"Przetłumaczone przez by Macieja Wojciechowskiego    wojciech@staszic.waw.pl
-.TH MC 1 "marca 2023" "MC Version 4.8.29" "GNU Midnight Commander"
+.TH MC 1 "września 2024" "MC Version 4.8.32" "GNU Midnight Commander"
 .\"SKIP_SECTION"
 .SH NAZWA
 mc \- wizualny interpetator poleceń dla systemów Unixopodobnych
@@ -895,8 +895,7 @@ Komenda porównywania katalogów (Compare directories) (C\-x d) porównuje
 zawartości panelu katalogowego z drugim. Możesz potem użyc Kopiuj (F5)
 żeby stworzyć dwa dokładnie identyczne panele. Metoda "quick" porównuje
 tylko i wyłącznie rozmiary plików i ich daty. Metoda "thorough" porównuje
-pliki bajt po bajcie. Ta metoda działa tylko wtedy kiedy komputer obsługuje
-wywołanie mmap(2). Metoda "size\-only" zwraca uwagę tylko na rozmiar plików.
+pliki bajt po bajcie. Metoda "size\-only" zwraca uwagę tylko na rozmiar plików.
 Nie ma dla niej żadnego znaczenia czy plik ma inną datę lub zawartość, liczy
 się tylko rozmiar.
 .PP
@@ -1957,13 +1956,6 @@ Możesz mieszać ciągi znaków ze stałymi tak jak: "Ciąg" 0xFE 0xBB
 "więcej tekstu". Ciąg pomiędzy stałymi i cudzysłowami jest po prostu
 ignorowany.
 .PP
-Kilka wewnętrznych szczegółów na temat podglądu: Na systemach, które używają
-wywołania systemowego mmap(2), program mapuje pliki zamiast je ładować;
-jeśli system nie obsługuje mmap(2) lub plik pasuje do któregoś z wybranych
-filtrów, podgląd użyje jego rozszerzalnych buforów, dzięki temu ładując tylko
-te części, do których musisz mieć aktualnie dostęp (dotyczy również
-plików skompresowanych).
-.PP
 Tu jest lista akcji powiązanych z każdym klawiszem, który Midnight Commander
 obsługuje w wewnętrznym poglądzie.
 .PP
@@ -2542,8 +2534,8 @@ dhotfocus; Kolory pomocy: helpnormal, helpitalic, helpbold, helplink,
 helpslink; Kolory podglądu: viewunderline; Specjalne tryby podświetlenia:
 executable, directory, link, device, special. Viewer colors are: viewnormal,
 viewbold, viewunderline, viewselected. Editor colors are: editnormal, editbold,
-editmarked, editwhitespace, editlinestate. Popup menu colors are: pmenunormal,
-pmenusel, pmenutitle.
+editmarked, editwhitespace, editnonprintable, editlinestate. Popup menu colors
+are: pmenunormal, pmenusel, pmenutitle.
 [nie tłumaczyłem nazw z racji tego, że trzeba je stosować w ich angielskim
 brzmieniu \- jeśli jesteś aż tak zaawansowany, użyj słownika].
 .PP

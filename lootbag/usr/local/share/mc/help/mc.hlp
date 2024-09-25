@@ -533,7 +533,7 @@ Filter...
 
 The filter command allows you to specify a shell pattern (for example *.tar.gz) which the files and directories must match to be shown. The input lineInput Line Keys allow enter the pattern of file/directory names that will be shown in the panel.
 
-When Files only checkbox is on, only files will be matched to the filter, and all directories will be shown. Otherwise, as files as directories will be filtered. When Shell Patterns checkbox is on, the regular expression is much like the filename globbing in the shell (* standing for zero or more characters and ? standing for one character). Otherwise, the matching of files/directoris is done with normal regular expressions (see ed(1)). When Case sensitive checkbox is on, the filtering will be case sensitive characters. Otherwise, the case will be ignored.[Reread]
+When Files only checkbox is on, only files will be matched to the filter, and all directories will be shown. Otherwise, as files as directories will be filtered. When Shell Patterns checkbox is on, the regular expression is much like the filename globbing in the shell (* standing for zero or more characters and ? standing for one character). Otherwise, the matching of files/directories is done with normal regular expressions (see ed(1)). When Case sensitive checkbox is on, the filtering will be case sensitive characters. Otherwise, the case will be ignored.[Reread]
 Reread
 
 The reread command reload the list of files in the directory. It is useful if other processes have created or removed files.[File Menu]
@@ -647,7 +647,7 @@ The "Swap panels" command swaps the contents of the two directory panels.
 
 The "Switch panels on/off" command shows the output of the last shell command. This works only on xterm and on Linux and FreeBSD console.
 
-The "Compare directories" command compares the directory panels with each other. You can then use the Copy (F5) command to make the panels identical. There are three compare methods. The quick method compares only file size and file date. The thorough method makes a full byte-by-byte compare. The thorough method is not available if the machine does not support the mmap(2) system call. The size-only compare method just compares the file sizes and does not check the contents or the date times, it just checks the file size.
+The "Compare directories" command compares the directory panels with each other. You can then use the Copy (F5) command to make the panels identical. There are three compare methods. The quick method compares only file size and file date. The thorough method makes a full byte-by-byte compare. The size-only compare method just compares the file sizes and does not check the contents or the date times, it just checks the file size.
 
 The "External panelize"External panelize allows you to execute an external program, and make the output of that program the contents of the current panel.
 
@@ -1493,7 +1493,7 @@ Virtual File System
 
 Midnight Commander is provided with a code layer to access the file system; this code layer is known as the virtual file system switch. The virtual file system switch allows Midnight Commander to manipulate files not located on the Unix file system.
 
-Currently, Midnight Commander is packaged with some Virtual File Systems (VFS): the local file system, used for accessing the regular Unix file system; the ftpfs, used to manipulate files on remote systems with the FTP protocol; the tarfs, used to manipulate tar and compressed tar files; the undelfs, used to recover deleted files on ext2 file systems (the default file system for Linux systems), fish (for manipulating files over shell connections such as rsh and ssh). If the code was compiled with sftpfs (for manipulating files over SFTP connections).
+Currently, Midnight Commander is packaged with some Virtual File Systems (VFS): the local file system, used for accessing the regular Unix file system; the ftpfs, used to manipulate files on remote systems with the FTP protocol; the tarfs, used to manipulate tar and compressed tar files; the undelfs, used to recover deleted files on ext2 file systems (the default file system for Linux systems), shell (for manipulating files over shell connections such as rsh and ssh). If the code was compiled with sftpfs (for manipulating files over SFTP connections).
 
 A generic extfs (EXTernal virtual File System) is provided in order to easily expand VFS capabilities using scripts and external software.
 
@@ -1533,7 +1533,7 @@ Examples:
 The latter specifies the full path of the tar archive.[FIle transfer over SHell filesystem]
 FIle transfer over SHell filesystem
 
-The fish file system is a network based file system that allows you to manipulate the files in a remote machine as if they were local. To use this, the other side has to either run fish server, or has to have bash-compatible shell.
+The shell file system is a network based file system that allows you to manipulate the files in a remote machine as if they were local. To use this, the other side has to have bash-compatible shell.
 
 To connect to a remote machine, you just need to chdir into a special directory which name is in the following format:
 
@@ -1669,7 +1669,7 @@ The format for the color definition is:
 
   <keyword>=<fgcolor>,<bgcolor>,<attributes>:<keyword>=...
 
-The colors are optional, and the keywords are: normal, selected, disabled, marked, markselect, errors, input, inputmark, inputunchanged, commandlinemark, reverse, gauge, header, inputhistory, commandhistory. Button bar colors are: bbarhotkey, bbarbutton. Status bar color: statusbar. Menu colors are: menunormal, menusel, menuhot, menuhotsel, menuinactive. Dialog colors are: dnormal, dfocus, dhotnormal, dhotfocus, dtitle. Error dialog colors are: errdfocus, errdhotnormal, errdhotfocus, errdtitle. Help colors are: helpnormal, helpitalic, helpbold, helplink, helpslink, helptitle. Viewer colors are: viewnormal, viewbold, viewunderline, viewselected. Editor colors are: editnormal, editbold, editmarked, editwhitespace, editlinestate. Popup menu colors are: pmenunormal, pmenusel, pmenutitle.
+The colors are optional, and the keywords are: normal, selected, disabled, marked, markselect, errors, input, inputmark, inputunchanged, commandlinemark, reverse, gauge, header, inputhistory, commandhistory. Button bar colors are: bbarhotkey, bbarbutton. Status bar color: statusbar. Menu colors are: menunormal, menusel, menuhot, menuhotsel, menuinactive. Dialog colors are: dnormal, dfocus, dhotnormal, dhotfocus, dtitle. Error dialog colors are: errdfocus, errdhotnormal, errdhotfocus, errdtitle. Help colors are: helpnormal, helpitalic, helpbold, helplink, helpslink, helptitle. Viewer colors are: viewnormal, viewbold, viewunderline, viewselected. Editor colors are: editnormal, editbold, editmarked, editwhitespace, editnonprintable, editlinestate. Popup menu colors are: pmenunormal, pmenusel, pmenutitle.
 
 header determines the color of panel header, the line that contains column titles and sort mode indicator.
 
@@ -2001,7 +2001,7 @@ These variables may be set in your ~/.config/mc/ini file:
 xtree_mode
         If this variable is on (default is off) when you browse the file system on a Tree panel, it will automatically reload the other panel with the contents of the selected directory.
 
-fish_directory_timeout
+shell_directory_timeout
         This variable holds the lifetime of a directory cache entry in seconds. The default value is 900 seconds.
 
 clipboard_store

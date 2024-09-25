@@ -539,7 +539,7 @@ Komenda "Find file" szuka pliku spełniającego podane warunki, natomiast komend
 
 Komenda "Panels on/off" pokazuje wyjście ostatniej komendy interpetatora poleceń. Działa ona tylko na terminalach typu Linux lub FreeBSD.
 
-Komenda porównywania katalogów (Compare directories) (C-x d) porównuje zawartości panelu katalogowego z drugim. Możesz potem użyc Kopiuj (F5) żeby stworzyć dwa dokładnie identyczne panele. Metoda "quick" porównuje tylko i wyłącznie rozmiary plików i ich daty. Metoda "thorough" porównuje pliki bajt po bajcie. Ta metoda działa tylko wtedy kiedy komputer obsługuje wywołanie mmap(2). Metoda "size-only" zwraca uwagę tylko na rozmiar plików. Nie ma dla niej żadnego znaczenia czy plik ma inną datę lub zawartość, liczy się tylko rozmiar.
+Komenda porównywania katalogów (Compare directories) (C-x d) porównuje zawartości panelu katalogowego z drugim. Możesz potem użyc Kopiuj (F5) żeby stworzyć dwa dokładnie identyczne panele. Metoda "quick" porównuje tylko i wyłącznie rozmiary plików i ich daty. Metoda "thorough" porównuje pliki bajt po bajcie. Metoda "size-only" zwraca uwagę tylko na rozmiar plików. Nie ma dla niej żadnego znaczenia czy plik ma inną datę lub zawartość, liczy się tylko rozmiar.
 
 Komenda historii komend (Command history) pokazuje listę wpisanych komend. Ta, którą wybierzesz, jest kopiowana do linii poleceń. Do historii komend można mieć dostęp również przy użyciu kombinacji M-p lub M-n.
 
@@ -1087,8 +1087,6 @@ Kiedy jesteś w trybie hex, funkcja szukania akceptuje tekst w cudzysłowach ró
 
 Możesz mieszać ciągi znaków ze stałymi tak jak: "Ciąg" 0xFE 0xBB "więcej tekstu". Ciąg pomiędzy stałymi i cudzysłowami jest po prostu ignorowany.
 
-Kilka wewnętrznych szczegółów na temat podglądu: Na systemach, które używają wywołania systemowego mmap(2), program mapuje pliki zamiast je ładować; jeśli system nie obsługuje mmap(2) lub plik pasuje do któregoś z wybranych filtrów, podgląd użyje jego rozszerzalnych buforów, dzięki temu ładując tylko te części, do których musisz mieć aktualnie dostęp (dotyczy również plików skompresowanych).
-
 Tu jest lista akcji powiązanych z każdym klawiszem, który Midnight Commander obsługuje w wewnętrznym poglądzie.
 
 F1 Wywołuje wbudowaną przeglądarkę pomocy.
@@ -1345,7 +1343,7 @@ Format definicji kolorów jest następujący:
 
   <słowo kluczowe>=<kolor powierzchni">,<kolor tła>:<słowo kluczowe>= ...
 
-Kolory są opcjonalne, a słowa kluczowe są następujące: normal, selected, marked, markselect, errors, input, reverse menunormal, menusel, menuhot, menuhotsel, menuinactive, gauge; kolory okien dialogowych: dnormal, dfocus, dhotnormal, dhotfocus; Kolory pomocy: helpnormal, helpitalic, helpbold, helplink, helpslink; Kolory podglądu: viewunderline; Specjalne tryby podświetlenia: executable, directory, link, device, special. Viewer colors are: viewnormal, viewbold, viewunderline, viewselected. Editor colors are: editnormal, editbold, editmarked, editwhitespace, editlinestate. Popup menu colors are: pmenunormal, pmenusel, pmenutitle. [nie tłumaczyłem nazw z racji tego, że trzeba je stosować w ich angielskim brzmieniu - jeśli jesteś aż tak zaawansowany, użyj słownika].
+Kolory są opcjonalne, a słowa kluczowe są następujące: normal, selected, marked, markselect, errors, input, reverse menunormal, menusel, menuhot, menuhotsel, menuinactive, gauge; kolory okien dialogowych: dnormal, dfocus, dhotnormal, dhotfocus; Kolory pomocy: helpnormal, helpitalic, helpbold, helplink, helpslink; Kolory podglądu: viewunderline; Specjalne tryby podświetlenia: executable, directory, link, device, special. Viewer colors are: viewnormal, viewbold, viewunderline, viewselected. Editor colors are: editnormal, editbold, editmarked, editwhitespace, editnonprintable, editlinestate. Popup menu colors are: pmenunormal, pmenusel, pmenutitle. [nie tłumaczyłem nazw z racji tego, że trzeba je stosować w ich angielskim brzmieniu - jeśli jesteś aż tak zaawansowany, użyj słownika].
 
 Okna dialogowe mogą mieć następujące kolory: dnormal używany do normalnego tekstu, dfocus jest kolorem używanym do wyświetlania aktualnego komponentu, dhotnormal jest kolorem używanym do odróżnienia klawiszy w normalnych komponentach, a dhotfocus jest używany do wyświetlania owych w aktualnie wybranym.
 

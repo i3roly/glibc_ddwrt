@@ -546,7 +546,7 @@ Il comando trova fileFind File permette di cercare un file specifico. Il coma
 
 Il comando "attiva/disattiva pannelli" mostra il risultato dell'ultimo comando shell. Quest'ultimo funziona solo su xterm e sulle console Linux e FreeBSD.
 
-Il comando Confronta directory (C-x d) confronta il contenuto dei pannelli directory uno con l'altro. E' poi possibile usare il comando Copia (F5) per rendere i pannelli identici. Ci sono tre metodi di confronto. Il metodo veloce confronta solo l'ampiezza e la data del file. Il metodo completo fa un confronto byte-per-byte. Il metodo completo non è disponibile se la macchina non supporta la chiamata di sistema mmap(2). Il metodo solo dimensione confronta solo l'ampiezza dei file e non controlla il contenuto né la data del file.
+Il comando Confronta directory (C-x d) confronta il contenuto dei pannelli directory uno con l'altro. E' poi possibile usare il comando Copia (F5) per rendere i pannelli identici. Ci sono tre metodi di confronto. Il metodo veloce confronta solo l'ampiezza e la data del file. Il metodo completo fa un confronto byte-per-byte. Il metodo solo dimensione confronta solo l'ampiezza dei file e non controlla il contenuto né la data del file.
 
 Il comando cronologia comandi mostra un'elenco dei comandi battuti. Il comando selezionato viene copiato sulla riga di comando. Alla cronologia comandi vi si può accedere premendo M-p o M-n.
 
@@ -1067,8 +1067,6 @@ In modalità esadecimale, la funzione di ricerca accetta testo protetto e costan
 
 Notare che 012 è un numero ottale. -1 viene convertito in 0xFF.
 
-Alcuni dettagli interni circa il visualizzatore: su sistemi che forniscono la chiamata di sistema mmap(2), il programma mappa il file invece di caricarlo; se il sistema non fornisce la chiamata di sistema mmap(2) o il file corrisponde ad un'azione che richiede un filtro, allora il visualizzatore userà i buffer di accrescimanto (growing), caricando perciò solo le parti del file su cui vi si accede (inclusi i file compressi).
-
 Ecco un'elenco di azioni associate ad ogni tasto che il Midnight Commander gestisce nel visualizzatore di file interno.
 
 F1 Invoca il visualizzatore ipertestuale dell'aiuto.
@@ -1285,7 +1283,7 @@ Il formato della definizione dei colori è:
 
   <parolachiave>=<coloreprimopiano>,<coloresfondo>:<parolachiave>= ...
 
-I colori sono opzionali e le parolechiave sono: normal, selected, marked, markselect, errors, input, reverse, gauge. I colori dei menu sono: menunormal, menusel, menuhot, menuhotsel, menuinactive. I colori delle finestre di dialogo sono: dnormal, dfocus, dhotnormal, dhotfocus. I colori dell'aiuto sono: helpnormal, helpitalic, helpbold, helplink, helpslink. Il colore del visualizzatore è: viewunderline. Colori speciali di evidenziazione: executable, directory, link, device, special, core. I colori dell'viewer sono: viewnormal, viewbold, viewunderline, viewselected. I colori dell'editor sono: editnormal, editbold, editmarked.
+I colori sono opzionali e le parolechiave sono: normal, selected, marked, markselect, errors, input, reverse, gauge. I colori dei menu sono: menunormal, menusel, menuhot, menuhotsel, menuinactive. I colori delle finestre di dialogo sono: dnormal, dfocus, dhotnormal, dhotfocus. I colori dell'aiuto sono: helpnormal, helpitalic, helpbold, helplink, helpslink. Il colore del visualizzatore è: viewunderline. Colori speciali di evidenziazione: executable, directory, link, device, special, core. I colori dell'viewer sono: viewnormal, viewbold, viewunderline, viewselected. I colori dell'editor sono: editnormal, editbold, editmarked, editnonprintable.
 
 input  determina il colore delle righe di input usate delle finestre di dialogo.
 

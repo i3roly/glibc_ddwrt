@@ -503,7 +503,7 @@ A Fájl keresésFind File parancs lehetővé teszi számodra a speciális fá
 
 A "Panelok ki-be" parancs megmutatja az utolsó shell parancs kimenetét. Ez csak xterm-en, Linux-on és FreeBSD konzolon működik.
 
-A Könyvtár összehasonlítás (C-x d) parancs összehasonlítja a könyvtár paneleket egymással. Ilyenkor használható a Másol (F5) parancs a panelek azonossá tételére. Ennek három formája van. A gyors változat csak a fájlok méretét, és dátumát vizsgálja meg. Az alapos változat teljesen, byte-ról byte-ra végzi el a vizsgálatot. Az alapos változat nem használható, ha a gép nem támogatja az mmap(2) rendszerhívást. A 'Csak fájlhossz' szerinti változat csak a fájlméretet hasonlítja össze és nem ellenőrzi le a dátumukat.
+A Könyvtár összehasonlítás (C-x d) parancs összehasonlítja a könyvtár paneleket egymással. Ilyenkor használható a Másol (F5) parancs a panelek azonossá tételére. Ennek három formája van. A gyors változat csak a fájlok méretét, és dátumát vizsgálja meg. Az alapos változat teljesen, byte-ról byte-ra végzi el a vizsgálatot. A 'Csak fájlhossz' szerinti változat csak a fájlméretet hasonlítja össze és nem ellenőrzi le a dátumukat.
 
 A Parancssor előzmények parancs megmutatja a begépelt parancsok listáját. Az itt kiválasztott parancs átmásolódik a parancssorba. A Parancssor előzmények a M-p, vagy a M-n begépelésével is elérhető.
 
@@ -1033,8 +1033,6 @@ Amikor hex módban vagy, a keresés funkcióban lehetővé teszi hexadecimális 
 
 Használhatsz kevert hivatkozást is ezen értékeknek megfelelően: "Szöveg" 0xFE 0xBB "további szöveg". A szöveg értékek közötti részt és a hivatkozás szövegét nem veszi figyelembe.
 
-Néhány belső részlet a fájlnézőről: Azokon a rendszereken, ahol létezik az mmap(2) rendszerhívás, a fájl programtérképe olvasódik be ehelyett; ha a rendszer nem tartalmazza az mmap(2) rendszerhívást, vagy a fájl tartalmaz olyan műveletet, mint ami megfelel a szűrőnek, a fájlnéző egy növekvő buffert fog használni, amely csak azokat a részeit tartalmazza a fájlnak, amelyekhez jelenleg hozzáférsz (ez tömörített fájlokra is vonatkozik).
-
 Ez a lista tartalmazza azokat a gombokat, amelyekhez művelet kapcsolódik a Midnight Commander belső fájlnézőjében.
 
 F1 Elindítja a beépített hypertext súgót.
@@ -1259,7 +1257,7 @@ A színmeghatározás formátuma:
 
   <kulcsszó>=<előtérszín>,<háttérszín>:<kulcsszó>= ...
 
-A színek opcionálisak, a kulcsszavak a következők: normal, selected, marked, markselect, errors, input, reverse, gauge; A menü színek: menunormal, menusel, menuhot, menuhotsel, menuinactive; A dialog színek: dnormal, dfocus, dhotnormal, dhotfocus; Súgó színek: helpnormal, helpitalic, helpbold, helplink, helpslink; Fájlnéző színek: viewunderline; Speciális kijelölés színei: executable, directory, link, stalelink, device, special, core; Viewer colors are: viewnormal, viewbold, viewunderline, viewselected. Szerkesztő színei: editnormal, editbold, editmarked.
+A színek opcionálisak, a kulcsszavak a következők: normal, selected, marked, markselect, errors, input, reverse, gauge; A menü színek: menunormal, menusel, menuhot, menuhotsel, menuinactive; A dialog színek: dnormal, dfocus, dhotnormal, dhotfocus; Súgó színek: helpnormal, helpitalic, helpbold, helplink, helpslink; Fájlnéző színek: viewunderline; Speciális kijelölés színei: executable, directory, link, stalelink, device, special, core; Viewer colors are: viewnormal, viewbold, viewunderline, viewselected. Szerkesztő színei: editnormal, editbold, editmarked, editnonprintable.
 
 input maghatározza a beviteli sorok színét a dialogus ablakora vonatkozóan.
 

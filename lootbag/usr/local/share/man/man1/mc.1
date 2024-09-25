@@ -1,6 +1,6 @@
 .\" -*- mode: troff; coding: UTF-8 -*-
 .\"TOPICS "Topics:"
-.TH MC 1 "March 2023" "MC Version 4.8.29" "GNU Midnight Commander"
+.TH MC 1 "September 2024" "MC Version 4.8.32" "GNU Midnight Commander"
 .\"SKIP_SECTION"
 .SH "NAME"
 mc \- Visual shell for Unix\-like systems.
@@ -961,7 +961,7 @@ be filtered. When
 .I Shell Patterns
 checkbox is on, the regular expression is much like the filename globbing
 in the shell (* standing for zero or more characters and ? standing
-for one character). Otherwise, the matching of files/directoris is done
+for one character). Otherwise, the matching of files/directories is done
 with normal regular expressions (see ed(1)). When
 .I Case sensitive
 checkbox is on, the filtering will be case sensitive characters. Otherwise,
@@ -1241,8 +1241,7 @@ The "Compare directories" command compares the directory
 panels with each other. You can then use the Copy (F5) command to make
 the panels identical. There are three compare methods. The quick method
 compares only file size and file date. The thorough method makes a
-full byte\-by\-byte compare. The thorough method is not available if the
-machine does not support the mmap(2) system call.  The size\-only
+full byte\-by\-byte compare. The size\-only
 compare method just compares the file sizes and does not check the
 contents or the date times, it just checks the file size.
 .PP
@@ -3138,7 +3137,7 @@ used to manipulate tar and compressed tar files; the
 .IR undelfs ,
 used to recover deleted files on ext2 file systems (the default file
 system for Linux systems),
-.I fish
+.I shell
 (for manipulating files over shell connections such as rsh and ssh).
 If the code was compiled with
 .I sftpfs
@@ -3225,10 +3224,9 @@ Examples:
 The latter specifies the full path of the tar archive.
 .\"NODE "  FIle transfer over SHell filesystem"
 .SH "  FIle transfer over SHell filesystem"
-The fish file system is a network based file system that allows you to
+The shell file system is a network based file system that allows you to
 manipulate the files in a remote machine as if they were local. To use
-this, the other side has to either run fish server, or has to have
-bash\-compatible shell.
+this, the other side has to have bash\-compatible shell.
 .PP
 To connect to a remote machine, you just need to chdir
 into a special directory which name is in the following
@@ -3514,8 +3512,8 @@ dhotnormal, dhotfocus, dtitle. Error dialog colors are: errdfocus, errdhotnormal
 errdhotfocus, errdtitle.  Help colors are: helpnormal, helpitalic, helpbold,
 helplink, helpslink, helptitle.  Viewer colors are: viewnormal, viewbold,
 viewunderline, viewselected. Editor colors are: editnormal, editbold, editmarked,
-editwhitespace, editlinestate. Popup menu colors are: pmenunormal, pmenusel,
-pmenutitle.
+editwhitespace, editnonprintable, editlinestate. Popup menu colors are: pmenunormal,
+pmenusel, pmenutitle.
 .PP
 .I header
 determines the color of panel header, the line that contains column titles
@@ -4095,7 +4093,7 @@ If this variable is on (default is off) when you browse the file system
 on a Tree panel, it will automatically reload the other panel with the
 contents of the selected directory.
 .TP
-.I fish_directory_timeout
+.I shell_directory_timeout
 This variable holds the lifetime of a directory cache entry in seconds. The
 default value is 900 seconds.
 .TP

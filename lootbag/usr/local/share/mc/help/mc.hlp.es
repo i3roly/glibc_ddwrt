@@ -674,7 +674,7 @@ Menú de Utilidades
 
 El comando "Activa/desactiva paneles" muestra la salida del último comando del shell. Esto funciona solo en xterm y en una consola Linux y FreeBSD.
 
-El comando Compara directorios (Ctrl-x d) compara los paneles de directorio uno con el otro. Podemos usar el comando Copiar (F5) para hacer ambos paneles idénticos. Hay tres métodos de comparación. El método rápido compara solo el tamaño de archivo y la fecha. El método completo realiza una comparación completa octeto a octeto. El método completo no está disponible si la máquina no soporta la llamada de sistema mmap(2). El método de comparación de solo tamaño solo compara los tamaños de archivo y no chequea los contenidos o las fechas, solo chequea los tamaños de los archivos.
+El comando Compara directorios (Ctrl-x d) compara los paneles de directorio uno con el otro. Podemos usar el comando Copiar (F5) para hacer ambos paneles idénticos. Hay tres métodos de comparación. El método rápido compara solo el tamaño de archivo y la fecha. El método completo realiza una comparación completa octeto a octeto. El método de comparación de solo tamaño solo compara los tamaños de archivo y no chequea los contenidos o las fechas, solo chequea los tamaños de los archivos.
 
 El comando Histórico de comandos muestra una lista de los comandos escritos. El comando seleccionado es copiado a la línea de órdenes. El histórico de comandos puede ser accedido también tecleando Alt-p ó Alt-n.
 
@@ -1333,8 +1333,6 @@ En modo hexadecimal, la función de búsqueda admite texto entre comillas o valo
 
 Nótese que 012 es un número octal y -1 se convierte en 0xFF.
 
-Algunos detalles internos del visualizador: En sistemas con acceso a la llamada del sistema mmap(2), el programa mapea el archivo en vez de cargarlo; si el sistema no provee de la llamada al sistema mmap(2) o el archivo realiza una acción que necesita de un filtro, entonces el visor usará sus cachés de crecimiento, cargando solo las partes del archivo a las que actualmente estamos accediendo (esto incluye a los archivos comprimidos).
-
 He aquí una lista de las acciones asociadas a cada tecla que Midnight Commander gestiona en el visor interno de archivos.
 
 F1 Invoca el visor de ayuda de hipertexto interno.
@@ -1582,7 +1580,7 @@ El formato de la definición de color es:
 
   <PalabraClave>=<ColorTexto>,<ColorFondo>:<PalabraClave>= ...
 
-los colores son opcionales, y las palabras claves son: normal, selected, disabled, marked, markselect, errors, input, inputmark, inputunchanged, commandlinemark, reverse, gauge, header, inputhistory, commandhistory; los colores de la barra de botones: bbarhotkey, bbarbutton; los colores de la barra de estado: statusbar; los colores de menú: menunormal, menusel, menuhot, menuhotsel, menuinactive; los colores de los diálogos: dnormal, dfocus, dhotnormal, dhotfocus, dtitle; los colores de los diálogos de error: errdfocus, errdhotnormal, errdhotfocus, errdtitle; los colores de la ayuda: helpnormal, helpitalic, helpbold, helplink, helpslink, helptitle; los colores del visor: viewnormal, viewbold, viewunderline, viewselected; loc colores del editor: editnormal, editbold, editmarked, editwhitespace, editlinestate; los colores de los menús desplegables: pmenunormal, pmenusel, pmenutitle.
+los colores son opcionales, y las palabras claves son: normal, selected, disabled, marked, markselect, errors, input, inputmark, inputunchanged, commandlinemark, reverse, gauge, header, inputhistory, commandhistory; los colores de la barra de botones: bbarhotkey, bbarbutton; los colores de la barra de estado: statusbar; los colores de menú: menunormal, menusel, menuhot, menuhotsel, menuinactive; los colores de los diálogos: dnormal, dfocus, dhotnormal, dhotfocus, dtitle; los colores de los diálogos de error: errdfocus, errdhotnormal, errdhotfocus, errdtitle; los colores de la ayuda: helpnormal, helpitalic, helpbold, helplink, helpslink, helptitle; los colores del visor: viewnormal, viewbold, viewunderline, viewselected; loc colores del editor: editnormal, editbold, editmarked, editwhitespace, editnonprintable, editlinestate; los colores de los menús desplegables: pmenunormal, pmenusel, pmenutitle.
 
 header determina el color del encabezado de los paneles, la línea con los títulos de columna y el modo de ordenación.
 
