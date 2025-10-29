@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: BSD-2-Clause
 module frr-zebra {
   yang-version 1.1;
   namespace "http://frrouting.org/yang/zebra";
@@ -79,6 +80,19 @@ module frr-zebra {
   revision 2019-06-01 {
     description
       "Initial revision.";
+
+    reference
+      "FRRouting";
+  }
+
+  feature ipv6-router-advertisements {
+    description
+      "Support for IPv6 Router Advertisements.";
+  }
+
+  feature ptm-bfd {
+    description
+      "Using an external PTM daemon that implements BFD.";
   }
 
   typedef unix-timestamp {
@@ -135,57 +149,16 @@ module frr-zebra {
       "Zebra interface type bond.";
   }
 
-  identity zif-bond-slave {
-    base zebra-interface-type;
-    description
-      "Zebra interface type bond slave.";
-  }
-
   identity zif-macvlan {
     base zebra-interface-type;
     description
       "Zebra interface type macvlan.";
   }
 
-  /*
-   * Multicast RPF mode configurable type
-   */
-
-  typedef mcast-rpf-lookup-mode {
-    type enumeration {
-      enum "none" {
-        value 0;
-        description
-          "No mode set.";
-      }
-      enum "mrib-only" {
-        value 1;
-        description
-          "Lookup in unicast RIB only.";
-      }
-      enum "urib-only" {
-        value 2;
-        description
-          "Lookup in multicast RIB only.";
-      }
-      enum "mrib-then-urib" {
-        value 3;
-        description
-          "Try multicast RIB first, fall back to unicast RIB.";
-      }
-      enum "lower-distance" {
-        value 4;
-        description
-          "Lookup both unicast and mcast, use entry with lower distance.";
-      }
-      enum "longer-prefix" {
-        value 5;
-        description
-          "Lookup both unicast and mcast, use entry with longer prefix.";
-      }
-    }
+  identity zif-gre {
+    base zebra-interface-type;
     description
-      "Multicast RPF lookup behavior";
+      "Zebra interface type gre.";
   }
 
   // End of ip6-route
@@ -219,6 +192,18 @@ module frr-zebra {
           "Multicast PIM-SM.";
       }
     }
+    description
+      "Type for VTEP flood type.";
+  }
+
+  /* PREF64 only accepts specific prefix lengths */
+  typedef pref64-prefix {
+    type inet:ipv6-prefix {
+      /* rely on inet:ipv6-prefix enforcing validity already */
+      pattern '.*/(96|64|56|48|40|32)';
+    }
+    description
+      "An IPv6 prefix suitable for PREF64 announcement";
   }
 
   /*
@@ -348,7 +333,13 @@ module frr-zebra {
    */
 
   grouping vni-information {
+    description
+      "Grouping for VNI information.";
+
     choice type-choice {
+      description
+        "Choice between L2 and L3 VNI information.";
+
       case l2 {
         leaf is-layer2 {
           type empty;
@@ -414,6 +405,9 @@ module frr-zebra {
    */
 
   grouping vni-l2-detail {
+    description
+      "Grouping for VNI L2 details.";
+
     leaf if-index {
       type uint32;
       description
@@ -433,6 +427,9 @@ module frr-zebra {
     }
 
     list remote-vtep-list {
+      description
+        "List of remote VTEPs.";
+
       leaf remote-vtep {
         type inet:ipv4-address;
         description
@@ -441,6 +438,8 @@ module frr-zebra {
 
       leaf vtep-flood {
         type vni-vtep-flood-type;
+        description
+          "VTEP flood type.";
       }
     }
   }
@@ -450,6 +449,9 @@ module frr-zebra {
    */
 
   grouping vni-l3-detail {
+    description
+      "Grouping for VNI L3 details.";
+
     leaf svi-interface {
       type frr-interface:interface-ref;
       description
@@ -490,6 +492,9 @@ module frr-zebra {
    */
 
   grouping zebra-debugs {
+    description
+      "Grouping for Zebra debugging options.";
+
     leaf debug-events {
       type boolean;
       description
@@ -600,12 +605,19 @@ module frr-zebra {
   }
 
   grouping ribs {
+    description
+      "Grouping for RIBs supported by FRR.";
+
     container ribs {
       config false;
       description
         "RIBs supported by FRR.";
       list rib {
         key "afi-safi-name table-id";
+
+        description
+          "List of RIBs, each with a specific AFI/SAFI name and table ID.";
+
         leaf afi-safi-name {
           type identityref {
             base frr-rt:afi-safi-type;
@@ -622,6 +634,10 @@ module frr-zebra {
 
         list route {
           key "prefix";
+          
+          description
+            "List of routes, each with a specific prefix.";
+
           leaf prefix {
             type inet:ip-prefix;
             description
@@ -630,6 +646,10 @@ module frr-zebra {
 
           list route-entry {
             key "protocol";
+
+            description
+              "List of route entries, each owned by a specific protocol.";
+
             leaf protocol {
               type frr-route-types:frr-route-types;
               description
@@ -677,6 +697,9 @@ module frr-zebra {
       "Retrieve IPv4 or IPv6 unicast routes.";
     input {
       choice ip-type {
+        description
+          "Choice between retrieving IPv4 routes and retrieving IPv6 routes.";
+
         case v4 {
           leaf ipv4 {
             type empty;
@@ -715,6 +738,10 @@ module frr-zebra {
       }
 
       choice vrf-choice {
+        description
+          "Choice between retrieving routes in a non-default VRF or |
+           retrieving routes from all VRFs.";
+
         case single {
           leaf vrf {
             type frr-vrf:vrf-ref;
@@ -762,6 +789,10 @@ module frr-zebra {
       }
 
       choice detail {
+        description
+          "Choice between including detailed information and |
+           including summary information only.";
+
         case det {
           leaf include-detail {
             type empty;
@@ -782,11 +813,17 @@ module frr-zebra {
     // End of input
     output {
       choice route-list {
+        description
+          "Choice between IPv4 route information and IPv6 route information.";
+
         case v4 {
           container routes-v4 {
             description
               "IPv4 route information.";
             list route {
+              description
+                "List of IPv4 routes.";
+
               uses ip4-route;
             }
           }
@@ -797,6 +834,9 @@ module frr-zebra {
             description
               "IPv6 route information.";
             list route {
+              description
+                "List of IPv6 routes.";
+
               uses ip6-route;
             }
           }
@@ -813,6 +853,10 @@ module frr-zebra {
       "Retrieve IPv6 multicast routes.";
     input {
       choice vrf-choice {
+        description
+          "Choice between retrieving routes in a non-default VRF or |
+           retrieving routes from all VRFs.";
+
         case single {
           leaf vrf {
             type frr-vrf:vrf-ref;
@@ -836,6 +880,9 @@ module frr-zebra {
         description
           "IPv6 mcast route information.";
         list route {
+          description
+            "List of IPv6 routes.";
+
           uses ip6-route;
         }
       }
@@ -850,6 +897,10 @@ module frr-zebra {
     // Note: no input clause.
     output {
       list vrf-list {
+        description
+          "List of VRF information including name, user configuration status, |
+           VRF ID, and VRF type.";
+
         leaf name {
           type frr-vrf:vrf-ref;
           description
@@ -869,6 +920,10 @@ module frr-zebra {
         }
 
         choice vrf-type {
+          description
+            "Choice between specifying the VRF as inactive, associated with a net namespace, |
+             or associated with a table ID.";
+
           case inactive {
             leaf is-inactive {
               type empty;
@@ -905,6 +960,10 @@ module frr-zebra {
     // Note: no input clause.
     output {
       list vrf-vni-list {
+        description
+          "List of VRF VNI information including VRF name, EVPN VNI, VxLAN interface name, |
+           SVI interface name, router MAC address, and state.";
+
         leaf vrf-name {
           type frr-vrf:vrf-ref;
           description
@@ -1001,6 +1060,10 @@ module frr-zebra {
       }
 
       choice dad-freeze-choice {
+        description
+          "Choice between setting duplicate address detection |
+           freeze to permanent or specifying a timer.";
+
         case freeze-permanent {
           leaf dad-freeze-perm {
             type empty;
@@ -1024,10 +1087,16 @@ module frr-zebra {
   // End get-evpn-info
 
   rpc get-vni-info {
+    description
+      "Retrieve information about EVPN VNIs.";
+
     // If no vni is specified, retrieve global list.
     input {
       choice vni-choice {
         default "all-vnis";
+        description
+          "Choice between retrieving information about all VNIs or a specific EVPN VNI.";
+
         case all-vnis {
           leaf all-vnis {
             type empty;
@@ -1059,6 +1128,9 @@ module frr-zebra {
         uses vni-information;
 
         choice detail-choice {
+          description
+            "Choice between detailed L2 or L3 information.";
+
           case l2 {
             description
               "Detailed L2 information.";
@@ -1083,6 +1155,10 @@ module frr-zebra {
     input {
       choice vni-choice {
         default "all-vnis";
+        description
+          "Choice between retrieving information about all VNIs or |
+           a specific EVPN VNI and a single RMAC address.";
+
         case all-vnis {
           leaf all-vnis {
             type empty;
@@ -1109,6 +1185,10 @@ module frr-zebra {
 
     output {
       list rmac-info-list {
+        description
+          "List of RMAC information including RMAC address, remote VTEP IP address, |
+           refcount, and associated IP prefixes.";
+
         leaf rmac {
           type yang:mac-address;
           description
@@ -1128,6 +1208,9 @@ module frr-zebra {
         }
 
         list prefix-list {
+          description
+            "List of IP prefixes associated with the RMAC.";
+
           leaf prefix-item {
             type inet:ip-prefix;
             description
@@ -1146,6 +1229,10 @@ module frr-zebra {
     input {
       choice vni-choice {
         default "all-vnis";
+        description
+          "Choice between retrieving information about all VNIs or |
+           a specific EVPN VNI and a single host IP address.";
+
         case all-vnis {
           leaf all-vnis {
             type empty;
@@ -1172,6 +1259,9 @@ module frr-zebra {
 
     output {
       list nh-info-list {
+        description
+          "List of nexthop information including IP address, MAC address, and refcount.";
+
         leaf ip-addr {
           type inet:ip-address;
           description
@@ -1191,6 +1281,9 @@ module frr-zebra {
         }
 
         list prefix-list {
+          description
+            "List of IP prefixes associated with the RMAC.";
+
           leaf prefix-item {
             type inet:ip-prefix;
             description
@@ -1208,6 +1301,11 @@ module frr-zebra {
       "Clear duplicate address detection state for one or all VNIs.";
     input {
       choice clear-dup-choice {
+        description
+          "Choice between clearing all VNIs or |
+           clearing state for a single EVPN VNI |
+           and a specific MAC or IP address.";
+
         case all-case {
           leaf all-vnis {
             type empty;
@@ -1255,6 +1353,11 @@ module frr-zebra {
     input {
       choice all-choice {
         default "all-vni";
+        description 
+	  "Choice between retrieving information for all VNIs or |
+           including detailed results, a single VTEP address, or |
+           showing duplicate addresses.";
+
         case all-vni {
           leaf all-vnis {
             type empty;
@@ -1263,6 +1366,10 @@ module frr-zebra {
           }
 
           choice all-choices {
+            description
+              "Choice between including detailed results, a single VTEP address, |
+               or showing duplicate addresses.";
+
             case detail-case {
               leaf all-detail {
                 type empty;
@@ -1297,6 +1404,10 @@ module frr-zebra {
           }
 
           choice single-choices {
+            description
+              "Choice between including detailed results, a specific MAC address, |
+               a single VTEP address, or showing duplicate addresses.";
+
             case detail-case {
               leaf single-detail {
                 type empty;
@@ -1335,6 +1446,9 @@ module frr-zebra {
     // End of input section
     output {
       list mac-list {
+        description
+          "List of MAC addresses.";
+
         leaf mac-addr {
           type yang:mac-address;
           description
@@ -1378,6 +1492,9 @@ module frr-zebra {
         }
 
         container dup-detect-started {
+          description
+            "Container for duplicate detection process start time and count.";
+
           leaf dup-detect-start {
             type unix-timestamp;
             description
@@ -1416,6 +1533,9 @@ module frr-zebra {
         }
 
         list neighbor-list {
+          description
+            "List of neighbor addresses.";
+
           leaf neighbor-addr {
             type inet:ip-address;
             description
@@ -1436,6 +1556,9 @@ module frr-zebra {
         }
 
         choice local-rem-choice {
+          description
+            "Choice between local interface and VLAN or remote VTEP IP address.";
+
           case local-case {
             leaf intf {
               type frr-interface:interface-ref;
@@ -1470,6 +1593,8 @@ module frr-zebra {
     input {
       choice all-choice {
         default "all-vni";
+        description
+          "Choice between retrieving information for all VNIs or including detailed results or showing duplicates.";
         case all-vni {
           leaf all-vnis {
             type empty;
@@ -1478,6 +1603,9 @@ module frr-zebra {
           }
 
           choice all-choices {
+            description
+              "Choice between including detailed results or showing duplicates.";
+
             case detail-case {
               leaf all-detail {
                 type empty;
@@ -1504,6 +1632,9 @@ module frr-zebra {
           }
 
           choice single-choices {
+            description
+              "Choice between single VTEP, neighbor address, or show duplicates.";
+
             case vtep-case {
               leaf single-vtep {
                 type inet:ipv4-address;
@@ -1534,6 +1665,9 @@ module frr-zebra {
     // End input section
     output {
       list vni-list {
+        description
+          "List of VNI containers.";
+
         container vni-container {
           description
             "Information for one VNI.";
@@ -1565,6 +1699,9 @@ module frr-zebra {
             }
 
             choice local-remote-choice {
+              description
+                "Choice between local and remote entries.";
+
               case local-case {
                 leaf is-local {
                   type empty;
@@ -1626,6 +1763,9 @@ module frr-zebra {
   // End get-evpn-arp-cache
 
   rpc get-pbr-ipset {
+    description
+      "RPC to retrieve PBR IP set.";
+
     input {
       leaf name {
         type string {
@@ -1638,6 +1778,9 @@ module frr-zebra {
 
     output {
       list ipset-list {
+        description
+          "List of IP sets.";
+
         leaf name {
           type string {
             length "1..32";
@@ -1651,24 +1794,26 @@ module frr-zebra {
             enum "net-net" {
               value 1;
               description
-                "";
+                "Network to network IP set type.";
             }
             enum "net-port-net" {
               value 2;
               description
-                "";
+                "Network to port to network IP set type.";
             }
             enum "net-port" {
               value 3;
               description
-                "";
+                "Network to port IP set type.";
             }
             enum "net" {
               value 4;
               description
-                "";
+                "Network IP set type.";
             }
           }
+          description
+            "Type of IP set.";
         }
 
         leaf src-prefix {
@@ -1744,6 +1889,9 @@ module frr-zebra {
         }
 
         container ipset-stats {
+          description
+            "Container for IP set statistics.";
+
           leaf is-unique {
             type empty;
             description
@@ -1769,6 +1917,9 @@ module frr-zebra {
   // End get-pbr-ipset
 
   rpc get-pbr-iptable {
+    description
+      "RPC to retrieve PBR iptables.";
+
     input {
       leaf name {
         type string {
@@ -1781,6 +1932,9 @@ module frr-zebra {
 
     output {
       list iptable-list {
+        description
+          "List of iptables entries.";
+
         leaf name {
           type string {
             length "1..32";
@@ -1858,6 +2012,9 @@ module frr-zebra {
         }
 
         container dscp-info {
+          description
+            "Container for dscp information.";
+
           leaf dscp-value {
             type uint32;
             description
@@ -1872,6 +2029,9 @@ module frr-zebra {
         }
 
         container fragment-info {
+          description
+            "Container for fragment information.";
+
           leaf fragment-val {
             type uint32;
             description
@@ -1886,16 +2046,19 @@ module frr-zebra {
         }
 
         container iptable-stats {
+          description
+            "Container for iptables statistics.";
+
           leaf packet-counter {
             type uint64;
             description
-              "";
+              "Number of packets processed by iptables.";
           }
 
           leaf bytes-counter {
             type uint64;
             description
-              "";
+              "Number of packets processed by iptables.";
           }
         }
 
@@ -1924,6 +2087,9 @@ module frr-zebra {
    */
 
   rpc get-debugs {
+    description
+      "RPC to retrieve debug information.";
+
     output {
       uses zebra-debugs;
     }
@@ -1935,19 +2101,26 @@ module frr-zebra {
     description
       "Extends interface model with Zebra-related parameters.";
     container zebra {
-      list ip-addrs {
-        key "address-family ip-prefix";
+      description
+        "Container for Zebra-related information.";
+
+      list ipv4-addrs {
+        key "ip prefix-length";
         description
-          "IP prefixes for an interface.";
-        uses frr-rt:address-family {
+          "The list of configured IPv4 addresses on the interface.";
+
+        leaf ip {
+          type inet:ipv4-address-no-zone;
           description
-            "Address family of the RIB.";
+            "The IPv4 address on the interface.";
         }
 
-        leaf ip-prefix {
-          type inet:ip-prefix;
+        leaf prefix-length {
+          type uint8 {
+            range "0..32";
+          }
           description
-            "IP address prefix.";
+            "The length of the subnet prefix.";
         }
 
         leaf label {
@@ -1955,12 +2128,57 @@ module frr-zebra {
           description
             "Optional string label for the address.";
         }
+      }
 
-        leaf ip4-peer {
-          when "derived-from-or-self(../address-family, 'frr-rt:ipv4')";
-          type inet:ipv4-prefix;
+      list ipv4-p2p-addrs {
+        key "ip peer-ip peer-prefix-length";
+        description
+          "The list of configured peer-to-peer IPv4 addresses on the interface.";
+
+        leaf ip {
+          type inet:ipv4-address-no-zone;
           description
-            "Peer prefix, for peer-to-peer interfaces.";
+            "The IPv4 address on the interface.";
+        }
+
+        leaf peer-ip {
+          type inet:ipv4-address-no-zone;
+          description
+            "Peer address.";
+        }
+
+        leaf peer-prefix-length {
+          type uint8 {
+            range "0..32";
+          }
+          description
+            "The length of the peer subnet prefix.";
+        }
+
+        leaf label {
+          type string;
+          description
+            "Optional string label for the address.";
+        }
+      }
+
+      list ipv6-addrs {
+        key "ip prefix-length";
+        description
+          "The list of configured IPv6 addresses on the interface.";
+
+        leaf ip {
+          type inet:ipv6-address-no-zone;
+          description
+            "The IPv6 address on the interface.";
+        }
+
+        leaf prefix-length {
+          type uint8 {
+            range "0..128";
+          }
+          description
+            "The length of the subnet prefix.";
         }
       }
 
@@ -1972,40 +2190,108 @@ module frr-zebra {
 
       leaf link-detect {
         type boolean;
+        default "true";
         description
           "Link-detection for the interface.";
       }
 
-      leaf shutdown {
+      leaf enabled {
         type boolean;
         description
           "Interface admin status.";
       }
 
+      leaf mpls {
+        type boolean;
+        description
+          "Interface MPLS status.";
+      }
+
       leaf bandwidth {
         type uint32 {
-          range "1..100000";
+          range "1..1000000";
         }
+        units "megabits/sec";
         description
           "Link bandwidth informational parameter, in megabits.";
       }
       container link-params {
+        presence "Activates link parameters on this interface.";
         description
           "link-params for Traffic-Engineering (TE) use in IGP extensions.";
+        leaf metric {
+          type uint32;
+          description
+            "Link metric for MPLS-TE purpose.";
+        }
+        leaf max-bandwidth {
+          type rt-types:bandwidth-ieee-float32;
+          description
+            "Maximum bandwidth.";
+        }
+        leaf max-reservable-bandwidth {
+          type rt-types:bandwidth-ieee-float32;
+          description
+            "Maximum reservable bandwidth.";
+        }
+        container unreserved-bandwidths {
+          description
+            "All unreserved bandwidths.";
+          list unreserved-bandwidth {
+            key "priority";
+            leaf priority {
+              type uint8 {
+                range "0 .. 7";
+              }
+              description
+                "Priority from 0 to 7.";
+            }
+            leaf unreserved-bandwidth {
+              type rt-types:bandwidth-ieee-float32;
+              mandatory true;
+              description
+                "Unreserved bandwidth.";
+            }
+            description
+              "List of unreserved bandwidths for different
+                priorities.";
+          }
+        }
+        leaf residual-bandwidth {
+          type rt-types:bandwidth-ieee-float32;
+          description
+            "Unidirectional residual bandwidth.";
+        }
+        leaf available-bandwidth {
+          type rt-types:bandwidth-ieee-float32;
+          description
+            "Unidirectional available bandwidth.";
+        }
+        leaf utilized-bandwidth {
+          type rt-types:bandwidth-ieee-float32;
+          description
+            "Unidirectional utilized bandwidth.";
+        }
         choice admin-group-mode {
           description "Admin-group mode";
           case legacy {
             description
               "Legacy mode. Only support standard admin-group (RFC3630/5305/5329)";
             leaf legacy-admin-group {
-              description "Admin-Group value";
               type uint32;
+              description "Admin-Group value";
             }
           }
           case affinity {
             container affinities {
+              description
+                "Container for affinity information.";
+
               leaf-list affinity {
-                type string;
+                type frr-affinity-map:affinity-map-ref;
+                must '../../affinity-mode != "standard" or /frr-affinity-map:lib/frr-affinity-map:affinity-maps/frr-affinity-map:affinity-map[frr-affinity-map:name=current()]/frr-affinity-map:value < 32' {
+                  error-message "Affinity bit-position must be less than 32 when used with standard affinity mode";
+                }
                 max-elements "256";
                 description
                   "Array of Attribute Names";
@@ -2014,9 +2300,6 @@ module frr-zebra {
           }
         }
         leaf affinity-mode {
-          description
-            "Affinity mode";
-          default "extended";
           type enumeration {
               enum extended {
               value 0;
@@ -2034,9 +2317,561 @@ module frr-zebra {
                 "Standard and extended Admin-Group";
             }
           }
+          default "extended";
+          description
+            "Affinity mode";
+        }
+        container neighbor {
+          presence "Activates neighbor information on this interface.";
+          leaf remote-as {
+            type inet:as-number;
+            mandatory true;
+            description
+              "Remote AS Number (RFC 5316 & RFC 5392)";
+          }
+          leaf ipv4-remote-id {
+            type inet:ipv4-address;
+            mandatory true;
+            description
+              "IPv4 Remote ASBR ID (RFC 5316 & RFC 5392)";
+          }
+          description
+            "Remote ASBR information (RFC 5316 & RFC 5392)";
+        }
+        leaf delay {
+          type uint32 {
+            range "0..16777215";
+          }
+          description
+            "Average Unidirectional Link Delay";
+        }
+        container min-max-delay {
+          presence "Activates min/max delay.";
+          leaf delay-min {
+            type uint32 {
+              range "0..16777215";
+            }
+            must '. <= ../../delay' {
+              error-message "Min delay must be less than or equal to delay";
+            }
+            mandatory true;
+            description
+              "Min Delay";
+          }
+          leaf delay-max {
+            type uint32 {
+              range "0..16777215";
+            }
+            must '. >= ../../delay' {
+              error-message "Max delay must be greater than or equal to delay";
+            }
+            mandatory true;
+            description
+              "Max Delay";
+          }
+          description
+            "Min/Max Unidirectional Link Delay";
+        }
+        leaf delay-variation {
+          type uint32 {
+            range "0..16777215";
+          }
+          description
+            "Unidirectional Delay Variation";
+        }
+        leaf packet-loss {
+          type decimal64 {
+            fraction-digits 6;
+            range "0..50.331642";
+          }
+          description
+            "Unidirectional Link Packet Loss";
         }
         // TODO -- other link-params options
         // for (experimental/partial TE use in IGP extensions)
+      }
+      container evpn-mh {
+        description "EVPN multihoming configuration";
+        choice esi-choice {
+          description "ESI type";
+          container type-0 {
+            description
+              "Container for type-0 information.";
+
+            leaf esi {
+              type yang:hex-string {
+                length "29";
+              }
+              description
+                "10-octet ESI.";
+              }
+          }
+          container type-3 {
+            description
+              "Container for type-3 information.";
+
+            leaf system-mac {
+              type yang:mac-address;
+              description
+                "System MAC address.";
+            }
+            leaf local-discriminator {
+              type uint32 {
+                range "1..16777215";
+              }
+              description
+                "Local discriminator.";
+            }
+          }
+        }
+        leaf df-preference {
+          type uint16;
+          default "32767";
+          description
+            "Preference value used for DF election.";
+        }
+        leaf bypass {
+          type boolean;
+          default "false";
+          description
+            "Bypass mode.";
+        }
+        leaf uplink {
+          type boolean;
+          default "false";
+          description
+            "Uplink to the VxLAN core.";
+        }
+      }
+      container ipv6-router-advertisements {
+        if-feature "ipv6-router-advertisements";
+        description
+          "Support for IPv6 Router Advertisements.";
+        leaf send-advertisements {
+          type boolean;
+          default "false";
+          description
+            "A flag indicating whether or not the router sends
+            periodic Router Advertisements and responds to
+            Router Solicitations.";
+          reference
+            "RFC 4861: Neighbor Discovery for IP version 6 (IPv6)
+                       - AdvSendAdvertisements";
+        }
+        leaf max-rtr-adv-interval {
+          type uint32 {
+            range "70..1800000";
+          }
+          units "milliseconds";
+          default "600000";
+          description
+            "The maximum time allowed between sending unsolicited
+            multicast Router Advertisements from the interface.";
+          reference
+            "RFC 4861: Neighbor Discovery for IP version 6 (IPv6)
+                       - MaxRtrAdvInterval
+             RFC 6275: Mobility Support in IPv6";
+        }
+        // Setting this value is not yet supported by the actual code.
+        /*
+        leaf min-rtr-adv-interval {
+          type uint32 {
+            range "30..1350000";
+          }
+          units "milliseconds";
+          must ". <= 0.75 * ../max-rtr-adv-interval" {
+            description
+              "The value MUST NOT be greater than 75% of
+              'max-rtr-adv-interval'.";
+          }
+          description
+            "The minimum time allowed between sending unsolicited
+            multicast Router Advertisements from the interface.
+
+            The default value to be used operationally if this
+            leaf is not configured is determined as follows:
+
+            - if max-rtr-adv-interval >= 9 seconds, the default
+              value is 0.33 * max-rtr-adv-interval;
+
+            - otherwise, it is 0.75 * max-rtr-adv-interval.";
+          reference
+            "RFC 4861: Neighbor Discovery for IP version 6 (IPv6)
+                       - MaxRtrAdvInterval
+             RFC 6275: Mobility Support in IPv6";
+        }
+        */
+        leaf managed-flag {
+          type boolean;
+          default "false";
+          description
+            "The value to be placed in the 'Managed address
+            configuration' flag field in the Router
+            Advertisement.";
+          reference
+            "RFC 4861: Neighbor Discovery for IP version 6 (IPv6)
+                       - AdvManagedFlag";
+        }
+        leaf other-config-flag {
+          type boolean;
+          default "false";
+          description
+            "The value to be placed in the 'Other configuration'
+            flag field in the Router Advertisement.";
+          reference
+            "RFC 4861: Neighbor Discovery for IP version 6 (IPv6)
+                       - AdvOtherConfigFlag";
+        }
+        leaf home-agent-flag {
+          type boolean;
+          default "false";
+          description
+            "The value to be placed in the 'Home Agent'
+            flag field in the Router Advertisement.";
+          reference
+            "RFC 6275: Mobility Support in IPv6";
+        }
+        leaf link-mtu {
+          type uint32;
+          default "0";
+          description
+            "The value to be placed in MTU options sent by the
+            router.  A value of zero indicates that no MTU options
+            are sent.";
+          reference
+            "RFC 4861: Neighbor Discovery for IP version 6 (IPv6)
+                       - AdvLinkMTU";
+        }
+        leaf reachable-time {
+          type uint32 {
+            range "0..3600000";
+          }
+          units "milliseconds";
+          default "0";
+          description
+            "The value to be placed in the Reachable Time field in
+            the Router Advertisement messages sent by the router.
+            A value of zero means unspecified (by this router).";
+          reference
+            "RFC 4861: Neighbor Discovery for IP version 6 (IPv6)
+                       - AdvReachableTime";
+        }
+        leaf retrans-timer {
+          type uint32;
+          units "milliseconds";
+          default "0";
+          description
+            "The value to be placed in the Retrans Timer field in
+            the Router Advertisement messages sent by the router.
+            A value of zero means unspecified (by this router).";
+          reference
+            "RFC 4861: Neighbor Discovery for IP version 6 (IPv6)
+                       - AdvRetransTimer";
+        }
+        leaf cur-hop-limit {
+          type uint8;
+          description
+            "The value to be placed in the Cur Hop Limit field in
+            the Router Advertisement messages sent by the router.
+            A value of zero means unspecified (by this router).
+
+            If this parameter is not configured, the device SHOULD
+            use the IANA-specified value for the default IPv4
+            Time to Live (TTL) parameter that was in effect at the
+            time of implementation.";
+          reference
+            "RFC 3232: Assigned Numbers: RFC 1700 is Replaced by
+                       an On-line Database
+             RFC 4861: Neighbor Discovery for IP version 6 (IPv6)
+                       - AdvCurHopLimit
+             IANA: IP Parameters
+                   (https://www.iana.org/assignments/ip-parameters)";
+        }
+        leaf default-lifetime {
+          type uint16 {
+            range "0..9000";
+          }
+          units "seconds";
+          must ". = 0 or . * 1000 >= ../max-rtr-adv-interval" {
+            description
+              "The value MUST NOT be less than max-rtr-adv-interval.";
+          }
+          description
+            "The value to be placed in the Router Lifetime field of
+            Router Advertisements sent from the interface, in
+            seconds.  It MUST be either zero or between
+            max-rtr-adv-interval and 9000 seconds.  A value of zero
+            indicates that the router is not to be used as a
+            default router.  These limits may be overridden by
+            specific documents that describe how IPv6 operates over
+            different link layers.
+
+            If this parameter is not configured, the device SHOULD
+            use a value of 3 * max-rtr-adv-interval.";
+          reference
+            "RFC 4861: Neighbor Discovery for IP version 6 (IPv6)
+                       - AdvDefaultLifetime";
+        }
+        leaf fast-retransmit {
+          type boolean;
+          default "true";
+          description
+            "Allow sending unsolicited multicast Router Advertisements
+            more frequently than once every 3 seconds as required by
+            RFC 4861.";
+        }
+        leaf advertisement-interval-option {
+          type boolean;
+          default "false";
+          description
+            "Enable sending the Advertisement Interval Option in
+            Router Advertisements.";
+          reference
+            "RFC 6275: Mobility Support in IPv6";
+        }
+        leaf home-agent-preference {
+          type uint16;
+          description
+            "The value to be placed in the Home Agent Preference
+            field in the Router Advertisement messages sent by the
+            router.";
+          reference
+            "RFC 6275: Mobility Support in IPv6";
+        }
+        leaf home-agent-lifetime {
+          type uint16;
+          description
+            "The value to be placed in the Home Agent Lifetime
+            field in the Router Advertisement messages sent by the
+            router.";
+          reference
+            "RFC 6275: Mobility Support in IPv6";
+        }
+        leaf default-router-preference {
+          type enumeration {
+            enum high {
+              value 1; /* 01 */
+              description
+                "High preference.";
+            }
+            enum medium {
+              value 0; /* 00 */
+              description
+                "Medium preference.";
+            }
+            enum low {
+              value 3; /* 11 */
+              description
+                "Low preference.";
+            }
+          }
+          default "medium";
+          description
+            "The value to be placed in the Default Router
+            Preference field in the Router Advertisement messages
+            sent by the router.";
+          reference
+            "RFC 4191: Default Router Preferences and More-Specific
+                       Routes";
+        }
+        container prefix-list {
+          description
+            "Support for prefixes to be placed in Prefix
+            Information options in Router Advertisement messages
+            sent from the interface.
+
+            Prefixes that are advertised by default but do not
+            have their entries in the child 'prefix' list are
+            advertised with the default values of all parameters.
+
+            The link-local prefix SHOULD NOT be included in the
+            list of advertised prefixes.";
+          reference
+            "RFC 4861: Neighbor Discovery for IP version 6 (IPv6)
+                       - AdvPrefixList";
+          list prefix {
+            key "prefix-spec";
+            description
+              "Support for an advertised prefix entry.";
+            leaf prefix-spec {
+              type inet:ipv6-prefix;
+              description
+                "IPv6 address prefix.";
+            }
+            // FRR doesn't support 'no-advertise'. Keeping the code
+            // here for future reference.
+            /*
+            choice control-adv-prefixes {
+              default "advertise";
+              description
+                "Either (1) the prefix is explicitly removed from the
+                set of advertised prefixes or (2) the parameters with
+                which the prefix is advertised are specified (default
+                case).";
+              leaf no-advertise {
+                type empty;
+                description
+                  "The prefix will not be advertised.
+
+                  This can be used for removing the prefix from
+                  the default set of advertised prefixes.";
+              }
+              case advertise {
+            */
+                leaf valid-lifetime {
+                  type uint32;
+                  units "seconds";
+                  default "2592000";
+                  description
+                    "The value to be placed in the Valid Lifetime
+                    in the Prefix Information option.  The
+                    designated value of all 1's (0xffffffff)
+                      represents infinity.";
+                  reference
+                    "RFC 4861: Neighbor Discovery for IP version 6
+                              (IPv6) - AdvValidLifetime";
+                }
+                leaf on-link-flag {
+                  type boolean;
+                  default "true";
+                  description
+                    "The value to be placed in the on-link flag
+                    ('L-bit') field in the Prefix Information
+                    option.";
+                  reference
+                    "RFC 4861: Neighbor Discovery for IP version 6
+                              (IPv6) - AdvOnLinkFlag";
+                }
+                leaf preferred-lifetime {
+                  type uint32;
+                  units "seconds";
+                  must ". <= ../valid-lifetime" {
+                    description
+                      "This value MUST NOT be greater than
+                      valid-lifetime.";
+                  }
+                  default "604800";
+                  description
+                    "The value to be placed in the Preferred
+                    Lifetime in the Prefix Information option.
+                    The designated value of all 1's (0xffffffff)
+                    represents infinity.";
+                  reference
+                    "RFC 4861: Neighbor Discovery for IP version 6
+                              (IPv6) - AdvPreferredLifetime";
+                }
+                leaf autonomous-flag {
+                  type boolean;
+                  default "true";
+                  description
+                    "The value to be placed in the Autonomous Flag
+                    field in the Prefix Information option.";
+                  reference
+                    "RFC 4861: Neighbor Discovery for IP version 6
+                              (IPv6) - AdvAutonomousFlag";
+                }
+                leaf router-address-flag {
+                  type boolean;
+                  default "false";
+                  description
+                    "The value to be placed in the Router Address
+                    flag field in the Prefix Information option.";
+                  reference
+                    "RFC 6275: Mobility Support in IPv6";
+                }
+            /*
+              }
+            }
+            */
+            // This is closing brackets for `case advertise` and
+            // `choice control-adv-prefixes`.
+          }
+        }
+        container rdnss {
+          description
+            "A list of recursive DNS server addresses that are placed
+            in Recursive DNS Server (RDNSS) options in Router
+            Advertisement messages sent from the interface.";
+          reference
+            "RFC 8106: IPv6 Router Advertisement Options for DNS
+                       Configuration";
+          list rdnss-address {
+            key "address";
+            description
+              "Recursive DNS server address.";
+            leaf address {
+              type inet:ipv6-address;
+              description
+                "IPv6 address of a recursive DNS server.";
+            }
+            leaf lifetime {
+              type uint32;
+              units "seconds";
+              description
+                "The value that is placed in the Lifetime field in the
+                RDNSS option.  The designated value of all 1's
+                (0xffffffff) represents infinity.";
+            }
+          }
+        }
+        container dnssl {
+          description
+            "A list of domain names that are placed in DNS Search List (DNSSL)
+            options in Router Advertisement messages sent from the interface.";
+          reference
+            "RFC 8106: IPv6 Router Advertisement Options for DNS
+                       Configuration";
+          list dnssl-domain {
+            key "domain";
+            description
+              "Domain name for the search list.";
+            leaf domain {
+              type inet:domain-name;
+              description
+                "Domain name for the search list.";
+            }
+            leaf lifetime {
+              type uint32;
+              units "seconds";
+              description
+                "The value that is placed in the Lifetime field in the
+                DNSSL option.  The designated value of all 1's
+                (0xffffffff) represents infinity.";
+            }
+          }
+        }
+        container pref64 {
+          description
+            "A list of NAT64 prefixes that are placed in the PREF64 option in
+            Router Advertisement messages sent from the interface.";
+          reference
+            "RFC 8781: Discovering PREF64 in Router Advertisements";
+          list pref64-prefix {
+            key "prefix";
+            description
+              "NAT64 prefix details";
+            leaf prefix {
+              type pref64-prefix;
+              description
+                "NAT64 prefix, typically 64:ff9b::/96";
+            }
+            leaf lifetime {
+              type uint16;
+              units "seconds";
+              description
+                "Lifetime of the NAT64 prefix to be placed in RAs.
+		If omitted, the lifetime will be calculated automatically as
+		MaxRtrAdvInterval * 3";
+            }
+          }
+        }
+      }
+      leaf ptm-enable {
+        if-feature ptm-bfd;
+        type boolean;
+        default "true";
+        description
+          "Enable PTM on the interface.";
       }
       container state {
         config false;
@@ -2079,6 +2914,8 @@ module frr-zebra {
 
         leaf vni-id {
           type vni-id-type;
+          description
+            "A VNI id.";
         }
 
         leaf remote-vtep {
@@ -2092,6 +2929,12 @@ module frr-zebra {
           description
             "The VNI multicast group for BUM traffic.";
         }
+
+        leaf bond {
+          type frr-interface:interface-ref;
+          description
+            "The bond interface this interface belongs to.";
+        }
       }
     }
   }
@@ -2102,6 +2945,122 @@ module frr-zebra {
     container zebra {
       description
         "Zebra's vrf specific configuration and operational model.";
+
+      leaf router-id {
+        type yang:dotted-quad;
+        description
+          "A 32-bit number in the form of a dotted quad that is used by
+           some routing protocols identifying a router.";
+      }
+
+      leaf ipv6-router-id {
+        type inet:ipv6-address-no-zone;
+        description
+          "A 128-bit number in the form of an IPv6 address that is used by
+           some routing protocols identifying a router.";
+      }
+
+      list filter-protocol {
+        key "afi-safi protocol";
+        description
+          "Filter routing info exchanged between zebra and protocol.";
+        leaf afi-safi {
+          type identityref {
+            base frr-rt:afi-safi-type;
+          }
+          description
+            "AFI-SAFI type.";
+        }
+        leaf protocol {
+          // This should be identityref to frr-rt:control-plane-protocol someday
+          type string;
+          description
+            "The protocol to filter.";
+        }
+        leaf route-map {
+          type frr-route-map:route-map-ref;
+          mandatory true;
+          description
+            "A route-map to filter routes.";
+        }
+      }
+
+      list filter-nht {
+        key "afi-safi protocol";
+        description
+          "Filter next hop tracking route resolution.";
+        leaf afi-safi {
+          type identityref {
+            base frr-rt:afi-safi-type;
+          }
+          description
+            "AFI-SAFI type.";
+        }
+        leaf protocol {
+          // This should be identityref to frr-rt:control-plane-protocol someday
+          type string;
+          description
+            "The protocol to filter.";
+        }
+        leaf route-map {
+          type frr-route-map:route-map-ref;
+          mandatory true;
+          description
+            "A route-map to filter nexthops.";
+        }
+      }
+
+      leaf resolve-via-default {
+        type boolean;
+        description
+          "Resolve IPv4 nexthops via the default route. This is true by default
+           for traditional profile and false by default for datacenter profile.
+           Removing the leaf sets it back to the default value for the profile.";
+      }
+
+      leaf ipv6-resolve-via-default {
+        type boolean;
+        description
+          "Resolve IPv4 nexthops via the default route. This is true by default
+           for traditional profile and false by default for datacenter profile.
+           Removing the leaf sets it back to the default value for the profile.";
+      }
+
+      container netns {
+        description
+          "Configuration for netns VRF backend.";
+        container table-range {
+          presence "Activates table-range configuration.";
+          description
+            "The range of tables to use for this netns.";
+          leaf start {
+            type uint32;
+            mandatory true;
+            description
+              "The first table to use.";
+          }
+          leaf end {
+            type uint32;
+            must ". >= ../start" {
+              error-message "End table must be greater than or equal to start table";
+            }
+            mandatory true;
+            description
+              "The last table to use.";
+          }
+        }
+      }
+
+      container mpls {
+        description
+          "MPLS Configuration.";
+          leaf fec-nexthop-resolution {
+            type boolean;
+            description
+              "Authorise nexthop resolution over all labeled routes.";
+          }
+      }
+
       uses ribs;
 
       uses vrf-vni-mapping;
@@ -2109,6 +3068,9 @@ module frr-zebra {
   }
 
   augment "/frr-vrf:lib/frr-vrf:vrf/frr-zebra:zebra/ribs/rib/route/route-entry/nexthop-group/nexthop" {
+    description
+      "Augments the nexthop with operational data.";
+
     uses frr-nh:frr-nexthop-operational;
   }
 
@@ -2119,36 +3081,14 @@ module frr-zebra {
   container zebra {
     description
       "Data model for the Zebra daemon.";
-    leaf mcast-rpf-lookup {
-      type frr-zebra:mcast-rpf-lookup-mode;
-      default "mrib-then-urib";
-      description
-        "Multicast RPF lookup behavior.";
-    }
     leaf ip-forwarding {
       type boolean;
       description
         "IP forwarding status.";
     }
     leaf ipv6-forwarding {
-      type enumeration {
-        enum unknown {
-          value -1;
-          description
-            "Unknown state.";
-        }
-        enum off {
-          value 0;
-          description
-            "IPv6 forwarding disabled.";
-        }
-        enum on {
-          value 1;
-          description
-            "IPv6 forwarding enabled.";
-        }
-      }
-      description
+      type boolean;
+       description
         "IPv6 forwarding status.";
     }
     leaf workqueue-hold-timer {
@@ -2207,10 +3147,29 @@ module frr-zebra {
       description
         "Limit on the number of updates queued to the dataplane subsystem.";
     }
+    leaf ptm-enable {
+      if-feature ptm-bfd;
+      type boolean;
+      default "false";
+      description
+        "Enable PTM globally.";
+    }
+    leaf route-map-delay {
+      type uint32 {
+        range "0..600";
+      }
+      units "seconds";
+      default "5";
+      description
+        "Time to wait before route-map updates are processed.";
+    }
     /*
      * Debug options
      */
     container debugs {
+      description
+        "This container contains debug information for the zebra daemon.";
+
       uses zebra-debugs;
     }
     /* End of debugs */
@@ -2224,6 +3183,31 @@ module frr-zebra {
       config false;
       description
         "Operational data.";
+      leaf max-multipath {
+        type uint16 {
+          range "1..65535";
+        }
+        description
+          "The maximum number of nexthops for a route.  At this point it
+           is unlikely that a multipath number will ever get larger then
+           1024 but to allow for future expansions, the yang returns a
+           16 bit number";
+      }
+      leaf ip-forwarding {
+        type boolean;
+        description
+          "IP forwarding status.";
+      }
+      leaf ipv6-forwarding {
+        type boolean;
+        description
+          "IPv6 forwarding status.";
+      }
+      leaf mpls-forwarding {
+        type boolean;
+        description
+          "MPLS forwarding status.";
+      }   
     }
     // End of operational / state container
   }

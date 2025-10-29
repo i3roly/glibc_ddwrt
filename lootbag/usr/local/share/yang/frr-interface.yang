@@ -52,14 +52,17 @@ module frr-interface {
   revision 2020-02-05 {
     description
       "Added operational data";
+    reference "FRRouting";
   }
   revision 2019-09-09 {
     description
       "Added interface-ref typedef";
+    reference "FRRouting";
   }
   revision 2018-03-28 {
     description
       "Initial revision.";
+    reference "FRRouting";
   }
 
   identity other {
@@ -229,9 +232,14 @@ module frr-interface {
           "IPv6 enabled.";
       }
     }
+    description
+      "Type definition for interface flags.";
   }
 
   grouping if-common-operational {
+    description
+      "Common operational data for interfaces.";
+
     leaf if-index {
       type int32 {
         range "0..2147483647";
@@ -241,17 +249,18 @@ module frr-interface {
     }
 
     leaf mtu {
-      type uint16;
+      type uint32;
       description
-        "The size of the largest IPV4 packet that the interface
-         will send and receive.";
+        "The size of the largest IPV4 packet that the interface will send.
+         Normally this will never be larger than 65535; however, some devices
+         (e.g., vrf) can have larger values";
     }
 
     leaf mtu6 {
       type uint32;
       description
         "The size of the largest IPV6 packet that the interface
-         will send and receive.";
+         will send.";
     }
 
     leaf speed {
@@ -288,6 +297,9 @@ module frr-interface {
   }
 
   container lib {
+    description
+      "Library container.";
+
     list interface {
       key "name";
       description
@@ -300,9 +312,9 @@ module frr-interface {
 
       leaf vrf {
         type frr-vrf:vrf-ref;
+        config false;
         description
           "VRF this interface is associated with.";
-        config false;
       }
 
       leaf description {
@@ -313,6 +325,8 @@ module frr-interface {
 
       container state {
         config false;
+        description
+          "State information for the interface.";
         uses if-common-operational;
       }
     }

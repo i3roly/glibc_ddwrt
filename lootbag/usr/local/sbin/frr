@@ -15,8 +15,8 @@
 
 PATH=/bin:/usr/bin:/sbin:/usr/sbin
 D_PATH="/usr/sbin" # /usr/lib/frr
-C_PATH="/tmp" # /etc/frr
-V_PATH="/var/run" # /var/run/frr
+C_PATH="/usr/etc/frr" # /etc/frr
+V_PATH="/usr/var/run/frr" # /var/run/frr
 B_PATH="/usr/bin"
 VTYSH="/usr/bin/vtysh" # /usr/bin/vtysh
 FRR_USER="root" # frr

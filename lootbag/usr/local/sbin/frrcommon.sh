@@ -22,8 +22,8 @@ nsopt="${FRR_PATHSPACE:+-N ${FRR_PATHSPACE}}"
 
 PATH=/bin:/usr/bin:/sbin:/usr/sbin
 D_PATH="/usr/sbin" # /usr/lib/frr
-C_PATH="/tmp${suffix}" # /etc/frr
-V_PATH="/var/run${suffix}" # /var/run/frr
+C_PATH="/usr/etc/frr${suffix}" # /etc/frr
+V_PATH="/usr/var/run/frr${suffix}" # /var/run/frr
 B_PATH="/usr/bin"
 VTYSH="/usr/bin/vtysh" # /usr/bin/vtysh
 FRR_USER="root" # frr
@@ -175,7 +175,12 @@ daemon_start() {
 	instopt="${inst:+-n $inst}"
 	eval args="\$${daemon}_options"
 
-	cmd="$all_wrap $wrap $bin $nsopt -d $frr_global_options $instopt $args"
+	if [ "$daemon" = "watchfrr" ]; then
+		cmd="$all_wrap $wrap $bin $nsopt -d $instopt $args"
+	else
+		cmd="$all_wrap $wrap $bin $nsopt -d $frr_global_options $instopt $args"
+	fi
+
 	log_success_msg "Starting $daemon with command: '$cmd'"
 	if eval "$cmd"; then
 		log_success_msg "Started $dmninst"
@@ -207,8 +212,8 @@ daemon_stop() {
 	[ -z "$fail" -a -z "$pid" ] && fail="pid file is empty"
 	[ -n "$fail" ] || kill -0 "$pid" 2>/dev/null || fail="pid $pid not running"
 
-	if [ -n "$fail" ] && [ "$2" != "--quiet" ]; then
-		log_failure_msg "Cannot stop $dmninst: $fail"
+	if [ -n "$fail" ]; then
+		[ "$2" = "--quiet" ] || log_failure_msg "Cannot stop $dmninst: $fail"
 		return 1
 	fi
 
@@ -220,11 +225,11 @@ daemon_stop() {
 		[ $(( cnt -= 1 )) -gt 0 ] || break
 	done
 	if kill -0 "$pid" 2>/dev/null; then
-		log_failure_msg "Failed to stop $dmninst, pid $pid still running"
+		[ "$2" = "--quiet" ] || log_failure_msg "Failed to stop $dmninst, pid $pid still running"
 		still_running=1
 		return 1
 	else
-		log_success_msg "Stopped $dmninst"
+		[ "$2" = "--quiet" ] || log_success_msg "Stopped $dmninst"
 		rm -f "$pidfile"
 		return 0
 	fi
